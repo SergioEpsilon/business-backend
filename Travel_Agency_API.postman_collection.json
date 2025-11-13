@@ -1,0 +1,498 @@
+{
+  "info": {
+    "name": "Travel Agency Management API",
+    "description": "Complete API collection for Travel Agency Management System",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "version": "1.0.0"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3333/api/v1",
+      "type": "string"
+    },
+    {
+      "key": "clientId",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "tripId",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "planId",
+      "value": "1",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "List Users",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/users?page=1&per_page=20"
+          }
+        },
+        {
+          "name": "Get User Stats",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/users/stats"
+          }
+        },
+        {
+          "name": "Get User by ID",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/users/1"
+          }
+        },
+        {
+          "name": "Get User Profile",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/users/1/profile"
+          }
+        },
+        {
+          "name": "Update User",
+          "request": {
+            "method": "PUT",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"new.username\",\n  \"email\": \"newemail@example.com\"\n}"
+            },
+            "url": "{{baseUrl}}/users/1"
+          }
+        },
+        {
+          "name": "Toggle User Status",
+          "request": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/users/1/toggle-status"
+          }
+        },
+        {
+          "name": "Change Password",
+          "request": {
+            "method": "PATCH",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"currentPassword\": \"old123\",\n  \"newPassword\": \"new456\"\n}"
+            },
+            "url": "{{baseUrl}}/users/1/change-password"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Clients",
+      "item": [
+        {
+          "name": "List Clients",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/clients?page=1&per_page=20"
+          }
+        },
+        {
+          "name": "Create Client",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"juan.perez\",\n  \"email\": \"juan@example.com\",\n  \"password\": \"password123\",\n  \"firstName\": \"Juan\",\n  \"lastName\": \"Pérez\",\n  \"documentType\": \"CC\",\n  \"documentNumber\": \"1234567890\",\n  \"phone\": \"+573001234567\",\n  \"birthDate\": \"1990-05-15\",\n  \"address\": \"Calle 123 #45-67\",\n  \"city\": \"Bogotá\"\n}"
+            },
+            "url": "{{baseUrl}}/clients"
+          }
+        },
+        {
+          "name": "Get Client",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/clients/{{clientId}}"
+          }
+        },
+        {
+          "name": "Update Client",
+          "request": {
+            "method": "PUT",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phone\": \"+573009999999\",\n  \"address\": \"Nueva dirección\"\n}"
+            },
+            "url": "{{baseUrl}}/clients/{{clientId}}"
+          }
+        },
+        {
+          "name": "Delete Client",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/clients/{{clientId}}"
+          }
+        },
+        {
+          "name": "Get Client Trips",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/clients/{{clientId}}/trips"
+          }
+        },
+        {
+          "name": "Get Client Bank Cards",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/clients/{{clientId}}/bank-cards"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Guides",
+      "item": [
+        {
+          "name": "List Guides",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/guides"
+          }
+        },
+        {
+          "name": "Get Available Guides",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/guides/available"
+          }
+        },
+        {
+          "name": "Create Guide",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"carlos.guide\",\n  \"email\": \"carlos@guide.com\",\n  \"password\": \"guide123\",\n  \"firstName\": \"Carlos\",\n  \"lastName\": \"Rodríguez\",\n  \"documentType\": \"CC\",\n  \"documentNumber\": \"987654321\",\n  \"phone\": \"+573109876543\",\n  \"licenseNumber\": \"GUIDE-2024-001\",\n  \"specialization\": \"Turismo ecológico\",\n  \"languages\": [\"Español\", \"Inglés\"],\n  \"yearsOfExperience\": 8\n}"
+            },
+            "url": "{{baseUrl}}/guides"
+          }
+        },
+        {
+          "name": "Get Guide",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/guides/1"
+          }
+        },
+        {
+          "name": "Toggle Guide Availability",
+          "request": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/guides/1/toggle-availability"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Municipalities",
+      "item": [
+        {
+          "name": "List Municipalities",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/municipalities"
+          }
+        },
+        {
+          "name": "Search Municipalities",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/municipalities/search?query=carta"
+          }
+        },
+        {
+          "name": "Create Municipality",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Cartagena de Indias\",\n  \"department\": \"Bolívar\",\n  \"country\": \"Colombia\",\n  \"population\": 1028736,\n  \"latitude\": 10.3910,\n  \"longitude\": -75.4794,\n  \"description\": \"Ciudad histórica\",\n  \"climate\": \"Tropical\"\n}"
+            },
+            "url": "{{baseUrl}}/municipalities"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Tourist Activities",
+      "item": [
+        {
+          "name": "List Activities",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/tourist-activities"
+          }
+        },
+        {
+          "name": "Get Activities by Type",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/tourist-activities/by-type?type=cultural"
+          }
+        },
+        {
+          "name": "Create Activity",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"guideId\": 1,\n  \"municipalityId\": 1,\n  \"name\": \"Tour Centro Histórico\",\n  \"description\": \"Recorrido guiado\",\n  \"type\": \"cultural\",\n  \"duration\": 180,\n  \"price\": 80000,\n  \"difficulty\": \"easy\",\n  \"minCapacity\": 2,\n  \"maxCapacity\": 15\n}"
+            },
+            "url": "{{baseUrl}}/tourist-activities"
+          }
+        },
+        {
+          "name": "Toggle Activity Active",
+          "request": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/tourist-activities/1/toggle-active"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Plans",
+      "item": [
+        {
+          "name": "List Plans",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/plans?is_active=true"
+          }
+        },
+        {
+          "name": "Create Plan",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"planCode\": \"PLAN-CARIBE-001\",\n  \"name\": \"Escapada Caribeña\",\n  \"description\": \"Plan completo 5 días\",\n  \"duration\": 5,\n  \"basePrice\": 2500000,\n  \"category\": \"premium\",\n  \"includesAccommodation\": true,\n  \"includesTransport\": true,\n  \"maxPeople\": 4\n}"
+            },
+            "url": "{{baseUrl}}/plans"
+          }
+        },
+        {
+          "name": "Get Plan",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/plans/{{planId}}"
+          }
+        },
+        {
+          "name": "Attach Activities to Plan",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"activityIds\": [1, 2],\n  \"customData\": {\n    \"1\": {\n      \"day_number\": 1,\n      \"order_in_day\": 1,\n      \"is_optional\": false,\n      \"custom_price\": 80000\n    }\n  }\n}"
+            },
+            "url": "{{baseUrl}}/plans/{{planId}}/attach-activities"
+          }
+        },
+        {
+          "name": "Toggle Plan Active",
+          "request": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/plans/{{planId}}/toggle-active"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Trips",
+      "item": [
+        {
+          "name": "List Trips",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/trips?status=confirmed"
+          }
+        },
+        {
+          "name": "Create Trip",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"clientId\": 1,\n  \"startDate\": \"2024-07-15\",\n  \"endDate\": \"2024-07-20\",\n  \"destination\": \"Cartagena\",\n  \"numberOfPeople\": 2,\n  \"status\": \"pending\"\n}"
+            },
+            "url": "{{baseUrl}}/trips"
+          }
+        },
+        {
+          "name": "Get Trip",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/trips/{{tripId}}"
+          }
+        },
+        {
+          "name": "Attach Plans to Trip",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"planIds\": [1],\n  \"customData\": {\n    \"1\": {\n      \"order_in_trip\": 1,\n      \"custom_price\": 2300000\n    }\n  }\n}"
+            },
+            "url": "{{baseUrl}}/trips/{{tripId}}/attach-plans"
+          }
+        },
+        {
+          "name": "Update Trip Status",
+          "request": {
+            "method": "PATCH",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"confirmed\"\n}"
+            },
+            "url": "{{baseUrl}}/trips/{{tripId}}/update-status"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Invoices",
+      "item": [
+        {
+          "name": "List Invoices",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/invoices"
+          }
+        },
+        {
+          "name": "Create Invoice with Installments",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"tripId\": 1,\n  \"bankCardId\": 1,\n  \"subtotal\": 2500000,\n  \"tax\": 475000,\n  \"discount\": 0,\n  \"createInstallments\": true,\n  \"numberOfInstallments\": 3,\n  \"firstInstallmentDate\": \"2024-07-01\"\n}"
+            },
+            "url": "{{baseUrl}}/invoices"
+          }
+        },
+        {
+          "name": "Get Invoice",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/invoices/1"
+          }
+        },
+        {
+          "name": "Register Payment",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": 1000000,\n  \"paymentMethod\": \"credit_card\",\n  \"transactionReference\": \"TXN-2024-001\"\n}"
+            },
+            "url": "{{baseUrl}}/invoices/1/register-payment"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Installments",
+      "item": [
+        {
+          "name": "List Installments",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/installments"
+          }
+        },
+        {
+          "name": "Get Overdue Installments",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/installments/overdue"
+          }
+        },
+        {
+          "name": "Pay Installment",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"paymentMethod\": \"bank_transfer\",\n  \"transactionReference\": \"TRANSFER-2024-001\"\n}"
+            },
+            "url": "{{baseUrl}}/installments/1/pay"
+          }
+        },
+        {
+          "name": "Mark Overdue (Batch)",
+          "request": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/installments/mark-overdue"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Bank Cards",
+      "item": [
+        {
+          "name": "List Client Cards",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/clients/{{clientId}}/bank-cards"
+          }
+        },
+        {
+          "name": "Create Bank Card",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cardHolderName\": \"JUAN PEREZ\",\n  \"cardNumber\": \"4242424242424242\",\n  \"cardType\": \"credit\",\n  \"cardBrand\": \"Visa\",\n  \"expiryMonth\": 12,\n  \"expiryYear\": 2026,\n  \"cvv\": \"123\",\n  \"billingAddress\": \"Calle 123\",\n  \"billingCity\": \"Bogotá\",\n  \"billingCountry\": \"Colombia\",\n  \"isDefault\": true\n}"
+            },
+            "url": "{{baseUrl}}/clients/{{clientId}}/bank-cards"
+          }
+        },
+        {
+          "name": "Set Default Card",
+          "request": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/bank-cards/1/set-default"
+          }
+        },
+        {
+          "name": "Delete (Deactivate) Card",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/bank-cards/1"
+          }
+        }
+      ]
+    }
+  ]
+}

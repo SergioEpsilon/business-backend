@@ -1,0 +1,51 @@
+import { DateTime } from 'luxon'
+import { BaseModel, column, manyToMany, ManyToMany } from '@ioc:Adonis/Lucid/Orm'
+import Driver from 'App/Models/Driver'
+
+export default class Vehicle extends BaseModel {
+  @column({ isPrimary: true })
+  public id: number
+
+  @column()
+  public brand: string
+
+  @column()
+  public model: string
+
+  @column()
+  public year: number
+
+  @column()
+  public licensePlate: string
+
+  @column()
+  public vehicleType: string
+
+  @column()
+  public capacity: number
+
+  @column()
+  public hasAirConditioning: boolean
+
+  @column()
+  public hasWifi: boolean
+
+  @column()
+  public isActive: boolean
+
+  @column.dateTime({ autoCreate: true })
+  public createdAt: DateTime
+
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  public updatedAt: DateTime
+
+  // Relación muchos a muchos con Driver a través de driver_shifts
+  @manyToMany(() => Driver, {
+    pivotTable: 'driver_shifts',
+    pivotForeignKey: 'vehicle_id',
+    pivotRelatedForeignKey: 'driver_id',
+    pivotTimestamps: true,
+    pivotColumns: ['shift_start', 'shift_end', 'status'],
+  })
+  public drivers: ManyToMany<typeof Driver>
+}
