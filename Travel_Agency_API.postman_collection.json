@@ -63,7 +63,7 @@
           "name": "Update User",
           "request": {
             "method": "PUT",
-            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"username\": \"new.username\",\n  \"email\": \"newemail@example.com\"\n}"
@@ -82,7 +82,7 @@
           "name": "Change Password",
           "request": {
             "method": "PATCH",
-            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"currentPassword\": \"old123\",\n  \"newPassword\": \"new456\"\n}"
@@ -106,7 +106,7 @@
           "name": "Create Client",
           "request": {
             "method": "POST",
-            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"username\": \"juan.perez\",\n  \"email\": \"juan@example.com\",\n  \"password\": \"password123\",\n  \"firstName\": \"Juan\",\n  \"lastName\": \"Pérez\",\n  \"documentType\": \"CC\",\n  \"documentNumber\": \"1234567890\",\n  \"phone\": \"+573001234567\",\n  \"birthDate\": \"1990-05-15\",\n  \"address\": \"Calle 123 #45-67\",\n  \"city\": \"Bogotá\"\n}"
@@ -125,7 +125,7 @@
           "name": "Update Client",
           "request": {
             "method": "PUT",
-            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"phone\": \"+573009999999\",\n  \"address\": \"Nueva dirección\"\n}"
@@ -177,7 +177,7 @@
           "name": "Create Guide",
           "request": {
             "method": "POST",
-            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"username\": \"carlos.guide\",\n  \"email\": \"carlos@guide.com\",\n  \"password\": \"guide123\",\n  \"firstName\": \"Carlos\",\n  \"lastName\": \"Rodríguez\",\n  \"documentType\": \"CC\",\n  \"documentNumber\": \"987654321\",\n  \"phone\": \"+573109876543\",\n  \"licenseNumber\": \"GUIDE-2024-001\",\n  \"specialization\": \"Turismo ecológico\",\n  \"languages\": [\"Español\", \"Inglés\"],\n  \"yearsOfExperience\": 8\n}"
@@ -222,7 +222,7 @@
           "name": "Create Municipality",
           "request": {
             "method": "POST",
-            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"name\": \"Cartagena de Indias\",\n  \"department\": \"Bolívar\",\n  \"country\": \"Colombia\",\n  \"population\": 1028736,\n  \"latitude\": 10.3910,\n  \"longitude\": -75.4794,\n  \"description\": \"Ciudad histórica\",\n  \"climate\": \"Tropical\"\n}"
@@ -253,7 +253,7 @@
           "name": "Create Activity",
           "request": {
             "method": "POST",
-            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"guideId\": 1,\n  \"municipalityId\": 1,\n  \"name\": \"Tour Centro Histórico\",\n  \"description\": \"Recorrido guiado\",\n  \"type\": \"cultural\",\n  \"duration\": 180,\n  \"price\": 80000,\n  \"difficulty\": \"easy\",\n  \"minCapacity\": 2,\n  \"maxCapacity\": 15\n}"
@@ -284,7 +284,7 @@
           "name": "Create Plan",
           "request": {
             "method": "POST",
-            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"planCode\": \"PLAN-CARIBE-001\",\n  \"name\": \"Escapada Caribeña\",\n  \"description\": \"Plan completo 5 días\",\n  \"duration\": 5,\n  \"basePrice\": 2500000,\n  \"category\": \"premium\",\n  \"includesAccommodation\": true,\n  \"includesTransport\": true,\n  \"maxPeople\": 4\n}"
@@ -303,7 +303,7 @@
           "name": "Attach Activities to Plan",
           "request": {
             "method": "POST",
-            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"activityIds\": [1, 2],\n  \"customData\": {\n    \"1\": {\n      \"day_number\": 1,\n      \"order_in_day\": 1,\n      \"is_optional\": false,\n      \"custom_price\": 80000\n    }\n  }\n}"
@@ -334,7 +334,7 @@
           "name": "Create Trip",
           "request": {
             "method": "POST",
-            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"clientId\": 1,\n  \"startDate\": \"2024-07-15\",\n  \"endDate\": \"2024-07-20\",\n  \"destination\": \"Cartagena\",\n  \"numberOfPeople\": 2,\n  \"status\": \"pending\"\n}"
@@ -353,7 +353,7 @@
           "name": "Attach Plans to Trip",
           "request": {
             "method": "POST",
-            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"planIds\": [1],\n  \"customData\": {\n    \"1\": {\n      \"order_in_trip\": 1,\n      \"custom_price\": 2300000\n    }\n  }\n}"
@@ -365,7 +365,7 @@
           "name": "Update Trip Status",
           "request": {
             "method": "PATCH",
-            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"status\": \"confirmed\"\n}"
@@ -389,7 +389,7 @@
           "name": "Create Invoice with Installments",
           "request": {
             "method": "POST",
-            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"tripId\": 1,\n  \"bankCardId\": 1,\n  \"subtotal\": 2500000,\n  \"tax\": 475000,\n  \"discount\": 0,\n  \"createInstallments\": true,\n  \"numberOfInstallments\": 3,\n  \"firstInstallmentDate\": \"2024-07-01\"\n}"
@@ -408,7 +408,7 @@
           "name": "Register Payment",
           "request": {
             "method": "POST",
-            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"amount\": 1000000,\n  \"paymentMethod\": \"credit_card\",\n  \"transactionReference\": \"TXN-2024-001\"\n}"
@@ -439,7 +439,7 @@
           "name": "Pay Installment",
           "request": {
             "method": "POST",
-            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"paymentMethod\": \"bank_transfer\",\n  \"transactionReference\": \"TRANSFER-2024-001\"\n}"
@@ -470,7 +470,7 @@
           "name": "Create Bank Card",
           "request": {
             "method": "POST",
-            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
             "body": {
               "mode": "raw",
               "raw": "{\n  \"cardHolderName\": \"JUAN PEREZ\",\n  \"cardNumber\": \"4242424242424242\",\n  \"cardType\": \"credit\",\n  \"cardBrand\": \"Visa\",\n  \"expiryMonth\": 12,\n  \"expiryYear\": 2026,\n  \"cvv\": \"123\",\n  \"billingAddress\": \"Calle 123\",\n  \"billingCity\": \"Bogotá\",\n  \"billingCountry\": \"Colombia\",\n  \"isDefault\": true\n}"

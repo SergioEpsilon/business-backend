@@ -5,9 +5,11 @@
 Se han implementado **11 controladores** completos con operaciones CRUD y funcionalidades especializadas:
 
 ### 1. **ClientsController** ✅
+
 **Ruta base:** `/clients`
 
 **Endpoints:**
+
 - `GET /clients` - Lista paginada de clientes con usuarios y viajes
 - `POST /clients` - Crea cliente con usuario (transaccional)
 - `GET /clients/:id` - Detalle completo con trips, planes, facturas y tarjetas
@@ -17,6 +19,7 @@ Se han implementado **11 controladores** completos con operaciones CRUD y funcio
 - `GET /clients/:id/bank-cards` - Tarjetas activas del cliente
 
 **Características:**
+
 - ✅ Transacciones para creación atómica
 - ✅ Carga de relaciones profundas
 - ✅ Paginación
@@ -25,9 +28,11 @@ Se han implementado **11 controladores** completos con operaciones CRUD y funcio
 ---
 
 ### 2. **TripsController** ✅
+
 **Ruta base:** `/trips`
 
 **Endpoints:**
+
 - `GET /trips` - Lista filtrable por status/clientId
 - `POST /trips` - Crea viaje con código generado
 - `GET /trips/:id` - Detalle profundo con cliente, planes, actividades, facturas
@@ -39,6 +44,7 @@ Se han implementado **11 controladores** completos con operaciones CRUD y funcio
 - `GET /trips/:id/invoices` - Facturas del viaje
 
 **Características:**
+
 - ✅ Relación n:m con Plans usando pivot `trip_plan`
 - ✅ Filtrado por estado y cliente
 - ✅ Validación de enums (status, paymentStatus)
@@ -47,9 +53,11 @@ Se han implementado **11 controladores** completos con operaciones CRUD y funcio
 ---
 
 ### 3. **PlansController** ✅
+
 **Ruta base:** `/plans`
 
 **Endpoints:**
+
 - `GET /plans` - Lista filtrable por categoría/activo
 - `POST /plans` - Crea plan turístico
 - `GET /plans/:id` - Detalle con actividades, guías, municipios y viajes
@@ -61,6 +69,7 @@ Se han implementado **11 controladores** completos con operaciones CRUD y funcio
 - `GET /plans/:id/activities` - Actividades del plan
 
 **Características:**
+
 - ✅ Relación n:m con TouristActivities
 - ✅ Datos pivot: day_number, order_in_day, is_optional, custom_price
 - ✅ Filtrado por categoría y estado activo
@@ -69,9 +78,11 @@ Se han implementado **11 controladores** completos con operaciones CRUD y funcio
 ---
 
 ### 4. **TouristActivitiesController** ✅
+
 **Ruta base:** `/tourist-activities`
 
 **Endpoints:**
+
 - `GET /tourist-activities` - Lista filtrable por municipio/guía/tipo/activo
 - `POST /tourist-activities` - Crea actividad turística
 - `GET /tourist-activities/:id` - Detalle con guía, municipio y planes
@@ -82,6 +93,7 @@ Se han implementado **11 controladores** completos con operaciones CRUD y funcio
 - `GET /tourist-activities/by-type` - Filtro especializado por tipo
 
 **Características:**
+
 - ✅ Relación con Guide y Municipality
 - ✅ Filtrado múltiple (municipio, guía, tipo, estado)
 - ✅ Endpoint especializado por tipo de actividad
@@ -90,9 +102,11 @@ Se han implementado **11 controladores** completos con operaciones CRUD y funcio
 ---
 
 ### 5. **InvoicesController** ✅
+
 **Ruta base:** `/invoices`
 
 **Endpoints:**
+
 - `GET /invoices` - Lista filtrable por status/tripId
 - `POST /invoices` - Crea factura con cálculo automático y cuotas opcionales
 - `GET /invoices/:id` - Detalle con viaje, cliente, tarjeta y cuotas
@@ -102,6 +116,7 @@ Se han implementado **11 controladores** completos con operaciones CRUD y funcio
 - `PATCH /invoices/:id/mark-overdue` - Marca como vencida
 
 **Características:**
+
 - ✅ Transacciones para factura + cuotas
 - ✅ Cálculo automático de totales (subtotal, tax, total)
 - ✅ Registro incremental de pagos con balance
@@ -111,9 +126,11 @@ Se han implementado **11 controladores** completos con operaciones CRUD y funcio
 ---
 
 ### 6. **MunicipalitiesController** ✅
+
 **Ruta base:** `/municipalities`
 
 **Endpoints:**
+
 - `GET /municipalities` - Lista filtrable por departamento/país
 - `POST /municipalities` - Crea municipio
 - `GET /municipalities/:id` - Detalle con actividades turísticas activas
@@ -123,6 +140,7 @@ Se han implementado **11 controladores** completos con operaciones CRUD y funcio
 - `GET /municipalities/search` - Búsqueda por nombre/departamento
 
 **Características:**
+
 - ✅ Datos geográficos (latitud, longitud, población, clima)
 - ✅ Filtrado por ubicación
 - ✅ Búsqueda inteligente con LIKE
@@ -131,9 +149,11 @@ Se han implementado **11 controladores** completos con operaciones CRUD y funcio
 ---
 
 ### 7. **GuidesController** ✅
+
 **Ruta base:** `/guides`
 
 **Endpoints:**
+
 - `GET /guides` - Lista filtrable por especialización/disponibilidad
 - `POST /guides` - Crea guía con usuario (transaccional)
 - `GET /guides/:id` - Detalle con usuario y actividades
@@ -144,6 +164,7 @@ Se han implementado **11 controladores** completos con operaciones CRUD y funcio
 - `GET /guides/available` - Guías disponibles
 
 **Características:**
+
 - ✅ Transacciones para creación guía + usuario
 - ✅ Manejo de JSON para idiomas
 - ✅ Control de disponibilidad
@@ -153,9 +174,11 @@ Se han implementado **11 controladores** completos con operaciones CRUD y funcio
 ---
 
 ### 8. **AdministratorsController** ✅
+
 **Ruta base:** `/administrators`
 
 **Endpoints:**
+
 - `GET /administrators` - Lista filtrable por departamento
 - `POST /administrators` - Crea administrador con usuario (transaccional)
 - `GET /administrators/:id` - Detalle con usuario
@@ -164,6 +187,7 @@ Se han implementado **11 controladores** completos con operaciones CRUD y funcio
 - `PATCH /administrators/:id/permissions` - Actualiza permisos
 
 **Características:**
+
 - ✅ Transacciones para admin + usuario
 - ✅ Sistema de permisos (canManageUsers, canManageTrips, canManageInvoices)
 - ✅ Niveles de acceso (1: básico, 2: medio, 3: total)
@@ -172,9 +196,11 @@ Se han implementado **11 controladores** completos con operaciones CRUD y funcio
 ---
 
 ### 9. **UsersController** ✅
+
 **Ruta base:** `/users`
 
 **Endpoints:**
+
 - `GET /users` - Lista filtrable por userType/isActive
 - `GET /users/:id` - Detalle con todas las relaciones según tipo
 - `PUT /users/:id` - Actualiza información básica
@@ -184,6 +210,7 @@ Se han implementado **11 controladores** completos con operaciones CRUD y funcio
 - `GET /users/stats` - Estadísticas de usuarios
 
 **Características:**
+
 - ✅ Carga polimórfica de relaciones según userType
 - ✅ Estadísticas agregadas (total, activos, por tipo)
 - ✅ Endpoint de perfil dinámico
@@ -192,9 +219,11 @@ Se han implementado **11 controladores** completos con operaciones CRUD y funcio
 ---
 
 ### 10. **BankCardsController** ✅
+
 **Ruta base:** `/bank-cards` y `/clients/:clientId/bank-cards`
 
 **Endpoints:**
+
 - `GET /clients/:clientId/bank-cards` - Tarjetas de un cliente
 - `POST /clients/:clientId/bank-cards` - Registra nueva tarjeta
 - `GET /bank-cards/:id` - Detalle de tarjeta
@@ -203,6 +232,7 @@ Se han implementado **11 controladores** completos con operaciones CRUD y funcio
 - `PATCH /bank-cards/:id/set-default` - Marca como predeterminada
 
 **Características:**
+
 - ✅ Soft delete (desactivación en vez de eliminar)
 - ✅ Tarjeta predeterminada automática
 - ✅ Datos sensibles ocultos (cardNumber, cvv con serializeAs: null)
@@ -211,9 +241,11 @@ Se han implementado **11 controladores** completos con operaciones CRUD y funcio
 ---
 
 ### 11. **InstallmentsController** ✅
+
 **Ruta base:** `/installments`
 
 **Endpoints:**
+
 - `GET /installments` - Lista filtrable por status/tripId
 - `POST /installments` - Crea cuota manualmente
 - `GET /installments/:id` - Detalle de cuota con viaje y factura
@@ -224,6 +256,7 @@ Se han implementado **11 controladores** completos con operaciones CRUD y funcio
 - `PATCH /installments/mark-overdue` - Marca cuotas vencidas masivamente
 
 **Características:**
+
 - ✅ Estados: pending, paid, overdue
 - ✅ Registro de pagos con fecha y método
 - ✅ Detección automática de cuotas vencidas
@@ -233,14 +266,14 @@ Se han implementado **11 controladores** completos con operaciones CRUD y funcio
 
 ## 📊 Estadísticas Generales
 
-| Métrica | Cantidad |
-|---------|----------|
-| **Total de Controladores** | 11 |
-| **Total de Endpoints** | ~75 |
-| **Operaciones CRUD Completas** | 11 |
-| **Endpoints Especializados** | ~20 |
-| **Relaciones Gestionadas** | 15+ |
-| **Transacciones Implementadas** | 5 |
+| Métrica                         | Cantidad |
+| ------------------------------- | -------- |
+| **Total de Controladores**      | 11       |
+| **Total de Endpoints**          | ~75      |
+| **Operaciones CRUD Completas**  | 11       |
+| **Endpoints Especializados**    | ~20      |
+| **Relaciones Gestionadas**      | 15+      |
+| **Transacciones Implementadas** | 5        |
 
 ---
 
@@ -278,29 +311,36 @@ InvoicesController
 ## ⚡ Patrones Implementados
 
 ### 1. **Transacciones Atómicas**
+
 - `ClientsController.store()` - Usuario + Cliente
 - `GuidesController.store()` - Usuario + Guía
 - `AdministratorsController.store()` - Usuario + Administrador
 - `InvoicesController.store()` - Factura + Cuotas
 
 ### 2. **Soft Delete**
+
 - `BankCardsController` - Desactivación en vez de eliminación física
 
 ### 3. **Relaciones Many-to-Many con Pivot**
+
 - `TripsController.attachPlans()` - Datos personalizados en pivot
 - `PlansController.attachActivities()` - Orden y opcionalidad en pivot
 
 ### 4. **Carga Profunda de Relaciones**
+
 - Uso extensivo de `preload()` anidado
 - Optimización con selectivas cargas según endpoint
 
 ### 5. **Toggle Endpoints**
+
 - `toggleStatus()`, `toggleActive()`, `toggleAvailability()`
 
 ### 6. **Filtrado Flexible**
+
 - Parámetros opcionales de query para filtrado dinámico
 
 ### 7. **Paginación Estándar**
+
 - `page` y `per_page` en endpoints de listado
 
 ---
@@ -308,11 +348,13 @@ InvoicesController
 ## 🔐 Consideraciones de Seguridad
 
 ### Implementadas:
+
 - ✅ Ocultación de datos sensibles (`serializeAs: null` en Model)
 - ✅ Transacciones para integridad de datos
 - ✅ Validación de estados con enums
 
 ### Pendientes (TODO):
+
 - 🔴 Implementar Hash para passwords (`Hash.make()`, `Hash.verify()`)
 - 🔴 Agregar middleware de autenticación
 - 🔴 Implementar autorización basada en roles
@@ -325,7 +367,9 @@ InvoicesController
 ## 📝 Próximos Pasos
 
 ### 1. **Definir Rutas** (ALTA PRIORIDAD)
+
 Crear archivo `start/routes.ts` con todas las rutas:
+
 ```typescript
 Route.group(() => {
   // Clients
@@ -336,6 +380,7 @@ Route.group(() => {
 ```
 
 ### 2. **Crear Validadores**
+
 - `ClientValidator.ts`
 - `TripValidator.ts`
 - `PlanValidator.ts`
@@ -343,16 +388,19 @@ Route.group(() => {
 - Etc.
 
 ### 3. **Middleware de Autenticación**
+
 - Implementar JWT o sessions
 - Proteger rutas sensibles
 - Verificación de permisos por rol
 
 ### 4. **Testing**
+
 - Unit tests para cada controlador
 - Integration tests para flujos completos
 - Test de transacciones
 
 ### 5. **Documentación API**
+
 - Swagger/OpenAPI
 - Postman collection
 - Ejemplos de requests/responses
@@ -362,6 +410,7 @@ Route.group(() => {
 ## 🎯 Uso Rápido
 
 ### Ejemplo: Crear un cliente
+
 ```bash
 POST /api/v1/clients
 Content-Type: application/json
@@ -382,6 +431,7 @@ Content-Type: application/json
 ```
 
 ### Ejemplo: Crear viaje con planes
+
 ```bash
 # 1. Crear viaje
 POST /api/v1/trips
@@ -424,17 +474,17 @@ POST /api/v1/trips/1/attach-plans
 
 **Progreso General:** ████████░░ 75%
 
-| Componente | Estado |
-|------------|--------|
-| Modelos | ✅ 100% |
-| Migraciones | ✅ 100% |
+| Componente    | Estado  |
+| ------------- | ------- |
+| Modelos       | ✅ 100% |
+| Migraciones   | ✅ 100% |
 | Controladores | ✅ 100% |
-| Seeders | ✅ 100% |
+| Seeders       | ✅ 100% |
 | Documentación | ✅ 100% |
-| Validadores | ❌ 0% |
-| Rutas | ❌ 0% |
-| Auth | ❌ 0% |
-| Tests | ❌ 0% |
+| Validadores   | ❌ 0%   |
+| Rutas         | ❌ 0%   |
+| Auth          | ❌ 0%   |
+| Tests         | ❌ 0%   |
 
 ---
 

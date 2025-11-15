@@ -1,35 +1,14 @@
 import { DateTime } from 'luxon'
-import {
-  BaseModel,
-  column,
-  belongsTo,
-  BelongsTo,
-  manyToMany,
-  ManyToMany,
-  hasMany,
-  HasMany,
-} from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, column, manyToMany, ManyToMany, hasMany, HasMany } from '@ioc:Adonis/Lucid/Orm'
 import Client from './Client'
+import Route from './Route'
+import Room from './Room'
 import Plan from './Plan'
 import Installment from './Installment'
-import Invoice from './Invoice'
 
 export default class Trip extends BaseModel {
   @column({ isPrimary: true })
   public id: number
-
-  // Relación n-1 con Client (cada viaje pertenece a un cliente)
-  @column()
-  public clientId: number
-
-  @belongsTo(() => Client, {
-    foreignKey: 'clientId',
-  })
-  public client: BelongsTo<typeof Client>
-
-  // Información del viaje
-  @column()
-  public tripCode: string
 
   @column()
   public destination: string
@@ -44,40 +23,41 @@ export default class Trip extends BaseModel {
   public endDate: DateTime
 
   @column()
-  public totalPrice: number
+  public price: number
 
   @column()
-  public numberOfPassengers: number
+  public capacity: number
 
-  @column()
-  public status: 'pending' | 'confirmed' | 'in_progress' | 'completed' | 'cancelled'
+  // Relación muchos a muchos con Client
+  @manyToMany(() => Client, {
+    pivotTable: 'client_trip',
+  })
+  public clients: ManyToMany<typeof Client>
 
-  @column()
-  public paymentStatus: 'pending' | 'partial' | 'paid'
+  // Relación muchos a muchos con Route (trayecto)
+  @manyToMany(() => Route, {
+    pivotTable: 'trip_route',
+  })
+  public routes: ManyToMany<typeof Route>
 
-  @column()
-  public notes: string
+  // Relación muchos a muchos con Room
+  @manyToMany(() => Room, {
+    pivotTable: 'room_trip',
+    pivotColumns: ['check_in_date', 'check_out_date', 'num_guests'],
+  })
+  public rooms: ManyToMany<typeof Room>
 
-  // Relación n-m con Plan (un viaje puede incluir varios planes)
+  // Relación muchos a muchos con Plan
   @manyToMany(() => Plan, {
     pivotTable: 'trip_plan',
-    pivotForeignKey: 'trip_id',
-    pivotRelatedForeignKey: 'plan_id',
-    pivotTimestamps: true,
   })
   public plans: ManyToMany<typeof Plan>
 
-  // Relación 1-n con Installment (un viaje puede tener múltiples cuotas)
+  // Relación uno a muchos con Installment
   @hasMany(() => Installment, {
     foreignKey: 'tripId',
   })
   public installments: HasMany<typeof Installment>
-
-  // Relación 1-n con Invoice (un viaje puede tener múltiples facturas)
-  @hasMany(() => Invoice, {
-    foreignKey: 'tripId',
-  })
-  public invoices: HasMany<typeof Invoice>
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime

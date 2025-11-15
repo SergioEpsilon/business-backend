@@ -49,7 +49,6 @@ export default class UsersController {
         .where('id', params.id)
         .preload('client', (clientQuery) => {
           clientQuery.preload('trips')
-          clientQuery.preload('bankCards')
         })
         .preload('guide', (guideQuery) => {
           guideQuery.preload('touristActivities')
@@ -157,11 +156,7 @@ export default class UsersController {
           profile = await Client.query()
             .where('user_id', user.id)
             .preload('trips', (tripsQuery) => {
-              tripsQuery.preload('plans')
               tripsQuery.orderBy('created_at', 'desc')
-            })
-            .preload('bankCards', (cardsQuery) => {
-              cardsQuery.where('is_active', true)
             })
             .firstOrFail()
           break

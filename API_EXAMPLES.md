@@ -9,6 +9,7 @@ Este documento contiene ejemplos prácticos de cómo usar los endpoints de la AP
 **Base URL:** `http://localhost:3333/api/v1`
 
 **Headers comunes:**
+
 ```
 Content-Type: application/json
 Accept: application/json
@@ -25,6 +26,7 @@ POST /api/v1/clients
 ```
 
 **Body:**
+
 ```json
 {
   "username": "maria.lopez",
@@ -44,6 +46,7 @@ POST /api/v1/clients
 ```
 
 **Respuesta (201 Created):**
+
 ```json
 {
   "message": "Cliente creado exitosamente",
@@ -72,6 +75,7 @@ GET /api/v1/clients?page=1&per_page=10
 ```
 
 **Respuesta:**
+
 ```json
 {
   "meta": {
@@ -104,6 +108,7 @@ GET /api/v1/clients/1
 ```
 
 **Respuesta:**
+
 ```json
 {
   "id": 1,
@@ -146,6 +151,7 @@ POST /api/v1/guides
 ```
 
 **Body:**
+
 ```json
 {
   "username": "carlos.tours",
@@ -175,6 +181,7 @@ POST /api/v1/municipalities
 ```
 
 **Body:**
+
 ```json
 {
   "name": "Cartagena de Indias",
@@ -182,7 +189,7 @@ POST /api/v1/municipalities
   "country": "Colombia",
   "population": 1028736,
   "area": 572,
-  "latitude": 10.3910,
+  "latitude": 10.391,
   "longitude": -75.4794,
   "description": "Ciudad histórica patrimonio de la humanidad",
   "climate": "Tropical",
@@ -197,6 +204,7 @@ POST /api/v1/tourist-activities
 ```
 
 **Body:**
+
 ```json
 {
   "guideId": 1,
@@ -223,6 +231,7 @@ GET /api/v1/municipalities/search?query=carta
 ```
 
 **Respuesta:**
+
 ```json
 [
   {
@@ -251,6 +260,7 @@ POST /api/v1/plans
 ```
 
 **Body:**
+
 ```json
 {
   "planCode": "PLAN-CARIBE-2024",
@@ -275,6 +285,7 @@ POST /api/v1/plans/1/attach-activities
 ```
 
 **Body:**
+
 ```json
 {
   "activityIds": [1, 2, 3],
@@ -302,6 +313,7 @@ POST /api/v1/plans/1/attach-activities
 ```
 
 **Respuesta:**
+
 ```json
 {
   "message": "Actividades asociadas exitosamente al plan",
@@ -343,6 +355,7 @@ POST /api/v1/trips
 ```
 
 **Body:**
+
 ```json
 {
   "clientId": 1,
@@ -356,6 +369,7 @@ POST /api/v1/trips
 ```
 
 **Respuesta:**
+
 ```json
 {
   "message": "Viaje creado exitosamente",
@@ -379,6 +393,7 @@ POST /api/v1/trips/1/attach-plans
 ```
 
 **Body:**
+
 ```json
 {
   "planIds": [1, 2],
@@ -407,6 +422,7 @@ PATCH /api/v1/trips/1/update-status
 ```
 
 **Body:**
+
 ```json
 {
   "status": "confirmed"
@@ -414,6 +430,7 @@ PATCH /api/v1/trips/1/update-status
 ```
 
 Valores permitidos para `status`:
+
 - `pending`
 - `confirmed`
 - `in_progress`
@@ -427,6 +444,7 @@ GET /api/v1/trips/1
 ```
 
 **Respuesta:**
+
 ```json
 {
   "id": 1,
@@ -481,6 +499,7 @@ POST /api/v1/clients/1/bank-cards
 ```
 
 **Body:**
+
 ```json
 {
   "cardHolderName": "JUAN PEREZ",
@@ -507,6 +526,7 @@ GET /api/v1/clients/1/bank-cards?is_active=true
 ```
 
 **Respuesta:**
+
 ```json
 [
   {
@@ -540,6 +560,7 @@ POST /api/v1/invoices
 ```
 
 **Body:**
+
 ```json
 {
   "tripId": 1,
@@ -554,6 +575,7 @@ POST /api/v1/invoices
 ```
 
 **Respuesta:**
+
 ```json
 {
   "message": "Factura creada exitosamente con 3 cuota(s)",
@@ -599,6 +621,7 @@ POST /api/v1/invoices/1/register-payment
 ```
 
 **Body:**
+
 ```json
 {
   "amount": 1000000,
@@ -608,6 +631,7 @@ POST /api/v1/invoices/1/register-payment
 ```
 
 **Respuesta:**
+
 ```json
 {
   "message": "Pago registrado exitosamente",
@@ -629,6 +653,7 @@ POST /api/v1/installments/1/pay
 ```
 
 **Body:**
+
 ```json
 {
   "paymentMethod": "bank_transfer",
@@ -643,6 +668,7 @@ GET /api/v1/installments/overdue
 ```
 
 **Respuesta:**
+
 ```json
 [
   {
@@ -670,6 +696,7 @@ PATCH /api/v1/installments/mark-overdue
 ```
 
 **Respuesta:**
+
 ```json
 {
   "message": "5 cuota(s) marcada(s) como vencida(s)",
@@ -688,6 +715,7 @@ GET /api/v1/users/stats
 ```
 
 **Respuesta:**
+
 ```json
 {
   "total": 50,
@@ -707,6 +735,7 @@ GET /api/v1/users/1/profile
 ```
 
 **Respuesta (si es cliente):**
+
 ```json
 {
   "user": {
@@ -738,6 +767,7 @@ GET /api/v1/guides/available
 ```
 
 **Respuesta:**
+
 ```json
 [
   {
@@ -759,6 +789,7 @@ GET /api/v1/municipalities/1/activities
 ```
 
 **Respuesta:**
+
 ```json
 [
   {
@@ -813,6 +844,7 @@ PUT /api/v1/clients/1
 ```
 
 **Body (parcial):**
+
 ```json
 {
   "phone": "+573009999999",
@@ -828,6 +860,7 @@ PATCH /api/v1/guides/1/toggle-availability
 ```
 
 **Respuesta:**
+
 ```json
 {
   "message": "Guía no disponible",
@@ -851,6 +884,7 @@ PATCH /api/v1/administrators/1/permissions
 ```
 
 **Body:**
+
 ```json
 {
   "accessLevel": 3,
@@ -871,6 +905,7 @@ DELETE /api/v1/clients/1
 ```
 
 **Respuesta:**
+
 ```json
 {
   "message": "Cliente eliminado exitosamente"
@@ -892,6 +927,7 @@ POST /api/v1/trips/1/detach-plans
 ```
 
 **Body:**
+
 ```json
 {
   "planIds": [1, 2]
@@ -905,6 +941,7 @@ POST /api/v1/trips/1/detach-plans
 ### Caso 1: Reservar un Viaje Completo
 
 **1. Crear el cliente:**
+
 ```bash
 POST /api/v1/clients
 { ... datos del cliente ... }
@@ -912,6 +949,7 @@ POST /api/v1/clients
 ```
 
 **2. Crear el viaje:**
+
 ```bash
 POST /api/v1/trips
 {
@@ -925,6 +963,7 @@ POST /api/v1/trips
 ```
 
 **3. Asociar planes al viaje:**
+
 ```bash
 POST /api/v1/trips/10/attach-plans
 {
@@ -936,6 +975,7 @@ POST /api/v1/trips/10/attach-plans
 ```
 
 **4. Registrar tarjeta de pago:**
+
 ```bash
 POST /api/v1/clients/5/bank-cards
 { ... datos de la tarjeta ... }
@@ -943,6 +983,7 @@ POST /api/v1/clients/5/bank-cards
 ```
 
 **5. Crear factura con cuotas:**
+
 ```bash
 POST /api/v1/invoices
 {
@@ -957,6 +998,7 @@ POST /api/v1/invoices
 ```
 
 **6. Pagar primera cuota:**
+
 ```bash
 POST /api/v1/installments/25/pay
 {
@@ -966,6 +1008,7 @@ POST /api/v1/installments/25/pay
 ```
 
 **7. Confirmar viaje:**
+
 ```bash
 PATCH /api/v1/trips/10/update-status
 { "status": "confirmed" }
@@ -974,6 +1017,7 @@ PATCH /api/v1/trips/10/update-status
 ### Caso 2: Crear un Plan Turístico Completo
 
 **1. Crear municipio (si no existe):**
+
 ```bash
 POST /api/v1/municipalities
 { ... datos del municipio ... }
@@ -981,6 +1025,7 @@ POST /api/v1/municipalities
 ```
 
 **2. Crear actividades:**
+
 ```bash
 POST /api/v1/tourist-activities
 {
@@ -996,6 +1041,7 @@ POST /api/v1/tourist-activities
 ```
 
 **3. Crear el plan:**
+
 ```bash
 POST /api/v1/plans
 {
@@ -1008,6 +1054,7 @@ POST /api/v1/plans
 ```
 
 **4. Asociar actividades al plan:**
+
 ```bash
 POST /api/v1/plans/8/attach-activities
 {
@@ -1027,11 +1074,13 @@ POST /api/v1/plans/8/attach-activities
 ### Ejemplo de Error 404 (No encontrado)
 
 **Request:**
+
 ```bash
 GET /api/v1/clients/999
 ```
 
 **Respuesta (404):**
+
 ```json
 {
   "message": "Cliente no encontrado",
@@ -1042,12 +1091,14 @@ GET /api/v1/clients/999
 ### Ejemplo de Error 400 (Datos inválidos)
 
 **Request:**
+
 ```bash
 PATCH /api/v1/trips/1/update-status
 { "status": "invalid_status" }
 ```
 
 **Respuesta (400):**
+
 ```json
 {
   "message": "Estado no válido",
@@ -1076,6 +1127,7 @@ PATCH /api/v1/trips/1/update-status
 ---
 
 **Para más detalles, consulta:**
+
 - `CONTROLLERS_SUMMARY.md` - Documentación completa de endpoints
 - `SETUP_GUIDE.md` - Guía de instalación y ejecución
 - `DOCUMENTATION.md` - Documentación técnica del sistema

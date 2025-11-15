@@ -1,13 +1,5 @@
 import { DateTime } from 'luxon'
-import {
-  BaseModel,
-  column,
-  belongsTo,
-  BelongsTo,
-  hasMany,
-  HasMany,
-} from '@ioc:Adonis/Lucid/Orm'
-import User from './User'
+import { BaseModel, column, ManyToMany, manyToMany, hasMany, HasMany } from '@ioc:Adonis/Lucid/Orm'
 import Trip from './Trip'
 import BankCard from './BankCard'
 
@@ -15,27 +7,11 @@ export default class Client extends BaseModel {
   @column({ isPrimary: true })
   public id: number
 
-  // Relación 1-1 con User
   @column()
-  public userId: number
-
-  @belongsTo(() => User, {
-    foreignKey: 'userId',
-  })
-  public user: BelongsTo<typeof User>
-
-  // Información del cliente
-  @column()
-  public firstName: string
+  public name: string
 
   @column()
-  public lastName: string
-
-  @column()
-  public documentType: string
-
-  @column()
-  public documentNumber: string
+  public email: string
 
   @column()
   public phone: string
@@ -43,22 +19,13 @@ export default class Client extends BaseModel {
   @column()
   public address: string
 
-  @column()
-  public city: string
-
-  @column()
-  public country: string
-
-  @column.date()
-  public birthDate: DateTime
-
-  // Relación 1-n con Trip (un cliente puede tener múltiples viajes)
-  @hasMany(() => Trip, {
-    foreignKey: 'clientId',
+  // Relación muchos a muchos con Trip
+  @manyToMany(() => Trip, {
+    pivotTable: 'client_trip',
   })
-  public trips: HasMany<typeof Trip>
+  public trips: ManyToMany<typeof Trip>
 
-  // Relación 1-n con BankCard (un cliente puede tener múltiples tarjetas)
+  // Relación uno a muchos con BankCard
   @hasMany(() => BankCard, {
     foreignKey: 'clientId',
   })

@@ -184,44 +184,48 @@
 ## 🔗 RESUMEN DE RELACIONES
 
 ### Relaciones 1:1 (Uno a Uno)
-| Modelo Origen | Relación | Modelo Destino |
-|---------------|----------|----------------|
-| User | hasOne | Client |
-| User | hasOne | Guide |
-| User | hasOne | Administrator |
-| Client | belongsTo | User |
-| Guide | belongsTo | User |
-| Administrator | belongsTo | User |
+
+| Modelo Origen | Relación  | Modelo Destino |
+| ------------- | --------- | -------------- |
+| User          | hasOne    | Client         |
+| User          | hasOne    | Guide          |
+| User          | hasOne    | Administrator  |
+| Client        | belongsTo | User           |
+| Guide         | belongsTo | User           |
+| Administrator | belongsTo | User           |
 
 ### Relaciones 1:n (Uno a Muchos)
-| Modelo Origen | Relación | Modelo Destino |
-|---------------|----------|----------------|
-| Client | hasMany | Trip |
-| Client | hasMany | BankCard |
-| Guide | hasMany | TouristActivity |
-| Municipality | hasMany | TouristActivity |
-| Trip | hasMany | Invoice |
-| Trip | hasMany | Installment |
-| BankCard | hasMany | Invoice |
-| Invoice | hasMany | Installment |
+
+| Modelo Origen | Relación | Modelo Destino  |
+| ------------- | -------- | --------------- |
+| Client        | hasMany  | Trip            |
+| Client        | hasMany  | BankCard        |
+| Guide         | hasMany  | TouristActivity |
+| Municipality  | hasMany  | TouristActivity |
+| Trip          | hasMany  | Invoice         |
+| Trip          | hasMany  | Installment     |
+| BankCard      | hasMany  | Invoice         |
+| Invoice       | hasMany  | Installment     |
 
 ### Relaciones n:1 (Muchos a Uno)
-| Modelo Origen | Relación | Modelo Destino |
-|---------------|----------|----------------|
-| Trip | belongsTo | Client |
-| TouristActivity | belongsTo | Guide |
-| TouristActivity | belongsTo | Municipality |
-| Invoice | belongsTo | Trip |
-| Invoice | belongsTo | BankCard |
-| Installment | belongsTo | Trip |
-| Installment | belongsTo | Invoice |
-| BankCard | belongsTo | Client |
+
+| Modelo Origen   | Relación  | Modelo Destino |
+| --------------- | --------- | -------------- |
+| Trip            | belongsTo | Client         |
+| TouristActivity | belongsTo | Guide          |
+| TouristActivity | belongsTo | Municipality   |
+| Invoice         | belongsTo | Trip           |
+| Invoice         | belongsTo | BankCard       |
+| Installment     | belongsTo | Trip           |
+| Installment     | belongsTo | Invoice        |
+| BankCard        | belongsTo | Client         |
 
 ### Relaciones n:m (Muchos a Muchos)
-| Modelo A | Tabla Pivote | Modelo B | Campos Extra |
-|----------|--------------|----------|--------------|
-| Plan | plan_tourist_activities | TouristActivity | day_number, order_in_day, is_optional, custom_price |
-| Trip | trip_plan | Plan | order_in_trip, start_date, end_date, custom_price |
+
+| Modelo A | Tabla Pivote            | Modelo B        | Campos Extra                                        |
+| -------- | ----------------------- | --------------- | --------------------------------------------------- |
+| Plan     | plan_tourist_activities | TouristActivity | day_number, order_in_day, is_optional, custom_price |
+| Trip     | trip_plan               | Plan            | order_in_trip, start_date, end_date, custom_price   |
 
 ---
 
@@ -260,21 +264,25 @@
 ## 🎯 CARDINALIDADES EXPLICADAS
 
 ### Cliente → Viajes (1:n)
+
 - **Un** cliente puede hacer **múltiples** viajes
 - **Cada** viaje pertenece a **un solo** cliente
 - **Ejemplo:** María García tiene 3 viajes reservados
 
 ### Viaje → Planes (n:m)
+
 - **Un** viaje puede incluir **varios** planes
 - **Un** plan puede estar en **varios** viajes
 - **Ejemplo:** Viaje a Cartagena incluye "Plan Colonial" + "Plan Playa"
 
 ### Plan → Actividades (n:m)
+
 - **Un** plan incluye **múltiples** actividades
 - **Una** actividad puede estar en **varios** planes
 - **Ejemplo:** "Tour Ciudad Amurallada" está en 3 planes diferentes
 
 ### Guía → Actividades (1:n)
+
 - **Un** guía dirige **múltiples** actividades
 - **Cada** actividad tiene **un** guía asignado
 - **Ejemplo:** Pedro Martínez guía 5 actividades diferentes
@@ -286,13 +294,16 @@
 ### 🚨 DEBEN SER ENCRIPTADOS:
 
 #### User
+
 - `password` → Bcrypt/Argon2
 
 #### BankCard
+
 - `card_number` → AES-256
 - `cvv` → AES-256
 
 ### 🔒 NO DEBEN SERIALIZARSE:
+
 - `user.password` → `serializeAs: null`
 - `bank_card.card_number` → `serializeAs: null` (en producción)
 - `bank_card.cvv` → `serializeAs: null`
@@ -333,6 +344,7 @@ CREATE INDEX idx_activities_municipality ON tourist_activities(municipality_id);
 ## 🎨 ESTADOS Y ENUMERACIONES
 
 ### Trip Status
+
 - `pending` - Pendiente de confirmación
 - `confirmed` - Confirmado
 - `in_progress` - En curso
@@ -340,11 +352,13 @@ CREATE INDEX idx_activities_municipality ON tourist_activities(municipality_id);
 - `cancelled` - Cancelado
 
 ### Payment Status
+
 - `pending` - Sin pagar
 - `partial` - Pago parcial
 - `paid` - Pagado completo
 
 ### Invoice Status
+
 - `pending` - Pendiente
 - `partial` - Pago parcial
 - `paid` - Pagada
@@ -352,21 +366,25 @@ CREATE INDEX idx_activities_municipality ON tourist_activities(municipality_id);
 - `cancelled` - Cancelada
 
 ### Installment Status
+
 - `pending` - Pendiente
 - `paid` - Pagada
 - `overdue` - Vencida
 - `cancelled` - Cancelada
 
 ### Difficulty Levels
+
 - `easy` - Fácil
 - `moderate` - Moderado
 - `hard` - Difícil
 
 ### Card Types
+
 - `credit` - Crédito
 - `debit` - Débito
 
 ### Payment Methods
+
 - `credit_card` - Tarjeta de crédito
 - `debit_card` - Tarjeta débito
 - `bank_transfer` - Transferencia

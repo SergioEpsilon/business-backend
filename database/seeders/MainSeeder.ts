@@ -175,8 +175,7 @@ export default class extends BaseSeeder {
       area: 26.0,
       latitude: 12.58447,
       longitude: -81.70047,
-      description:
-        'Isla paradisíaca en el Caribe colombiano, famosa por su mar de siete colores.',
+      description: 'Isla paradisíaca en el Caribe colombiano, famosa por su mar de siete colores.',
       climate: 'Tropical',
       altitude: 1,
     })
@@ -208,8 +207,7 @@ export default class extends BaseSeeder {
       guideId: guide1.id,
       municipalityId: cartagena.id,
       name: 'Paseo en Lancha a Islas del Rosario',
-      description:
-        'Excursión marítima a las hermosas Islas del Rosario con snorkeling incluido.',
+      description: 'Excursión marítima a las hermosas Islas del Rosario con snorkeling incluido.',
       activityType: 'Naturaleza',
       duration: 8,
       price: 150000,
@@ -226,8 +224,7 @@ export default class extends BaseSeeder {
       guideId: guide2.id,
       municipalityId: santaMarta.id,
       name: 'Trekking Parque Tayrona',
-      description:
-        'Caminata ecológica por los senderos del Parque Nacional Natural Tayrona.',
+      description: 'Caminata ecológica por los senderos del Parque Nacional Natural Tayrona.',
       activityType: 'Aventura',
       duration: 10,
       price: 120000,

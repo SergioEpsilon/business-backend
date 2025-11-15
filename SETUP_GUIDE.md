@@ -76,6 +76,7 @@ node ace migration:run
 ```
 
 **Salida esperada:**
+
 ```
 ❯ Migrated database/migrations/1763054937318_users in 156 ms
 ❯ Migrated database/migrations/1699851600000_clients in 89 ms
@@ -91,6 +92,7 @@ node ace db:seed
 ```
 
 **Esto creará:**
+
 - 2 clientes (Juan Pérez, María García)
 - 2 guías (Carlos Rodríguez, Ana Martínez)
 - 1 administrador (Admin Master)
@@ -110,6 +112,7 @@ node ace serve --watch
 ```
 
 **Salida esperada:**
+
 ```
 [ info ]  building... (1212 ms)
 [ info ]  starting http server...
@@ -137,6 +140,7 @@ curl http://localhost:3333/
 ```
 
 **Respuesta esperada:**
+
 ```json
 {
   "message": "Travel Agency Management API",
@@ -182,6 +186,7 @@ curl -X POST http://localhost:3333/api/v1/clients `
 ## 📚 Endpoints Disponibles
 
 ### Usuarios
+
 - `GET /api/v1/users` - Listar usuarios
 - `GET /api/v1/users/stats` - Estadísticas
 - `GET /api/v1/users/:id` - Ver usuario
@@ -191,6 +196,7 @@ curl -X POST http://localhost:3333/api/v1/clients `
 - `PATCH /api/v1/users/:id/change-password` - Cambiar contraseña
 
 ### Clientes
+
 - `GET /api/v1/clients` - Listar clientes
 - `POST /api/v1/clients` - Crear cliente
 - `GET /api/v1/clients/:id` - Ver cliente
@@ -200,6 +206,7 @@ curl -X POST http://localhost:3333/api/v1/clients `
 - `GET /api/v1/clients/:id/bank-cards` - Tarjetas del cliente
 
 ### Guías
+
 - `GET /api/v1/guides` - Listar guías
 - `GET /api/v1/guides/available` - Guías disponibles
 - `POST /api/v1/guides` - Crear guía
@@ -210,6 +217,7 @@ curl -X POST http://localhost:3333/api/v1/clients `
 - `PATCH /api/v1/guides/:id/toggle-availability` - Cambiar disponibilidad
 
 ### Administradores
+
 - `GET /api/v1/administrators` - Listar administradores
 - `POST /api/v1/administrators` - Crear administrador
 - `GET /api/v1/administrators/:id` - Ver administrador
@@ -218,6 +226,7 @@ curl -X POST http://localhost:3333/api/v1/clients `
 - `PATCH /api/v1/administrators/:id/permissions` - Actualizar permisos
 
 ### Municipios
+
 - `GET /api/v1/municipalities` - Listar municipios
 - `GET /api/v1/municipalities/search?query=cart` - Buscar municipios
 - `POST /api/v1/municipalities` - Crear municipio
@@ -227,6 +236,7 @@ curl -X POST http://localhost:3333/api/v1/clients `
 - `GET /api/v1/municipalities/:id/activities` - Actividades del municipio
 
 ### Actividades Turísticas
+
 - `GET /api/v1/tourist-activities` - Listar actividades
 - `GET /api/v1/tourist-activities/by-type?type=cultural` - Por tipo
 - `POST /api/v1/tourist-activities` - Crear actividad
@@ -237,6 +247,7 @@ curl -X POST http://localhost:3333/api/v1/clients `
 - `GET /api/v1/tourist-activities/:id/plans` - Planes que incluyen la actividad
 
 ### Planes
+
 - `GET /api/v1/plans` - Listar planes
 - `POST /api/v1/plans` - Crear plan
 - `GET /api/v1/plans/:id` - Ver plan
@@ -248,6 +259,7 @@ curl -X POST http://localhost:3333/api/v1/clients `
 - `GET /api/v1/plans/:id/activities` - Actividades del plan
 
 ### Viajes
+
 - `GET /api/v1/trips` - Listar viajes
 - `POST /api/v1/trips` - Crear viaje
 - `GET /api/v1/trips/:id` - Ver viaje
@@ -260,6 +272,7 @@ curl -X POST http://localhost:3333/api/v1/clients `
 - `GET /api/v1/trips/:id/invoices` - Facturas del viaje
 
 ### Facturas
+
 - `GET /api/v1/invoices` - Listar facturas
 - `POST /api/v1/invoices` - Crear factura
 - `GET /api/v1/invoices/:id` - Ver factura
@@ -270,6 +283,7 @@ curl -X POST http://localhost:3333/api/v1/clients `
 - `GET /api/v1/invoices/:id/installments` - Cuotas de la factura
 
 ### Cuotas
+
 - `GET /api/v1/installments` - Listar cuotas
 - `GET /api/v1/installments/overdue` - Cuotas vencidas
 - `PATCH /api/v1/installments/mark-overdue` - Marcar vencidas
@@ -280,6 +294,7 @@ curl -X POST http://localhost:3333/api/v1/clients `
 - `POST /api/v1/installments/:id/pay` - Pagar cuota
 
 ### Tarjetas Bancarias
+
 - `GET /api/v1/clients/:clientId/bank-cards` - Listar tarjetas
 - `POST /api/v1/clients/:clientId/bank-cards` - Crear tarjeta
 - `GET /api/v1/bank-cards/:id` - Ver tarjeta
@@ -410,8 +425,8 @@ USE travel_agency_db;
 SELECT id, username, email, user_type FROM users;
 
 -- Ver clientes
-SELECT c.id, c.first_name, c.last_name, u.email 
-FROM clients c 
+SELECT c.id, c.first_name, c.last_name, u.email
+FROM clients c
 JOIN users u ON c.user_id = u.id;
 
 -- Ver viajes
@@ -477,12 +492,14 @@ pm2 startup
 ## 📝 Notas Importantes
 
 1. **Seguridad:**
+
    - Cambia el `APP_KEY` en producción
    - Usa contraseñas fuertes para MySQL
    - Implementa autenticación JWT
    - Añade rate limiting
 
 2. **Performance:**
+
    - Activa cache de consultas
    - Usa índices en columnas frecuentemente consultadas
    - Considera usar Redis para sesiones
@@ -507,6 +524,7 @@ pm2 startup
 ---
 
 **¿Problemas o dudas?** Revisa la documentación completa en:
+
 - `DOCUMENTATION.md` - Documentación técnica
 - `README.md` - Guía general del proyecto
 - `CONTROLLERS_SUMMARY.md` - Referencia de controladores

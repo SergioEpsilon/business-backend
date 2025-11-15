@@ -16,8 +16,13 @@ export default class extends BaseSchema {
       table.decimal('amount', 10, 2).notNullable()
       table.date('due_date').notNullable()
       table.date('paid_date').nullable()
-      table.enum('status', ['pending', 'paid', 'overdue', 'cancelled']).notNullable().defaultTo('pending')
-      table.enum('payment_method', ['credit_card', 'debit_card', 'bank_transfer', 'cash']).nullable()
+      table
+        .enum('status', ['pending', 'paid', 'overdue', 'cancelled'])
+        .notNullable()
+        .defaultTo('pending')
+      table
+        .enum('payment_method', ['credit_card', 'debit_card', 'bank_transfer', 'cash'])
+        .nullable()
       table.string('transaction_reference', 100).nullable()
       table.text('notes').nullable()
 

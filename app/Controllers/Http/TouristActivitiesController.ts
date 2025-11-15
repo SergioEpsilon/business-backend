@@ -11,20 +11,13 @@ export default class TouristActivitiesController {
       const page = request.input('page', 1)
       const perPage = request.input('per_page', 20)
       const municipalityId = request.input('municipality_id')
-      const guideId = request.input('guide_id')
       const activityType = request.input('activity_type')
       const isActive = request.input('is_active')
 
-      const query = TouristActivity.query()
-        .preload('guide')
-        .preload('municipality')
+      const query = TouristActivity.query().preload('guides').preload('municipality')
 
       if (municipalityId) {
         query.where('municipality_id', municipalityId)
-      }
-
-      if (guideId) {
-        query.where('guide_id', guideId)
       }
 
       if (activityType) {
@@ -53,7 +46,6 @@ export default class TouristActivitiesController {
   public async store({ request, response }: HttpContextContract) {
     try {
       const data = request.only([
-        'guideId',
         'municipalityId',
         'name',
         'description',
@@ -70,7 +62,7 @@ export default class TouristActivitiesController {
       ])
 
       const activity = await TouristActivity.create(data)
-      await activity.load('guide')
+      await activity.load('guides')
       await activity.load('municipality')
 
       return response.created({
@@ -93,7 +85,7 @@ export default class TouristActivitiesController {
     try {
       const activity = await TouristActivity.query()
         .where('id', params.id)
-        .preload('guide', (guideQuery) => {
+        .preload('guides', (guideQuery) => {
           guideQuery.preload('user')
         })
         .preload('municipality')
@@ -118,7 +110,6 @@ export default class TouristActivitiesController {
       const activity = await TouristActivity.findOrFail(params.id)
 
       const data = request.only([
-        'guideId',
         'municipalityId',
         'name',
         'description',
@@ -137,7 +128,7 @@ export default class TouristActivitiesController {
       activity.merge(data)
       await activity.save()
 
-      await activity.load('guide')
+      await activity.load('guides')
       await activity.load('municipality')
 
       return response.ok({
@@ -221,13 +212,73 @@ export default class TouristActivitiesController {
       const activities = await TouristActivity.query()
         .where('activity_type', params.type)
         .where('is_active', true)
-        .preload('guide')
+        .preload('guides')
         .preload('municipality')
 
       return response.ok(activities)
     } catch (error) {
       return response.badRequest({
         message: 'Error al obtener actividades por tipo',
+        error: error.message,
+      })
+    }
+  }
+
+  /**
+   * Asocia un guía a una actividad
+   * POST /tourist-activities/:id/guides/:guideId
+   */
+  public async attachGuide({ params, response }: HttpContextContract) {
+    try {
+      const activity = await TouristActivity.findOrFail(params.id)
+      await activity.related('guides').attach([params.guideId])
+
+      return response.ok({
+        message: 'Guía asociado exitosamente',
+      })
+    } catch (error) {
+      return response.badRequest({
+        message: 'Error al asociar guía',
+        error: error.message,
+      })
+    }
+  }
+
+  /**
+   * Desasocia un guía de una actividad
+   * DELETE /tourist-activities/:id/guides/:guideId
+   */
+  public async detachGuide({ params, response }: HttpContextContract) {
+    try {
+      const activity = await TouristActivity.findOrFail(params.id)
+      await activity.related('guides').detach([params.guideId])
+
+      return response.ok({
+        message: 'Guía desasociado exitosamente',
+      })
+    } catch (error) {
+      return response.badRequest({
+        message: 'Error al desasociar guía',
+        error: error.message,
+      })
+    }
+  }
+
+  /**
+   * Obtiene los guías de una actividad
+   * GET /tourist-activities/:id/guides
+   */
+  public async guides({ params, response }: HttpContextContract) {
+    try {
+      const activity = await TouristActivity.findOrFail(params.id)
+      await activity.load('guides', (query) => {
+        query.preload('user')
+      })
+
+      return response.ok(activity.guides)
+    } catch (error) {
+      return response.badRequest({
+        message: 'Error al obtener guías',
         error: error.message,
       })
     }

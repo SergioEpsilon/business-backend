@@ -11,17 +11,9 @@ export default class extends BaseSchema {
 
       table.enum('transport_type', ['flight', 'bus', 'car', 'van', 'train']).notNullable()
       table.integer('aircraft_id').unsigned().nullable()
-      table
-        .foreign('aircraft_id')
-        .references('id')
-        .inTable('aircrafts')
-        .onDelete('SET NULL')
+      table.foreign('aircraft_id').references('id').inTable('aircrafts').onDelete('SET NULL')
       table.integer('vehicle_id').unsigned().nullable()
-      table
-        .foreign('vehicle_id')
-        .references('id')
-        .inTable('vehicles')
-        .onDelete('SET NULL')
+      table.foreign('vehicle_id').references('id').inTable('vehicles').onDelete('SET NULL')
 
       table.string('service_number', 50).nullable()
       table.dateTime('departure_time').notNullable()

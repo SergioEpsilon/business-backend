@@ -13,7 +13,7 @@ async function fixDriversTable() {
     console.log('Eliminando tabla drivers...')
     await connection.execute('DROP TABLE IF EXISTS drivers')
     console.log('✅ Tabla drivers eliminada')
-    
+
     console.log('Ejecuta: node ace migration:run')
   } catch (error) {
     console.error('Error:', error.message)

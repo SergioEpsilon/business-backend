@@ -11,6 +11,7 @@
 ## 🔐 PASO 1: Preparar Usuario en MS-Security (MongoDB)
 
 ### 1.1 Crear o Login para obtener Token
+
 **Endpoint:** `POST http://127.0.0.1:8080/api/auth/login`
 
 ```json
@@ -21,6 +22,7 @@
 ```
 
 **Respuesta esperada:**
+
 ```json
 {
   "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
@@ -33,7 +35,8 @@
 }
 ```
 
-📝 **Guardar:** 
+📝 **Guardar:**
+
 - `token` → Para usar en Authorization Bearer
 - `_id` → Es el `userId` que usaremos en MS-Business
 
@@ -42,15 +45,18 @@
 ## 🚗 PASO 2: Crear Driver en MS-Business (MySQL)
 
 ### 2.1 Crear Driver con validación contra MS-Security
+
 **Endpoint:** `POST http://localhost:3333/api/v1/drivers`
 
 **Headers:**
+
 ```
 Authorization: Bearer {TOKEN_DE_MS_SECURITY}
 Content-Type: application/json
 ```
 
 **Body:**
+
 ```json
 {
   "userId": "673abc123def456789",
@@ -68,6 +74,7 @@ Content-Type: application/json
 ```
 
 **Lo que hace internamente:**
+
 1. Recibe la petición con el token
 2. Extrae el `userId` del body
 3. **Valida contra MS-Security:** `GET http://127.0.0.1:8080/api/users/{userId}`
@@ -75,6 +82,7 @@ Content-Type: application/json
 5. Si todo está OK, crea el registro en MySQL
 
 **Respuesta exitosa:**
+
 ```json
 {
   "message": "Conductor registrado exitosamente",
@@ -101,6 +109,7 @@ Content-Type: application/json
 **Posibles errores:**
 
 ❌ Si el usuario no existe en MS-Security:
+
 ```json
 {
   "message": "Error al validar usuario en el microservicio de seguridad",
@@ -109,6 +118,7 @@ Content-Type: application/json
 ```
 
 ❌ Si el usuario existe pero no es tipo "driver":
+
 ```json
 {
   "message": "El usuario no existe o no es de tipo conductor"
@@ -120,9 +130,11 @@ Content-Type: application/json
 ## ✅ PASO 3: Validar la Integración
 
 ### 3.1 Endpoint de Validación
+
 **Endpoint:** `GET http://localhost:3333/api/v1/drivers/{driverId}/validate`
 
 **Headers:**
+
 ```
 Authorization: Bearer {TOKEN_DE_MS_SECURITY}
 ```
@@ -130,6 +142,7 @@ Authorization: Bearer {TOKEN_DE_MS_SECURITY}
 **Ejemplo:** `GET http://localhost:3333/api/v1/drivers/1/validate`
 
 **Respuesta esperada:**
+
 ```json
 {
   "driver": {
@@ -154,6 +167,7 @@ Authorization: Bearer {TOKEN_DE_MS_SECURITY}
 ```
 
 **¿Qué valida?**
+
 - ✅ Driver existe en MS-Business (MySQL)
 - ✅ Usuario existe en MS-Security (MongoDB)
 - ✅ El userId coincide entre ambos sistemas
@@ -164,18 +178,21 @@ Authorization: Bearer {TOKEN_DE_MS_SECURITY}
 ## 📚 PASO 4: Otros Endpoints Disponibles
 
 ### 4.1 Listar Drivers
+
 ```
 GET http://localhost:3333/api/v1/drivers?page=1&per_page=10&is_available=true
 Authorization: Bearer {TOKEN}
 ```
 
 ### 4.2 Obtener Driver por ID
+
 ```
 GET http://localhost:3333/api/v1/drivers/1
 Authorization: Bearer {TOKEN}
 ```
 
 ### 4.3 Actualizar Driver
+
 ```
 PUT http://localhost:3333/api/v1/drivers/1
 Authorization: Bearer {TOKEN}
@@ -189,12 +206,14 @@ Content-Type: application/json
 ```
 
 ### 4.4 Estadísticas
+
 ```
 GET http://localhost:3333/api/v1/drivers/stats
 Authorization: Bearer {TOKEN}
 ```
 
 **Respuesta:**
+
 ```json
 {
   "total": 10,
@@ -204,6 +223,7 @@ Authorization: Bearer {TOKEN}
 ```
 
 ### 4.5 Desactivar Driver
+
 ```
 DELETE http://localhost:3333/api/v1/drivers/1
 Authorization: Bearer {TOKEN}
@@ -214,6 +234,7 @@ Authorization: Bearer {TOKEN}
 ## 🔍 Verificación de la Integración
 
 ### Flujo completo probado:
+
 1. ✅ Usuario existe en MS-Security (MongoDB) como tipo "driver"
 2. ✅ MS-Business valida el usuario antes de crear el driver
 3. ✅ Driver se crea en MS-Business (MySQL) con referencia al userId
@@ -221,6 +242,7 @@ Authorization: Bearer {TOKEN}
 5. ✅ Ambos microservicios se comunican correctamente
 
 ### Base de datos:
+
 - **MS-Security (MongoDB):** Tabla `users` con `_id`, `userType: "driver"`
 - **MS-Business (MySQL):** Tabla `drivers` con `user_id` (sin FK, solo referencia)
 
@@ -259,7 +281,7 @@ Importa esta colección para tener todas las pruebas listas:
       "name": "1. Login MS-Security",
       "request": {
         "method": "POST",
-        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
         "body": {
           "mode": "raw",
           "raw": "{\n  \"email\": \"driver@test.com\",\n  \"password\": \"password123\"\n}"
@@ -272,8 +294,8 @@ Importa esta colección para tener todas las pruebas listas:
       "request": {
         "method": "POST",
         "header": [
-          {"key": "Authorization", "value": "Bearer {{token}}"},
-          {"key": "Content-Type", "value": "application/json"}
+          { "key": "Authorization", "value": "Bearer {{token}}" },
+          { "key": "Content-Type", "value": "application/json" }
         ],
         "body": {
           "mode": "raw",
@@ -286,7 +308,7 @@ Importa esta colección para tener todas las pruebas listas:
       "name": "3. Validate Driver",
       "request": {
         "method": "GET",
-        "header": [{"key": "Authorization", "value": "Bearer {{token}}"}],
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
         "url": "{{ms_business_url}}/drivers/1/validate"
       }
     },
@@ -294,7 +316,7 @@ Importa esta colección para tener todas las pruebas listas:
       "name": "4. List Drivers",
       "request": {
         "method": "GET",
-        "header": [{"key": "Authorization", "value": "Bearer {{token}}"}],
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
         "url": "{{ms_business_url}}/drivers"
       }
     },
@@ -302,7 +324,7 @@ Importa esta colección para tener todas las pruebas listas:
       "name": "5. Get Driver Stats",
       "request": {
         "method": "GET",
-        "header": [{"key": "Authorization", "value": "Bearer {{token}}"}],
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
         "url": "{{ms_business_url}}/drivers/stats"
       }
     }
@@ -315,13 +337,16 @@ Importa esta colección para tener todas las pruebas listas:
 ## 🚨 Troubleshooting
 
 ### Error: "ECONNREFUSED"
+
 - Verifica que MS-Security esté corriendo en el puerto 8080
 - Revisa la variable `MS_SECURITY` en el archivo `.env`
 
 ### Error: "Unknown column 'birth_date'"
+
 - Ya está resuelto, las migraciones fueron ejecutadas correctamente
 
 ### Error: Token inválido
+
 - Genera un nuevo token en MS-Security
 - Verifica que el middleware de seguridad esté funcionando
 

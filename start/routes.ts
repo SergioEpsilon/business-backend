@@ -49,7 +49,8 @@ Route.group(() => {
     Route.put('/:id', 'ClientsController.update')
     Route.delete('/:id', 'ClientsController.destroy')
     Route.get('/:id/trips', 'ClientsController.trips')
-    Route.get('/:id/bank-cards', 'ClientsController.bankCards')
+    Route.post('/:id/trips/:tripId', 'ClientsController.attachTrip')
+    Route.delete('/:id/trips/:tripId', 'ClientsController.detachTrip')
   }).prefix('/clients')
 
   // ==================== GUIDE ROUTES ====================
@@ -94,7 +95,27 @@ Route.group(() => {
     Route.put('/:id', 'VehiclesController.update')
     Route.delete('/:id', 'VehiclesController.destroy')
     Route.get('/:id/drivers', 'VehiclesController.drivers')
+    Route.get('/:id/routes', 'VehiclesController.routes')
+    Route.get('/:id/gps', 'VehiclesController.gps')
   }).prefix('/vehicles')
+
+  // ==================== CAR ROUTES ====================
+  Route.group(() => {
+    Route.get('/', 'CarsController.index')
+    Route.post('/', 'CarsController.store')
+    Route.get('/:id', 'CarsController.show')
+    Route.put('/:id', 'CarsController.update')
+    Route.delete('/:id', 'CarsController.destroy')
+  }).prefix('/cars')
+
+  // ==================== AIRCRAFT ROUTES ====================
+  Route.group(() => {
+    Route.get('/', 'AircraftsController.index')
+    Route.post('/', 'AircraftsController.store')
+    Route.get('/:id', 'AircraftsController.show')
+    Route.put('/:id', 'AircraftsController.update')
+    Route.delete('/:id', 'AircraftsController.destroy')
+  }).prefix('/aircrafts')
 
   // ==================== SHIFT ROUTES ====================
   Route.group(() => {
@@ -128,6 +149,9 @@ Route.group(() => {
     Route.delete('/:id', 'TouristActivitiesController.destroy')
     Route.patch('/:id/toggle-active', 'TouristActivitiesController.toggleActive')
     Route.get('/:id/plans', 'TouristActivitiesController.plans')
+    Route.get('/:id/guides', 'TouristActivitiesController.guides')
+    Route.post('/:id/guides/:guideId', 'TouristActivitiesController.attachGuide')
+    Route.delete('/:id/guides/:guideId', 'TouristActivitiesController.detachGuide')
   }).prefix('/tourist-activities')
 
   // ==================== PLAN ROUTES ====================
@@ -150,12 +174,26 @@ Route.group(() => {
     Route.get('/:id', 'TripsController.show')
     Route.put('/:id', 'TripsController.update')
     Route.delete('/:id', 'TripsController.destroy')
-    Route.post('/:id/attach-plans', 'TripsController.attachPlans')
-    Route.post('/:id/detach-plans', 'TripsController.detachPlans')
-    Route.patch('/:id/update-status', 'TripsController.updateStatus')
-    Route.get('/:id/plans', 'TripsController.plans')
-    Route.get('/:id/invoices', 'TripsController.invoices')
+    Route.get('/:id/clients', 'TripsController.clients')
+    Route.post('/:id/clients/:clientId', 'TripsController.attachClient')
+    Route.delete('/:id/clients/:clientId', 'TripsController.detachClient')
+    Route.get('/:id/routes', 'TripsController.routes')
+    Route.post('/:id/routes/:routeId', 'TripsController.attachRoute')
+    Route.delete('/:id/routes/:routeId', 'TripsController.detachRoute')
   }).prefix('/trips')
+
+  // ==================== ROUTE ROUTES ====================
+  Route.group(() => {
+    Route.get('/', 'RoutesController.index')
+    Route.post('/', 'RoutesController.store')
+    Route.get('/:id', 'RoutesController.show')
+    Route.put('/:id', 'RoutesController.update')
+    Route.delete('/:id', 'RoutesController.destroy')
+    Route.get('/:id/trips', 'RoutesController.trips')
+    Route.get('/:id/vehicles', 'RoutesController.vehicles')
+    Route.post('/:id/vehicles/:vehicleId', 'RoutesController.attachVehicle')
+    Route.delete('/:id/vehicles/:vehicleId', 'RoutesController.detachVehicle')
+  }).prefix('/routes')
 
   // ==================== INVOICE ROUTES ====================
   Route.group(() => {

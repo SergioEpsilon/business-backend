@@ -4,8 +4,8 @@ import {
   column,
   belongsTo,
   BelongsTo,
-  hasMany,
-  HasMany,
+  manyToMany,
+  ManyToMany,
 } from '@ioc:Adonis/Lucid/Orm'
 import User from './User'
 import TouristActivity from './TouristActivity'
@@ -54,11 +54,11 @@ export default class Guide extends BaseModel {
   @column()
   public isAvailable: boolean
 
-  // Relación 1-n con TouristActivity (un guía puede dirigir múltiples actividades)
-  @hasMany(() => TouristActivity, {
-    foreignKey: 'guideId',
+  // Relación n-n con TouristActivity (un guía puede dirigir múltiples actividades)
+  @manyToMany(() => TouristActivity, {
+    pivotTable: 'guide_tourist_activity',
   })
-  public touristActivities: HasMany<typeof TouristActivity>
+  public touristActivities: ManyToMany<typeof TouristActivity>
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime

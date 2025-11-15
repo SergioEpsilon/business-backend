@@ -15,14 +15,11 @@ export default class TouristActivity extends BaseModel {
   @column({ isPrimary: true })
   public id: number
 
-  // Relación n-1 con Guide (cada actividad es dirigida por un guía)
-  @column()
-  public guideId: number
-
-  @belongsTo(() => Guide, {
-    foreignKey: 'guideId',
+  // Relación n-n con Guide (una actividad puede tener múltiples guías)
+  @manyToMany(() => Guide, {
+    pivotTable: 'guide_tourist_activity',
   })
-  public guide: BelongsTo<typeof Guide>
+  public guides: ManyToMany<typeof Guide>
 
   // Relación n-1 con Municipality (cada actividad se desarrolla en un municipio)
   @column()

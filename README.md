@@ -26,6 +26,7 @@
 ## ✨ Características
 
 ### 🎯 Funcionalidades Principales
+
 - ✅ **Gestión de Usuarios** - Sistema multi-rol (clientes, guías, administradores)
 - ✅ **Gestión de Viajes** - Creación, seguimiento y facturación de viajes
 - ✅ **Planes Turísticos** - Paquetes personalizables con actividades
@@ -34,6 +35,7 @@
 - ✅ **Tarjetas Bancarias** - Gestión segura de métodos de pago
 
 ### 🔧 Características Técnicas
+
 - 🏗️ **Arquitectura MVC** - Código organizado y mantenible
 - 🔗 **Relaciones ORM** - 1:1, 1:n, n:m con Lucid ORM
 - 🔒 **Transacciones Atómicas** - Integridad de datos garantizada
@@ -42,6 +44,7 @@
 - 📊 **API RESTful** - 75+ endpoints bien documentados
 
 ### 📈 Estadísticas del Proyecto
+
 - **11 Modelos** con relaciones completas
 - **13 Migraciones** con constraints e índices
 - **11 Controladores** con operaciones CRUD
@@ -131,18 +134,19 @@ node ace serve --watch
 
 ## 📚 Documentación
 
-| Documento | Descripción |
-|-----------|-------------|
-| **[SETUP_GUIDE.md](./SETUP_GUIDE.md)** | 👈 **¡Empieza aquí!** Guía completa de instalación y configuración |
-| **[CONTROLLERS_SUMMARY.md](./CONTROLLERS_SUMMARY.md)** | Referencia completa de todos los controladores y endpoints |
-| **[API_EXAMPLES.md](./API_EXAMPLES.md)** | Ejemplos prácticos de uso de la API |
-| **[DOCUMENTATION.md](./DOCUMENTATION.md)** | Documentación técnica completa del sistema |
-| **[DATABASE_DIAGRAM.md](./DATABASE_DIAGRAM.md)** | Diagramas de la base de datos |
-| **[RESUMEN_EJECUTIVO.md](./RESUMEN_EJECUTIVO.md)** | Resumen ejecutivo del proyecto |
+| Documento                                              | Descripción                                                        |
+| ------------------------------------------------------ | ------------------------------------------------------------------ |
+| **[SETUP_GUIDE.md](./SETUP_GUIDE.md)**                 | 👈 **¡Empieza aquí!** Guía completa de instalación y configuración |
+| **[CONTROLLERS_SUMMARY.md](./CONTROLLERS_SUMMARY.md)** | Referencia completa de todos los controladores y endpoints         |
+| **[API_EXAMPLES.md](./API_EXAMPLES.md)**               | Ejemplos prácticos de uso de la API                                |
+| **[DOCUMENTATION.md](./DOCUMENTATION.md)**             | Documentación técnica completa del sistema                         |
+| **[DATABASE_DIAGRAM.md](./DATABASE_DIAGRAM.md)**       | Diagramas de la base de datos                                      |
+| **[RESUMEN_EJECUTIVO.md](./RESUMEN_EJECUTIVO.md)**     | Resumen ejecutivo del proyecto                                     |
 
 ### 📦 Colección de Postman
 
 Importa la colección de Postman para probar la API fácilmente:
+
 - **Archivo:** `Travel_Agency_API.postman_collection.json`
 - **Contiene:** 75+ requests organizados por módulos
 
@@ -214,6 +218,7 @@ ms-bussiness-backend/
 **Base URL:** `http://localhost:3333/api/v1`
 
 ### 👤 Usuarios
+
 ```
 GET    /users                      Lista usuarios
 GET    /users/stats                Estadísticas
@@ -225,6 +230,7 @@ PATCH  /users/:id/change-password  Cambiar contraseña
 ```
 
 ### 👥 Clientes
+
 ```
 GET    /clients                Lista clientes
 POST   /clients                Crear cliente
@@ -236,6 +242,7 @@ GET    /clients/:id/bank-cards Tarjetas del cliente
 ```
 
 ### ✈️ Viajes
+
 ```
 GET    /trips                      Lista viajes
 POST   /trips                      Crear viaje
@@ -249,6 +256,7 @@ GET    /trips/:id/invoices         Facturas del viaje
 ```
 
 ### 📋 Planes
+
 ```
 GET    /plans                          Lista planes
 POST   /plans                          Crear plan
@@ -261,6 +269,7 @@ GET    /plans/:id/activities           Actividades del plan
 ```
 
 ### 💰 Facturas
+
 ```
 GET    /invoices                       Lista facturas
 POST   /invoices                       Crear factura
@@ -372,6 +381,7 @@ curl -X POST http://localhost:3333/api/v1/trips/1/attach-plans \
 ## 🧪 Pruebas
 
 ### Usando Postman
+
 1. Importar `Travel_Agency_API.postman_collection.json`
 2. Configurar variable `baseUrl` a `http://localhost:3333/api/v1`
 3. Ejecutar requests
@@ -481,17 +491,17 @@ node build/server.js
 
 **Progreso General:** ████████░░ **75%**
 
-| Componente | Estado |
-|------------|--------|
-| Modelos | ✅ 100% (11/11) |
-| Migraciones | ✅ 100% (13/13) |
+| Componente    | Estado          |
+| ------------- | --------------- |
+| Modelos       | ✅ 100% (11/11) |
+| Migraciones   | ✅ 100% (13/13) |
 | Controladores | ✅ 100% (11/11) |
-| Rutas | ✅ 100% (1/1) |
-| Seeders | ✅ 100% (1/1) |
-| Documentación | ✅ 100% (7/7) |
-| Validadores | ❌ 0% (0/11) |
-| Autenticación | ❌ 0% |
-| Tests | ❌ 0% |
+| Rutas         | ✅ 100% (1/1)   |
+| Seeders       | ✅ 100% (1/1)   |
+| Documentación | ✅ 100% (7/7)   |
+| Validadores   | ❌ 0% (0/11)    |
+| Autenticación | ❌ 0%           |
+| Tests         | ❌ 0%           |
 
 ---
 
@@ -522,6 +532,7 @@ Este proyecto es privado y confidencial.
 ## 📞 Soporte
 
 Para soporte técnico:
+
 - 📧 Email: [support@example.com](mailto:support@example.com)
 - 📖 Documentación: Ver archivos `.md` en la raíz del proyecto
 

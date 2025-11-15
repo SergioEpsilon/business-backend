@@ -271,8 +271,8 @@ export default class DriversController {
 
       // Obtener emails de los usuarios desde MS-Security
       const token = request.header('Authorization')?.replace('Bearer ', '')
-            const userIds = drivers.map((d) => d.userId)
-      
+      const userIds = drivers.map((d) => d.userId)
+
       const emailPromises = drivers.map(async (driver) => {
         try {
           // Consultar usuario en MS-Security para obtener email

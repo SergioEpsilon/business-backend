@@ -1,243 +1,84 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Client from 'App/Models/Client'
-import User from 'App/Models/User'
-import Database from '@ioc:Adonis/Lucid/Database'
+import ClientValidator from 'App/Validators/ClientValidator'
 
 export default class ClientsController {
   /**
-   * Lista todos los clientes con paginación
-   * GET /clients
+   * Lista todos los clientes
    */
-  public async index({ request, response }: HttpContextContract) {
-    try {
+  public async index({ request }: HttpContextContract) {
+    const data = request.all()
+    if ('page' in data && 'per_page' in data) {
       const page = request.input('page', 1)
       const perPage = request.input('per_page', 20)
-
-      const clients = await Client.query()
-        .preload('user')
-        .preload('trips', (tripsQuery) => {
-          tripsQuery.select('id', 'trip_code', 'destination', 'start_date', 'status')
-        })
-        .paginate(page, perPage)
-
-      return response.ok(clients)
-    } catch (error) {
-      return response.badRequest({ message: 'Error al obtener clientes', error: error.message })
+      return await Client.query().paginate(page, perPage)
     }
+    return await Client.all()
   }
 
   /**
-   * Crea un nuevo cliente junto con su usuario
-   * POST /clients
+   * Almacena la información de un cliente
    */
   public async store({ request, response }: HttpContextContract) {
-    const trx = await Database.transaction()
-
-    try {
-      const {
-        username,
-        email,
-        password,
-        firstName,
-        lastName,
-        documentType,
-        documentNumber,
-        phone,
-        address,
-        city,
-        country,
-        birthDate,
-      } = request.only([
-        'username',
-        'email',
-        'password',
-        'firstName',
-        'lastName',
-        'documentType',
-        'documentNumber',
-        'phone',
-        'address',
-        'city',
-        'country',
-        'birthDate',
-      ])
-
-      // Crear usuario
-      const user = await User.create(
-        {
-          username,
-          email,
-          password, // En producción usar Hash.make(password)
-          userType: 'client',
-          isActive: true,
-        },
-        { client: trx }
-      )
-
-      // Crear cliente
-      const client = await Client.create(
-        {
-          userId: user.id,
-          firstName,
-          lastName,
-          documentType,
-          documentNumber,
-          phone,
-          address,
-          city,
-          country,
-          birthDate,
-        },
-        { client: trx }
-      )
-
-      await trx.commit()
-
-      await client.load('user')
-      return response.created({
-        message: 'Cliente creado exitosamente',
-        data: client,
-      })
-    } catch (error) {
-      await trx.rollback()
-      return response.badRequest({
-        message: 'Error al crear cliente',
-        error: error.message,
-      })
-    }
+    const payload = request.body()
+    const client = await Client.create(payload)
+    return response.created(client)
   }
 
   /**
-   * Muestra un cliente específico con todas sus relaciones
-   * GET /clients/:id
+   * Muestra la información de un solo cliente
    */
-  public async show({ params, response }: HttpContextContract) {
-    try {
-      const client = await Client.query()
-        .where('id', params.id)
-        .preload('user')
-        .preload('trips', (tripsQuery) => {
-          tripsQuery.preload('plans')
-          tripsQuery.preload('invoices')
-        })
-        .preload('bankCards', (cardsQuery) => {
-          cardsQuery.where('is_active', true)
-        })
-        .firstOrFail()
-
-      return response.ok(client)
-    } catch (error) {
-      return response.notFound({
-        message: 'Cliente no encontrado',
-        error: error.message,
-      })
-    }
+  public async show({ params }: HttpContextContract) {
+    const theClient: Client = await Client.findOrFail(params.id)
+    await theClient.load('trips')
+    return theClient
   }
 
   /**
-   * Actualiza la información de un cliente
-   * PUT /clients/:id
+   * Actualiza la información de un cliente basado
+   * en el identificador y nuevos parámetros
    */
-  public async update({ params, request, response }: HttpContextContract) {
-    try {
-      const client = await Client.findOrFail(params.id)
-
-      const data = request.only([
-        'firstName',
-        'lastName',
-        'documentType',
-        'documentNumber',
-        'phone',
-        'address',
-        'city',
-        'country',
-        'birthDate',
-      ])
-
-      client.merge(data)
-      await client.save()
-
-      await client.load('user')
-
-      return response.ok({
-        message: 'Cliente actualizado exitosamente',
-        data: client,
-      })
-    } catch (error) {
-      return response.badRequest({
-        message: 'Error al actualizar cliente',
-        error: error.message,
-      })
-    }
+  public async update({ params, request }: HttpContextContract) {
+    const theClient: Client = await Client.findOrFail(params.id)
+    const body = request.body()
+    if (body.name) theClient.name = body.name
+    if (body.email) theClient.email = body.email
+    if (body.phone) theClient.phone = body.phone
+    if (body.address) theClient.address = body.address
+    return await theClient.save()
   }
 
   /**
-   * Elimina un cliente (soft delete recomendado en producción)
-   * DELETE /clients/:id
+   * Elimina a un cliente basado en el identificador
    */
-  public async destroy({ params, response }: HttpContextContract) {
-    const trx = await Database.transaction()
-
-    try {
-      const client = await Client.findOrFail(params.id)
-      const user = await User.findOrFail(client.userId)
-
-      // Eliminar cliente y usuario
-      await client.delete()
-      await user.delete()
-
-      await trx.commit()
-
-      return response.ok({
-        message: 'Cliente eliminado exitosamente',
-      })
-    } catch (error) {
-      await trx.rollback()
-      return response.badRequest({
-        message: 'Error al eliminar cliente',
-        error: error.message,
-      })
-    }
+  public async destroy({ params }: HttpContextContract) {
+    const theClient: Client = await Client.findOrFail(params.id)
+    return await theClient.delete()
   }
 
-  /**
-   * Obtiene todos los viajes de un cliente
-   * GET /clients/:id/trips
-   */
-  public async trips({ params, response }: HttpContextContract) {
-    try {
-      const client = await Client.findOrFail(params.id)
-      await client.load('trips', (tripsQuery) => {
-        tripsQuery.preload('plans')
-        tripsQuery.orderBy('start_date', 'desc')
-      })
+  public async attachTrip({ params, response }: HttpContextContract) {
+    const client: Client = await Client.findOrFail(params.id)
+    const tripId = params.tripId
 
-      return response.ok(client.trips)
-    } catch (error) {
-      return response.notFound({
-        message: 'Cliente no encontrado',
-        error: error.message,
-      })
-    }
+    // Asociar el viaje al cliente (many-to-many)
+    await client.related('trips').attach([tripId])
+
+    return response.ok({ message: 'Trip attached to client successfully' })
   }
 
-  /**
-   * Obtiene todas las tarjetas bancarias de un cliente
-   * GET /clients/:id/bank-cards
-   */
-  public async bankCards({ params, response }: HttpContextContract) {
-    try {
-      const client = await Client.findOrFail(params.id)
-      await client.load('bankCards', (cardsQuery) => {
-        cardsQuery.where('is_active', true)
-      })
+  public async detachTrip({ params, response }: HttpContextContract) {
+    const client: Client = await Client.findOrFail(params.id)
+    const tripId = params.tripId
 
-      return response.ok(client.bankCards)
-    } catch (error) {
-      return response.notFound({
-        message: 'Cliente no encontrado',
-        error: error.message,
-      })
-    }
+    // Desasociar el viaje del cliente
+    await client.related('trips').detach([tripId])
+
+    return response.ok({ message: 'Trip detached from client successfully' })
+  }
+
+  public async trips({ params }: HttpContextContract) {
+    const theClient: Client = await Client.findOrFail(params.id)
+    await theClient.load('trips')
+    return theClient.trips
   }
 }

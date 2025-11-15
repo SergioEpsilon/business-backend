@@ -79,6 +79,9 @@ export default class VehiclesController {
         .preload('drivers', (driversQuery) => {
           driversQuery.pivotColumns(['shift_start', 'shift_end', 'status'])
         })
+        .preload('gps')
+        .preload('car')
+        .preload('aircraft')
         .firstOrFail()
 
       return response.ok(vehicle)
@@ -172,6 +175,48 @@ export default class VehiclesController {
     } catch (error) {
       return response.notFound({
         message: 'Vehículo no encontrado',
+        error: error.message,
+      })
+    }
+  }
+
+  /**
+   * Obtiene los trayectos de un vehículo
+   * GET /vehicles/:id/routes
+   */
+  public async routes({ params, response }: HttpContextContract) {
+    try {
+      const vehicle = await Vehicle.findOrFail(params.id)
+      await vehicle.load('routes')
+
+      return response.ok(vehicle.routes)
+    } catch (error) {
+      return response.badRequest({
+        message: 'Error al obtener trayectos del vehículo',
+        error: error.message,
+      })
+    }
+  }
+
+  /**
+   * Obtiene el GPS asociado a un vehículo
+   * GET /vehicles/:id/gps
+   */
+  public async gps({ params, response }: HttpContextContract) {
+    try {
+      const vehicle = await Vehicle.findOrFail(params.id)
+      await vehicle.load('gps')
+
+      if (!vehicle.gps) {
+        return response.notFound({
+          message: 'Este vehículo no tiene GPS asociado',
+        })
+      }
+
+      return response.ok(vehicle.gps)
+    } catch (error) {
+      return response.badRequest({
+        message: 'Error al obtener GPS del vehículo',
         error: error.message,
       })
     }
