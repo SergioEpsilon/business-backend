@@ -1,11 +1,37 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
+import {
+  BaseModel,
+  column,
+  ManyToMany,
+  manyToMany,
+  belongsTo,
+  BelongsTo,
+} from '@ioc:Adonis/Lucid/Orm'
 import Trip from './Trip'
 import Vehicle from './Vehicle'
+import Municipality from './Municipality'
 
 export default class Route extends BaseModel {
   @column({ isPrimary: true })
   public id: number
+
+  // Relación reflexiva con Municipality - Municipio de origen
+  @column()
+  public originMunicipalityId: number
+
+  @belongsTo(() => Municipality, {
+    foreignKey: 'originMunicipalityId',
+  })
+  public originMunicipality: BelongsTo<typeof Municipality>
+
+  // Relación reflexiva con Municipality - Municipio de destino
+  @column()
+  public destinationMunicipalityId: number
+
+  @belongsTo(() => Municipality, {
+    foreignKey: 'destinationMunicipalityId',
+  })
+  public destinationMunicipality: BelongsTo<typeof Municipality>
 
   @column()
   public origin: string
