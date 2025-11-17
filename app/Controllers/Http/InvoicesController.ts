@@ -16,28 +16,7 @@ export default class InvoicesController {
       const status = request.input('status')
       const tripId = request.input('trip_id')
 
-      // Obtener el usuario autenticado desde el JWT
-      const user = (request as any).user
-      if (!user) {
-        return response.unauthorized({ message: 'No autenticado' })
-      }
-
-      // Buscar los trips asociados al cliente autenticado
-      // Buscar el cliente por el id string generado por MS-SECURITY
-      const Client = (await import('App/Models/Client')).default
-      const clientId = user.id || user._id // Soporta ambos campos por compatibilidad
-      if (!clientId) {
-        return response.unauthorized({ message: 'ID de usuario no presente en el token' })
-      }
-      const client = await Client.find(clientId)
-      if (!client) {
-        return response.unauthorized({ message: 'Cliente no encontrado' })
-      }
-      const clientTrips = await client.related('trips').query().select('id')
-      const tripIds = clientTrips.map((trip) => trip.id)
-
       const query = Invoice.query()
-        .whereIn('trip_id', tripIds)
         .preload('trip', (tripQuery) => {
           tripQuery.preload('clients')
         })

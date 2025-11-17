@@ -199,7 +199,7 @@ Route.group(() => {
     Route.get('/:id/installments', 'InvoicesController.installments')
   })
     .prefix('/invoices')
-    .middleware(['security'])
+    .middleware('security')
 
   // ==================== INSTALLMENT ROUTES ====================
   Route.group(() => {
