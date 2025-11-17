@@ -85,9 +85,7 @@ export default class TouristActivitiesController {
     try {
       const activity = await TouristActivity.query()
         .where('id', params.id)
-        .preload('guides', (guideQuery) => {
-          guideQuery.preload('user')
-        })
+        .preload('guides')
         .preload('municipality')
         .preload('plans')
         .firstOrFail()
@@ -271,9 +269,7 @@ export default class TouristActivitiesController {
   public async guides({ params, response }: HttpContextContract) {
     try {
       const activity = await TouristActivity.findOrFail(params.id)
-      await activity.load('guides', (query) => {
-        query.preload('user')
-      })
+      await activity.load('guides')
 
       return response.ok(activity.guides)
     } catch (error) {

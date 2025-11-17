@@ -1,33 +1,18 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, belongsTo, BelongsTo, hasMany, HasMany } from '@ioc:Adonis/Lucid/Orm'
-import User from './User'
+import { BaseModel, column, hasMany, HasMany } from '@ioc:Adonis/Lucid/Orm'
 import Hotel from './Hotel'
 
 export default class Administrator extends BaseModel {
   @column({ isPrimary: true })
-  public id: number
+  public id: string
 
-  // Relación 1-1 con User
+  // Referencia al usuario en MS-SECURITY
   @column()
-  public userId: number
-
-  @belongsTo(() => User, {
-    foreignKey: 'userId',
-  })
-  public user: BelongsTo<typeof User>
+  public userId: string
 
   // Información del administrador
   @column()
-  public firstName: string
-
-  @column()
-  public lastName: string
-
-  @column()
-  public documentType: string
-
-  @column()
-  public documentNumber: string
+  public document: string
 
   @column()
   public phone: string

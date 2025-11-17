@@ -77,7 +77,7 @@ export default class MunicipalitiesController {
         .where('id', params.id)
         .preload('touristActivities', (activitiesQuery) => {
           activitiesQuery.where('is_active', true)
-          activitiesQuery.preload('guide')
+          activitiesQuery.preload('guides')
         })
         .firstOrFail()
 
@@ -154,7 +154,7 @@ export default class MunicipalitiesController {
     try {
       const municipality = await Municipality.findOrFail(params.id)
       await municipality.load('touristActivities', (activitiesQuery) => {
-        activitiesQuery.preload('guide')
+        activitiesQuery.preload('guides')
       })
 
       return response.ok(municipality.touristActivities)

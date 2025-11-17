@@ -31,15 +31,7 @@ Route.get('/', async () => {
 // API v1 Routes
 Route.group(() => {
   // ==================== USER ROUTES ====================
-  Route.group(() => {
-    Route.get('/', 'UsersController.index')
-    Route.get('/stats', 'UsersController.stats')
-    Route.get('/:id', 'UsersController.show')
-    Route.put('/:id', 'UsersController.update')
-    Route.patch('/:id/toggle-status', 'UsersController.toggleStatus')
-    Route.patch('/:id/change-password', 'UsersController.changePassword')
-    Route.get('/:id/profile', 'UsersController.profile')
-  }).prefix('/users')
+  // Las rutas de usuarios se manejan en MS-SECURITY
 
   // ==================== CLIENT ROUTES ====================
   Route.group(() => {
@@ -205,7 +197,9 @@ Route.group(() => {
     Route.post('/:id/register-payment', 'InvoicesController.registerPayment')
     Route.patch('/:id/mark-overdue', 'InvoicesController.markOverdue')
     Route.get('/:id/installments', 'InvoicesController.installments')
-  }).prefix('/invoices')
+  })
+    .prefix('/invoices')
+    .middleware(['security'])
 
   // ==================== INSTALLMENT ROUTES ====================
   Route.group(() => {

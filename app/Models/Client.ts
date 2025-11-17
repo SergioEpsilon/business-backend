@@ -5,13 +5,12 @@ import BankCard from './BankCard'
 
 export default class Client extends BaseModel {
   @column({ isPrimary: true })
-  public id: number
+  public id: string
+
+  // NO hay userId separado - el id ES el userId de MS-SECURITY
 
   @column()
-  public name: string
-
-  @column()
-  public email: string
+  public document: string
 
   @column()
   public phone: string

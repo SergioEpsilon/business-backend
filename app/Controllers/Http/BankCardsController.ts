@@ -80,12 +80,7 @@ export default class BankCardsController {
    */
   public async show({ params, response }: HttpContextContract) {
     try {
-      const card = await BankCard.query()
-        .where('id', params.id)
-        .preload('client', (clientQuery) => {
-          clientQuery.preload('user')
-        })
-        .firstOrFail()
+      const card = await BankCard.query().where('id', params.id).preload('client').firstOrFail()
 
       return response.ok(card)
     } catch (error) {

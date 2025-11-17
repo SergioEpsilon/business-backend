@@ -16,7 +16,7 @@ export default class InstallmentsController {
 
       const query = Installment.query()
         .preload('trip', (tripQuery) => {
-          tripQuery.preload('client')
+          tripQuery.preload('clients')
         })
         .preload('invoice')
 
@@ -76,9 +76,7 @@ export default class InstallmentsController {
       const installment = await Installment.query()
         .where('id', params.id)
         .preload('trip', (tripQuery) => {
-          tripQuery.preload('client', (clientQuery) => {
-            clientQuery.preload('user')
-          })
+          tripQuery.preload('clients')
         })
         .preload('invoice')
         .firstOrFail()
@@ -183,7 +181,7 @@ export default class InstallmentsController {
         .where('status', '!=', 'paid')
         .where('due_date', '<', DateTime.now().toSQLDate())
         .preload('trip', (tripQuery) => {
-          tripQuery.preload('client')
+          tripQuery.preload('clients')
         })
         .orderBy('due_date', 'asc')
 

@@ -1,6 +1,5 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Administrator from 'App/Models/Administrator'
-import User from 'App/Models/User'
 import Database from '@ioc:Adonis/Lucid/Database'
 
 export default class AdministratorsController {
@@ -14,7 +13,7 @@ export default class AdministratorsController {
       const perPage = request.input('per_page', 20)
       const department = request.input('department')
 
-      const query = Administrator.query().preload('user')
+      const query = Administrator.query()
 
       if (department) {
         query.where('department', 'like', `%${department}%`)
@@ -32,35 +31,15 @@ export default class AdministratorsController {
   }
 
   /**
-   * Crea un nuevo administrador junto con su usuario
+   * Crea un nuevo administrador
    * POST /administrators
+   * Valida que el user_id existe en el microservicio de seguridad
    */
   public async store({ request, response }: HttpContextContract) {
-    const trx = await Database.transaction()
-
     try {
-      const {
-        username,
-        email,
-        password,
-        firstName,
-        lastName,
-        documentType,
-        documentNumber,
-        phone,
-        department,
-        accessLevel,
-        canManageUsers,
-        canManageTrips,
-        canManageInvoices,
-      } = request.only([
-        'username',
-        'email',
-        'password',
-        'firstName',
-        'lastName',
-        'documentType',
-        'documentNumber',
+      const data = request.only([
+        'userId',
+        'document',
         'phone',
         'department',
         'accessLevel',
@@ -69,45 +48,64 @@ export default class AdministratorsController {
         'canManageInvoices',
       ])
 
-      // Crear usuario
-      const user = await User.create(
-        {
-          username,
-          email,
-          password, // En producción usar Hash.make(password)
-          userType: 'administrator',
-          isActive: true,
-        },
-        { client: trx }
-      )
+      // Validar que el usuario existe en MS-Security
+      const token = request.header('Authorization')?.replace('Bearer ', '')
 
-      // Crear administrador
-      const administrator = await Administrator.create(
-        {
-          userId: user.id,
-          firstName,
-          lastName,
-          documentType,
-          documentNumber,
-          phone,
-          department,
-          accessLevel: accessLevel || 1,
-          canManageUsers: canManageUsers !== undefined ? canManageUsers : false,
-          canManageTrips: canManageTrips !== undefined ? canManageTrips : false,
-          canManageInvoices: canManageInvoices !== undefined ? canManageInvoices : false,
-        },
-        { client: trx }
-      )
+      if (!token) {
+        return response.unauthorized({
+          message: 'Token de autenticación requerido',
+        })
+      }
 
-      await trx.commit()
+      // Validar contra MS-Security que el usuario existe y es tipo 'administrator'
+      try {
+        const axios = (await import('axios')).default
+        const Env = (await import('@ioc:Adonis/Core/Env')).default
 
-      await administrator.load('user')
+        const userValidation = await axios.get(
+          `${Env.get('MS_SECURITY')}/api/users/${data.userId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
+
+        if (!userValidation.data) {
+          return response.badRequest({
+            message: 'El usuario no existe en MS-Security',
+          })
+        }
+
+        // Validar userType: permitir 'administrator' o 'administrator-hotel'
+        const userType = userValidation.data.userType
+        if (userType && userType !== 'administrator' && userType !== 'administrator-hotel') {
+          return response.badRequest({
+            message: `El usuario es de tipo '${userType}', debe ser 'administrator' o 'administrator-hotel'`,
+          })
+        }
+      } catch (error) {
+        console.error('Error al validar con MS-Security:', error.message)
+        return response.badRequest({
+          message: 'Error al validar usuario en MS-Security',
+          error: error.response?.data || error.message,
+        })
+      }
+
+      const administrator = await Administrator.create({
+        id: data.userId,
+        ...data,
+        accessLevel: data.accessLevel || 1,
+        canManageUsers: data.canManageUsers !== undefined ? data.canManageUsers : false,
+        canManageTrips: data.canManageTrips !== undefined ? data.canManageTrips : false,
+        canManageInvoices: data.canManageInvoices !== undefined ? data.canManageInvoices : false,
+      })
+
       return response.created({
-        message: 'Administrador creado exitosamente',
+        message: 'Administrador registrado exitosamente',
         data: administrator,
       })
     } catch (error) {
-      await trx.rollback()
       return response.badRequest({
         message: 'Error al crear administrador',
         error: error.message,
@@ -123,7 +121,9 @@ export default class AdministratorsController {
     try {
       const administrator = await Administrator.query()
         .where('id', params.id)
-        .preload('user')
+        .preload('hotels', (hotelsQuery) => {
+          hotelsQuery.preload('municipality')
+        })
         .firstOrFail()
 
       return response.ok(administrator)
@@ -159,8 +159,6 @@ export default class AdministratorsController {
       administrator.merge(data)
       await administrator.save()
 
-      await administrator.load('user')
-
       return response.ok({
         message: 'Administrador actualizado exitosamente',
         data: administrator,
@@ -178,22 +176,14 @@ export default class AdministratorsController {
    * DELETE /administrators/:id
    */
   public async destroy({ params, response }: HttpContextContract) {
-    const trx = await Database.transaction()
-
     try {
       const administrator = await Administrator.findOrFail(params.id)
-      const user = await User.findOrFail(administrator.userId)
-
       await administrator.delete()
-      await user.delete()
-
-      await trx.commit()
 
       return response.ok({
         message: 'Administrador eliminado exitosamente',
       })
     } catch (error) {
-      await trx.rollback()
       return response.badRequest({
         message: 'Error al eliminar administrador',
         error: error.message,

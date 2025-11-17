@@ -1,3 +1,4 @@
+// ...existing code...
 import { DateTime } from 'luxon'
 import { BaseModel, column, manyToMany, ManyToMany, hasMany, HasMany } from '@ioc:Adonis/Lucid/Orm'
 import Client from './Client'
@@ -7,6 +8,12 @@ import Plan from './Plan'
 import Installment from './Installment'
 
 export default class Trip extends BaseModel {
+  @column({ columnName: 'number_of_passengers' })
+  public numberOfPassengers: number
+  @column({ columnName: 'total_price' })
+  public totalPrice: number
+  @column()
+  public tripCode: string
   @column({ isPrimary: true })
   public id: number
 

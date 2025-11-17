@@ -14,7 +14,7 @@ export default class PlansController {
       const isActive = request.input('is_active')
 
       const query = Plan.query().preload('touristActivities', (activitiesQuery) => {
-        activitiesQuery.preload('guide')
+        activitiesQuery.preload('guides')
         activitiesQuery.preload('municipality')
       })
 
@@ -80,11 +80,11 @@ export default class PlansController {
       const plan = await Plan.query()
         .where('id', params.id)
         .preload('touristActivities', (activitiesQuery) => {
-          activitiesQuery.preload('guide')
+          activitiesQuery.preload('guides')
           activitiesQuery.preload('municipality')
         })
         .preload('trips', (tripsQuery) => {
-          tripsQuery.preload('client')
+          tripsQuery.preload('clients')
         })
         .firstOrFail()
 
@@ -225,7 +225,7 @@ export default class PlansController {
     try {
       const plan = await Plan.findOrFail(params.id)
       await plan.load('touristActivities', (activitiesQuery) => {
-        activitiesQuery.preload('guide')
+        activitiesQuery.preload('guides')
         activitiesQuery.preload('municipality')
       })
 

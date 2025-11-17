@@ -20,6 +20,7 @@ const bodyParserConfig: BodyParserConfig = {
     limit: '1mb',
     queryString: {},
     types: ['application/x-www-form-urlencoded'],
+    convertEmptyStringsToNull: true,
   },
 
   raw: {
@@ -36,6 +37,7 @@ const bodyParserConfig: BodyParserConfig = {
     maxFields: 1000,
     limit: '20mb',
     types: ['multipart/form-data'],
+    convertEmptyStringsToNull: true,
   },
 }
 

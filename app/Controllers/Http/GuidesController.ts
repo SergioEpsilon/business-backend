@@ -1,6 +1,5 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Guide from 'App/Models/Guide'
-import User from 'App/Models/User'
 import Database from '@ioc:Adonis/Lucid/Database'
 
 export default class GuidesController {
@@ -15,7 +14,7 @@ export default class GuidesController {
       const specialization = request.input('specialization')
       const isAvailable = request.input('is_available')
 
-      const query = Guide.query().preload('user')
+      const query = Guide.query()
 
       if (specialization) {
         query.where('specialization', 'like', `%${specialization}%`)
@@ -34,82 +33,79 @@ export default class GuidesController {
   }
 
   /**
-   * Crea un nuevo guía junto con su usuario
+   * Crea un nuevo guía
    * POST /guides
+   * Valida que el user_id existe en el microservicio de seguridad
    */
   public async store({ request, response }: HttpContextContract) {
-    const trx = await Database.transaction()
-
     try {
-      const {
-        username,
-        email,
-        password,
-        firstName,
-        lastName,
-        documentType,
-        documentNumber,
-        phone,
-        licenseNumber,
-        specialization,
-        languages,
-        yearsOfExperience,
-        isAvailable,
-      } = request.only([
-        'username',
-        'email',
-        'password',
-        'firstName',
-        'lastName',
-        'documentType',
-        'documentNumber',
+      const data = request.only([
+        'userId',
+        'document',
         'phone',
         'licenseNumber',
         'specialization',
         'languages',
         'yearsOfExperience',
-        'isAvailable',
       ])
 
-      // Crear usuario
-      const user = await User.create(
-        {
-          username,
-          email,
-          password, // En producción usar Hash.make(password)
-          userType: 'guide',
-          isActive: true,
-        },
-        { client: trx }
-      )
+      // Validar que el usuario existe en MS-Security
+      const token = request.header('Authorization')?.replace('Bearer ', '')
 
-      // Crear guía
-      const guide = await Guide.create(
-        {
-          userId: user.id,
-          firstName,
-          lastName,
-          documentType,
-          documentNumber,
-          phone,
-          licenseNumber,
-          specialization,
-          languages: JSON.stringify(languages),
-          yearsOfExperience,
-          isAvailable: isAvailable !== undefined ? isAvailable : true,
-        },
-        { client: trx }
-      )
+      if (!token) {
+        return response.unauthorized({
+          message: 'Token de autenticación requerido',
+        })
+      }
 
-      await trx.commit()
+      // Validar contra MS-Security que el usuario existe y es tipo 'guide'
+      try {
+        const axios = (await import('axios')).default
+        const Env = (await import('@ioc:Adonis/Core/Env')).default
+        const { v4: uuidv4 } = await import('uuid')
 
-      await guide.load('user')
+        const userValidation = await axios.get(
+          `${Env.get('MS_SECURITY')}/api/users/${data.userId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
+
+        if (!userValidation.data) {
+          return response.badRequest({
+            message: 'El usuario no existe en MS-Security',
+          })
+        }
+
+        // Validar userType solo si existe y no es 'guide'
+        const userType = userValidation.data.userType
+        if (userType && userType !== 'guide') {
+          return response.badRequest({
+            message: `El usuario es de tipo '${userType}', debe ser 'guide'`,
+          })
+        }
+      } catch (error) {
+        console.error('Error al validar con MS-Security:', error.message)
+        return response.badRequest({
+          message: 'Error al validar usuario en MS-Security',
+          error: error.response?.data || error.message,
+        })
+      }
+
+      const axios = (await import('axios')).default
+      const guide = await Guide.create({
+        id: data.userId,
+        ...data,
+        isAvailable: true,
+      })
+
       return response.created({
-        message: 'Guía creado exitosamente',
+        message: 'Guía registrado exitosamente',
         data: guide,
       })
     } catch (error) {
-      await trx.rollback()
       return response.badRequest({
         message: 'Error al crear guía',
         error: error.message,
@@ -125,7 +121,6 @@ export default class GuidesController {
     try {
       const guide = await Guide.query()
         .where('id', params.id)
-        .preload('user')
         .preload('touristActivities', (activitiesQuery) => {
           activitiesQuery.preload('municipality')
         })
@@ -169,8 +164,6 @@ export default class GuidesController {
       guide.merge(data)
       await guide.save()
 
-      await guide.load('user')
-
       return response.ok({
         message: 'Guía actualizado exitosamente',
         data: guide,
@@ -188,22 +181,14 @@ export default class GuidesController {
    * DELETE /guides/:id
    */
   public async destroy({ params, response }: HttpContextContract) {
-    const trx = await Database.transaction()
-
     try {
       const guide = await Guide.findOrFail(params.id)
-      const user = await User.findOrFail(guide.userId)
-
       await guide.delete()
-      await user.delete()
-
-      await trx.commit()
 
       return response.ok({
         message: 'Guía eliminado exitosamente',
       })
     } catch (error) {
-      await trx.rollback()
       return response.badRequest({
         message: 'Error al eliminar guía',
         error: error.message,
@@ -260,10 +245,7 @@ export default class GuidesController {
    */
   public async available({ response }: HttpContextContract) {
     try {
-      const guides = await Guide.query()
-        .where('is_available', true)
-        .preload('user')
-        .orderBy('first_name', 'asc')
+      const guides = await Guide.query().where('is_available', true).orderBy('first_name', 'asc')
 
       return response.ok(guides)
     } catch (error) {
