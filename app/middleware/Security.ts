@@ -23,6 +23,7 @@ export default class Security {
         console.log('Respuesta completa de ms-security:', result.data)
         if (result.data === true || result.data?.hasPermission === true) {
           console.log('Permiso concedido por ms-security')
+          console.log('PASÓ EL MIDDLEWARE')
           await next()
         } else {
           console.log('Permiso denegado por ms-security')

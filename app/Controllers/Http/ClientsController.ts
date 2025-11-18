@@ -8,11 +8,27 @@ export default class ClientsController {
    */
   public async index({ request, response }: HttpContextContract) {
     try {
+      // Validar rol ADMINISTRADOR en MS-SECURITY
+      const token = request.header('Authorization')?.replace('Bearer ', '')
+      if (!token) {
+        return response.unauthorized({ message: 'Token de autenticación requerido' })
+      }
+      const axios = (await import('axios')).default
+      const Env = (await import('@ioc:Adonis/Core/Env')).default
+      // Obtener info de usuario
+      const userInfo = await axios.get(`${Env.get('MS_SECURITY')}/api/auth/my-roles`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      if (
+        !userInfo.data ||
+        !userInfo.data.roles ||
+        !userInfo.data.roles.includes('administrator')
+      ) {
+        return response.forbidden({ message: 'Solo administradores pueden listar clientes' })
+      }
       const page = request.input('page', 1)
       const perPage = request.input('per_page', 20)
-
       const clients = await Client.query().orderBy('created_at', 'desc').paginate(page, perPage)
-
       return response.ok(clients)
     } catch (error) {
       return response.badRequest({
@@ -99,19 +115,73 @@ export default class ClientsController {
    * Muestra un cliente específico
    * GET /clients/:id
    */
-  public async show({ params, response }: HttpContextContract) {
+  public async show({ params, response, request }: HttpContextContract) {
     try {
+      // Solo el propio cliente o admin puede ver el perfil
+      const token = request.header('Authorization')?.replace('Bearer ', '')
+      if (!token) {
+        return response.unauthorized({ message: 'Token de autenticación requerido' })
+      }
+      const axios = (await import('axios')).default
+      const Env = (await import('@ioc:Adonis/Core/Env')).default
+      const userInfoResp = await axios.get(`${Env.get('MS_SECURITY')}/api/auth/my-roles`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      const userInfo = userInfoResp.data
+      let clientId = params.id
+      // Si la ruta es /me, usar el userId del usuario autenticado
+      if (clientId === 'me') {
+        clientId = userInfo.userId
+      }
+      // LOGS DETALLADOS
+      console.log('[DEBUG] params:', params)
+      console.log('[DEBUG] userInfo:', userInfo)
+      console.log('[DEBUG] Valor recibido en params.id:', params.id)
+      console.log('[DEBUG] Valor final de clientId:', clientId)
+      console.log('[DEBUG] Tipo de clientId:', typeof clientId)
+      // Validación de permisos
+      if (
+        !userInfo ||
+        (!userInfo.roles.includes('administrator') && userInfo.userId !== clientId)
+      ) {
+        return response.forbidden({ message: 'No autorizado para ver este cliente' })
+      }
+      // Buscar cliente en MySQL
+      console.log('[DEBUG] Buscando en la base de datos Client con id:', clientId)
+      const clientEnDb = await Client.query().where('id', clientId).first()
+      if (!clientEnDb) {
+        console.log('[DEBUG] No se encontró el cliente en MySQL con id:', clientId)
+        const allClients = await Client.all()
+        console.log(
+          '[DEBUG] Todos los IDs de clientes en MySQL:',
+          allClients.map((c) => c.id)
+        )
+        return response.notFound({
+          message: 'Cliente no encontrado',
+          error: 'No existe un cliente con ese id',
+        })
+      } else {
+        console.log('[DEBUG] Cliente encontrado en MySQL:', clientEnDb)
+      }
+      // Preload de relaciones
       const client = await Client.query()
-        .where('id', params.id)
+        .where('id', clientId)
         .preload('trips')
         .preload('bankCards')
-        .firstOrFail()
-
+        .first()
+      console.log('[DEBUG] Resultado de la consulta Client:', client)
+      if (!client) {
+        return response.notFound({
+          message: 'Cliente no encontrado',
+          error: 'No existe un cliente con ese id',
+        })
+      }
       return response.ok(client)
-    } catch (error) {
+    } catch (error: any) {
+      console.log('[DEBUG] Error en show:', error)
       return response.notFound({
         message: 'Cliente no encontrado',
-        error: error.message,
+        error: error?.message || error,
       })
     }
   }
@@ -122,13 +192,31 @@ export default class ClientsController {
    */
   public async update({ params, request, response }: HttpContextContract) {
     try {
-      const client = await Client.findOrFail(params.id)
-
+      // Solo el propio cliente o admin puede actualizar
+      const token = request.header('Authorization')?.replace('Bearer ', '')
+      if (!token) {
+        return response.unauthorized({ message: 'Token de autenticación requerido' })
+      }
+      const axios = (await import('axios')).default
+      const Env = (await import('@ioc:Adonis/Core/Env')).default
+      const userInfoResp = await axios.get(`${Env.get('MS_SECURITY')}/api/auth/my-roles`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      const userInfo = userInfoResp.data
+      let clientId = params.id
+      if (clientId === 'me') {
+        clientId = userInfo.userId
+      }
+      if (
+        !userInfo ||
+        (!userInfo.roles.includes('administrator') && userInfo.userId !== clientId)
+      ) {
+        return response.forbidden({ message: 'No autorizado para actualizar este cliente' })
+      }
+      const client = await Client.findOrFail(clientId)
       const data = request.only(['phone', 'address'])
-
       client.merge(data)
       await client.save()
-
       return response.ok({
         message: 'Cliente actualizado exitosamente',
         data: client,
@@ -145,11 +233,31 @@ export default class ClientsController {
    * Elimina un cliente
    * DELETE /clients/:id
    */
-  public async destroy({ params, response }: HttpContextContract) {
+  public async destroy({ params, response, request }: HttpContextContract) {
     try {
-      const client = await Client.findOrFail(params.id)
+      // Solo el propio cliente o admin puede eliminar
+      const token = request.header('Authorization')?.replace('Bearer ', '')
+      if (!token) {
+        return response.unauthorized({ message: 'Token de autenticación requerido' })
+      }
+      const axios = (await import('axios')).default
+      const Env = (await import('@ioc:Adonis/Core/Env')).default
+      const userInfoResp = await axios.get(`${Env.get('MS_SECURITY')}/api/auth/my-roles`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      const userInfo = userInfoResp.data
+      let clientId = params.id
+      if (clientId === 'me') {
+        clientId = userInfo.userId
+      }
+      if (
+        !userInfo ||
+        (!userInfo.roles.includes('administrator') && userInfo.userId !== clientId)
+      ) {
+        return response.forbidden({ message: 'No autorizado para eliminar este cliente' })
+      }
+      const client = await Client.findOrFail(clientId)
       await client.delete()
-
       return response.ok({
         message: 'Cliente eliminado exitosamente',
       })
@@ -165,11 +273,27 @@ export default class ClientsController {
    * Asocia un viaje a un cliente
    * POST /clients/:id/trips/:tripId
    */
-  public async attachTrip({ params, response }: HttpContextContract) {
+  public async attachTrip({ params, response, request }: HttpContextContract) {
     try {
+      // Solo el propio cliente o admin puede asociar viajes
+      const token = request.header('Authorization')?.replace('Bearer ', '')
+      if (!token) {
+        return response.unauthorized({ message: 'Token de autenticación requerido' })
+      }
+      const axios = (await import('axios')).default
+      const Env = (await import('@ioc:Adonis/Core/Env')).default
+      const userInfoResp = await axios.get(`${Env.get('MS_SECURITY')}/api/auth/my-roles`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      const userInfo = userInfoResp.data
+      if (
+        !userInfo ||
+        (!userInfo.roles.includes('administrator') && userInfo.userId !== params.id)
+      ) {
+        return response.forbidden({ message: 'No autorizado para asociar viaje a este cliente' })
+      }
       const client = await Client.findOrFail(params.id)
       await client.related('trips').attach([params.tripId])
-
       return response.ok({
         message: 'Viaje asociado al cliente exitosamente',
       })
@@ -185,11 +309,29 @@ export default class ClientsController {
    * Desasocia un viaje de un cliente
    * DELETE /clients/:id/trips/:tripId
    */
-  public async detachTrip({ params, response }: HttpContextContract) {
+  public async detachTrip({ params, response, request }: HttpContextContract) {
     try {
+      // Solo el propio cliente o admin puede desasociar viajes
+      const token = request.header('Authorization')?.replace('Bearer ', '')
+      if (!token) {
+        return response.unauthorized({ message: 'Token de autenticación requerido' })
+      }
+      const axios = (await import('axios')).default
+      const Env = (await import('@ioc:Adonis/Core/Env')).default
+      const userInfoResp = await axios.get(`${Env.get('MS_SECURITY')}/api/auth/my-roles`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      const userInfo = userInfoResp.data
+      if (
+        !userInfo ||
+        (!userInfo.roles.includes('administrator') && userInfo.userId !== params.id)
+      ) {
+        return response.forbidden({
+          message: 'No autorizado para desasociar viaje de este cliente',
+        })
+      }
       const client = await Client.findOrFail(params.id)
       await client.related('trips').detach([params.tripId])
-
       return response.ok({
         message: 'Viaje desasociado del cliente exitosamente',
       })
@@ -205,11 +347,27 @@ export default class ClientsController {
    * Obtiene los viajes de un cliente
    * GET /clients/:id/trips
    */
-  public async trips({ params, response }: HttpContextContract) {
+  public async trips({ params, response, request }: HttpContextContract) {
     try {
+      // Solo el propio cliente o admin puede ver los viajes
+      const token = request.header('Authorization')?.replace('Bearer ', '')
+      if (!token) {
+        return response.unauthorized({ message: 'Token de autenticación requerido' })
+      }
+      const axios = (await import('axios')).default
+      const Env = (await import('@ioc:Adonis/Core/Env')).default
+      const userInfoResp = await axios.get(`${Env.get('MS_SECURITY')}/api/auth/my-roles`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      const userInfo = userInfoResp.data
+      if (
+        !userInfo ||
+        (!userInfo.roles.includes('administrator') && userInfo.userId !== params.id)
+      ) {
+        return response.forbidden({ message: 'No autorizado para ver los viajes de este cliente' })
+      }
       const client = await Client.findOrFail(params.id)
       await client.load('trips')
-
       return response.ok(client.trips)
     } catch (error) {
       return response.notFound({

@@ -43,7 +43,9 @@ Route.group(() => {
     Route.get('/:id/trips', 'ClientsController.trips')
     Route.post('/:id/trips/:tripId', 'ClientsController.attachTrip')
     Route.delete('/:id/trips/:tripId', 'ClientsController.detachTrip')
-  }).prefix('/clients')
+  })
+    .prefix('/clients')
+    .middleware(['security'])
 
   // ==================== GUIDE ROUTES ====================
   Route.group(() => {
@@ -197,9 +199,8 @@ Route.group(() => {
     Route.post('/:id/register-payment', 'InvoicesController.registerPayment')
     Route.patch('/:id/mark-overdue', 'InvoicesController.markOverdue')
     Route.get('/:id/installments', 'InvoicesController.installments')
-  })
-    .prefix('/invoices')
-    .middleware('security')
+  }).prefix('/invoices')
+  // .middleware('security')
 
   // ==================== INSTALLMENT ROUTES ====================
   Route.group(() => {
