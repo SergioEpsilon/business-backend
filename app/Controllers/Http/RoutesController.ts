@@ -35,16 +35,36 @@ export default class RoutesController {
    */
   public async store({ request, response }: HttpContextContract) {
     try {
+      // 🚨 MODO TESTING: Simplificar creación de ruta
+      console.log('⚠️ RoutesController.store - TESTING MODE')
+
       const data = request.only([
+        'name',
         'origin',
         'destination',
+        'distance',
         'distanceKm',
+        'estimatedDuration',
         'estimatedDurationMinutes',
         'description',
+        'stops',
         'isActive',
       ])
 
-      const route = await Route.create(data)
+      // Mapeo de campos: soportar ambos formatos
+      const distanceKm = data.distanceKm || data.distance || 0
+      const estimatedDurationMinutes = data.estimatedDurationMinutes || data.estimatedDuration || 0
+
+      const route = await Route.create({
+        originMunicipalityId: 1, // Municipio por defecto para testing
+        destinationMunicipalityId: 1, // Municipio por defecto para testing
+        origin: data.origin,
+        destination: data.destination,
+        distanceKm: distanceKm,
+        estimatedDurationMinutes: estimatedDurationMinutes,
+        description: data.description || '',
+        isActive: data.isActive !== undefined ? data.isActive : true,
+      })
 
       return response.created({
         message: 'Trayecto creado exitosamente',

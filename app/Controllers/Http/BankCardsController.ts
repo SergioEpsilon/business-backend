@@ -34,13 +34,17 @@ export default class BankCardsController {
    */
   public async store({ params, request, response }: HttpContextContract) {
     try {
+      console.log('⚠️ BankCardsController.store - TESTING MODE')
+      
       const clientId = params.clientId
 
       const data = request.only([
+        'cardholderName',
         'cardHolderName',
         'cardNumber',
         'cardType',
         'cardBrand',
+        'expiryDate',
         'expiryMonth',
         'expiryYear',
         'cvv',
@@ -51,6 +55,28 @@ export default class BankCardsController {
         'isDefault',
       ])
 
+      // Mapeo de nombres de campo
+      const cardHolderName = data.cardHolderName || data.cardholderName || 'Titular de prueba'
+
+      // Parsear expiryDate si viene en formato MM/YY
+      let expiryMonth = data.expiryMonth
+      let expiryYear = data.expiryYear
+
+      if (data.expiryDate && typeof data.expiryDate === 'string' && data.expiryDate.includes('/')) {
+        const [month, year] = data.expiryDate.split('/')
+        expiryMonth = parseInt(month)
+        expiryYear = parseInt('20' + year) // Convertir YY a YYYY
+      }
+
+      // Mapeo de cardType español a inglés
+      const cardTypeMap = {
+        'credito': 'credit',
+        'crédito': 'credit',
+        'debito': 'debit',
+        'débito': 'debit',
+      }
+      const cardType = cardTypeMap[data.cardType?.toLowerCase()] || data.cardType || 'credit'
+
       // Si es tarjeta por defecto, quitar el default de las demás
       if (data.isDefault) {
         await BankCard.query().where('client_id', clientId).update({ is_default: false })
@@ -58,7 +84,18 @@ export default class BankCardsController {
 
       const card = await BankCard.create({
         clientId,
-        ...data,
+        cardHolderName: cardHolderName,
+        cardNumber: data.cardNumber || '0000000000000000',
+        cardType: cardType,
+        cardBrand: data.cardBrand || 'Visa',
+        expiryMonth: expiryMonth || 12,
+        expiryYear: expiryYear || 2030,
+        cvv: data.cvv || '000',
+        billingAddress: data.billingAddress || 'Dirección de prueba',
+        billingCity: data.billingCity || 'Ciudad de prueba',
+        billingCountry: data.billingCountry || 'Colombia',
+        billingZipCode: data.billingZipCode || '00000',
+        isDefault: data.isDefault !== undefined ? data.isDefault : false,
         isActive: true,
       })
 

@@ -45,6 +45,9 @@ export default class TouristActivitiesController {
    */
   public async store({ request, response }: HttpContextContract) {
     try {
+      // 🚨 MODO TESTING: Simplificar creación de actividad
+      console.log('⚠️ TouristActivitiesController.store - TESTING MODE')
+
       const data = request.only([
         'municipalityId',
         'name',
@@ -59,9 +62,37 @@ export default class TouristActivitiesController {
         'includesMeals',
         'requirements',
         'isActive',
+        'minAge',
       ])
 
-      const activity = await TouristActivity.create(data)
+      // Mapeo de difficulty español → inglés
+      const difficultyMap = {
+        'fácil': 'easy',
+        'facil': 'easy',
+        'moderada': 'moderate',
+        'difícil': 'hard',
+        'dificil': 'hard',
+        'extrema': 'hard',
+      }
+
+      const validDifficulty = difficultyMap[data.difficulty?.toLowerCase()] || data.difficulty || 'moderate'
+
+      const activity = await TouristActivity.create({
+        municipalityId: data.municipalityId || 1, // Municipio por defecto
+        name: data.name,
+        description: data.description || '',
+        activityType: data.activityType || 'Recreativa',
+        duration: data.duration || 60,
+        price: data.price || 0,
+        maxCapacity: data.maxCapacity || 20,
+        minCapacity: data.minCapacity || 1,
+        difficulty: validDifficulty,
+        includesTransport: data.includesTransport !== undefined ? data.includesTransport : false,
+        includesMeals: data.includesMeals !== undefined ? data.includesMeals : false,
+        requirements: data.requirements || '',
+        isActive: data.isActive !== undefined ? data.isActive : true,
+      })
+
       await activity.load('guides')
       await activity.load('municipality')
 

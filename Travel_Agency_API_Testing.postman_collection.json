@@ -1,0 +1,872 @@
+{
+	"info": {
+		"_postman_id": "travel-agency-api-2025",
+		"name": "Travel Agency API - Testing",
+		"description": "Colección completa para probar todos los endpoints del backend de agencia de viajes",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "1. Clientes",
+			"item": [
+				{
+					"name": "Listar Clientes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/clients",
+							"host": ["{{base_url}}"],
+							"path": ["clients"]
+						}
+					}
+				},
+				{
+					"name": "Crear Cliente",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"document\": \"1234567890\",\n  \"phone\": \"3001234567\",\n  \"address\": \"Calle 123 #45-67, Bogotá\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/clients",
+							"host": ["{{base_url}}"],
+							"path": ["clients"]
+						}
+					}
+				},
+				{
+					"name": "Obtener Cliente por ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/clients/{{client_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["clients", "{{client_id}}"]
+						}
+					}
+				},
+				{
+					"name": "Actualizar Cliente",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"document\": \"1234567890\",\n  \"phone\": \"3009876543\",\n  \"address\": \"Carrera 50 #30-20, Medellín\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/clients/{{client_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["clients", "{{client_id}}"]
+						}
+					}
+				},
+				{
+					"name": "Eliminar Cliente",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/clients/{{client_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["clients", "{{client_id}}"]
+						}
+					}
+				},
+				{
+					"name": "Obtener Viajes del Cliente",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/clients/{{client_id}}/trips",
+							"host": ["{{base_url}}"],
+							"path": ["clients", "{{client_id}}", "trips"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "2. Viajes",
+			"item": [
+				{
+					"name": "Listar Viajes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/trips",
+							"host": ["{{base_url}}"],
+							"path": ["trips"]
+						}
+					}
+				},
+				{
+					"name": "Crear Viaje",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"destination\": \"Cartagena\",\n  \"startDate\": \"2025-12-15\",\n  \"endDate\": \"2025-12-20\",\n  \"numPassengers\": 4,\n  \"status\": \"confirmado\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/trips",
+							"host": ["{{base_url}}"],
+							"path": ["trips"]
+						}
+					}
+				},
+				{
+					"name": "Obtener Viaje por ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/trips/{{trip_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["trips", "{{trip_id}}"]
+						}
+					}
+				},
+				{
+					"name": "Actualizar Viaje",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"destination\": \"Santa Marta\",\n  \"startDate\": \"2025-12-15\",\n  \"endDate\": \"2025-12-22\",\n  \"numPassengers\": 5,\n  \"status\": \"confirmado\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/trips/{{trip_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["trips", "{{trip_id}}"]
+						}
+					}
+				},
+				{
+					"name": "Eliminar Viaje",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/trips/{{trip_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["trips", "{{trip_id}}"]
+						}
+					}
+				},
+				{
+					"name": "Asociar Cliente a Viaje",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/trips/{{trip_id}}/clients/{{client_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["trips", "{{trip_id}}", "clients", "{{client_id}}"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "3. Planes",
+			"item": [
+				{
+					"name": "Listar Planes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/plans",
+							"host": ["{{base_url}}"],
+							"path": ["plans"]
+						}
+					}
+				},
+				{
+					"name": "Crear Plan",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Plan Aventura Caribe\",\n  \"description\": \"Plan turístico completo por la costa caribeña colombiana con actividades acuáticas\",\n  \"price\": 1500000,\n  \"duration\": 7,\n  \"isActive\": true\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/plans",
+							"host": ["{{base_url}}"],
+							"path": ["plans"]
+						}
+					}
+				},
+				{
+					"name": "Obtener Plan por ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/plans/{{plan_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["plans", "{{plan_id}}"]
+						}
+					}
+				},
+				{
+					"name": "Actualizar Plan",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Plan Aventura Caribe Premium\",\n  \"description\": \"Plan turístico premium por la costa caribeña con todas las comodidades\",\n  \"price\": 2500000,\n  \"duration\": 10,\n  \"isActive\": true\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/plans/{{plan_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["plans", "{{plan_id}}"]
+						}
+					}
+				},
+				{
+					"name": "Eliminar Plan",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/plans/{{plan_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["plans", "{{plan_id}}"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "4. Hoteles y Habitaciones",
+			"item": [
+				{
+					"name": "Listar Hoteles",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/hotels",
+							"host": ["{{base_url}}"],
+							"path": ["hotels"]
+						}
+					}
+				},
+				{
+					"name": "Obtener Hotel por ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/hotels/{{hotel_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["hotels", "{{hotel_id}}"]
+						}
+					}
+				},
+				{
+					"name": "Listar Habitaciones",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/rooms",
+							"host": ["{{base_url}}"],
+							"path": ["rooms"]
+						}
+					}
+				},
+				{
+					"name": "Crear Habitación",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"hotelId\": 1,\n  \"roomNumber\": \"101\",\n  \"roomType\": \"doble\",\n  \"capacity\": 2,\n  \"pricePerNight\": 150000,\n  \"isAvailable\": true,\n  \"floor\": 1,\n  \"hasBalcony\": true,\n  \"hasKitchen\": false,\n  \"hasAirConditioning\": true,\n  \"description\": \"Habitación doble con vista al mar\",\n  \"amenities\": \"TV, WiFi, Minibar, Caja fuerte\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/rooms",
+							"host": ["{{base_url}}"],
+							"path": ["rooms"]
+						}
+					}
+				},
+				{
+					"name": "Obtener Habitaciones por Hotel",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/rooms/hotel/{{hotel_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["rooms", "hotel", "{{hotel_id}}"]
+						}
+					}
+				},
+				{
+					"name": "Obtener Habitación por ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/rooms/{{room_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["rooms", "{{room_id}}"]
+						}
+					}
+				},
+				{
+					"name": "Actualizar Habitación",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"hotelId\": 1,\n  \"roomNumber\": \"101\",\n  \"roomType\": \"suite\",\n  \"capacity\": 3,\n  \"pricePerNight\": 250000,\n  \"isAvailable\": true,\n  \"floor\": 1,\n  \"hasBalcony\": true,\n  \"hasKitchen\": true,\n  \"hasAirConditioning\": true,\n  \"description\": \"Suite ejecutiva con vista panorámica al mar\",\n  \"amenities\": \"TV Smart, WiFi, Minibar, Caja fuerte, Jacuzzi\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/rooms/{{room_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["rooms", "{{room_id}}"]
+						}
+					}
+				},
+				{
+					"name": "Eliminar Habitación",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/rooms/{{room_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["rooms", "{{room_id}}"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "5. Actividades Turísticas",
+			"item": [
+				{
+					"name": "Listar Actividades",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/tourist-activities",
+							"host": ["{{base_url}}"],
+							"path": ["tourist-activities"]
+						}
+					}
+				},
+				{
+					"name": "Crear Actividad",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"municipalityId\": 1,\n  \"name\": \"Buceo en arrecifes\",\n  \"description\": \"Inmersión guiada en los arrecifes coralinos del Caribe\",\n  \"activityType\": \"Acuática\",\n  \"duration\": 120,\n  \"difficulty\": \"moderada\",\n  \"price\": 200000,\n  \"isActive\": true,\n  \"maxCapacity\": 10,\n  \"minAge\": 14,\n  \"requirements\": \"Certificado de buceo o curso previo\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/tourist-activities",
+							"host": ["{{base_url}}"],
+							"path": ["tourist-activities"]
+						}
+					}
+				},
+				{
+					"name": "Obtener Actividad por ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/tourist-activities/{{activity_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["tourist-activities", "{{activity_id}}"]
+						}
+					}
+				},
+				{
+					"name": "Actualizar Actividad",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"municipalityId\": 1,\n  \"name\": \"Buceo en arrecifes con fotografía\",\n  \"description\": \"Inmersión guiada con sesión fotográfica profesional\",\n  \"activityType\": \"Acuática\",\n  \"duration\": 180,\n  \"difficulty\": \"moderada\",\n  \"price\": 300000,\n  \"isActive\": true,\n  \"maxCapacity\": 8,\n  \"minAge\": 16,\n  \"requirements\": \"Certificado de buceo avanzado\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/tourist-activities/{{activity_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["tourist-activities", "{{activity_id}}"]
+						}
+					}
+				},
+				{
+					"name": "Eliminar Actividad",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/tourist-activities/{{activity_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["tourist-activities", "{{activity_id}}"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "6. Cuotas y Tarjetas",
+			"item": [
+				{
+					"name": "Listar Cuotas",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/installments",
+							"host": ["{{base_url}}"],
+							"path": ["installments"]
+						}
+					}
+				},
+				{
+					"name": "Crear Cuota",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"invoiceId\": 1,\n  \"tripId\": 1,\n  \"amount\": 500000,\n  \"dueDate\": \"2025-12-01\",\n  \"status\": \"pendiente\",\n  \"notes\": \"Primera cuota del viaje\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/installments",
+							"host": ["{{base_url}}"],
+							"path": ["installments"]
+						}
+					}
+				},
+				{
+					"name": "Listar Tarjetas de Cliente",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/clients/{{client_id}}/bank-cards",
+							"host": ["{{base_url}}"],
+							"path": ["clients", "{{client_id}}", "bank-cards"]
+						}
+					}
+				},
+				{
+					"name": "Crear Tarjeta",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"clientId\": 1,\n  \"cardNumber\": \"4532123456789012\",\n  \"cardholderName\": \"Juan Perez Garcia\",\n  \"expiryDate\": \"12/27\",\n  \"cvv\": \"123\",\n  \"cardType\": \"visa\",\n  \"isDefault\": true\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/clients/{{client_id}}/bank-cards",
+							"host": ["{{base_url}}"],
+							"path": ["clients", "{{client_id}}", "bank-cards"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "7. Vehículos y Rutas",
+			"item": [
+				{
+					"name": "Listar Vehículos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/vehicles",
+							"host": ["{{base_url}}"],
+							"path": ["vehicles"]
+						}
+					}
+				},
+				{
+					"name": "Crear Vehículo",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"vehicleType\": \"bus\",\n  \"licensePlate\": \"ABC123\",\n  \"brand\": \"Mercedes Benz\",\n  \"model\": \"Sprinter\",\n  \"year\": 2023,\n  \"capacity\": 20,\n  \"features\": \"Aire acondicionado, WiFi, TV, Asientos reclinables\",\n  \"isAvailable\": true\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/vehicles",
+							"host": ["{{base_url}}"],
+							"path": ["vehicles"]
+						}
+					}
+				},
+				{
+					"name": "Listar Rutas",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/routes",
+							"host": ["{{base_url}}"],
+							"path": ["routes"]
+						}
+					}
+				},
+				{
+					"name": "Crear Ruta",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Bogotá - Cartagena\",\n  \"origin\": \"Bogotá\",\n  \"destination\": \"Cartagena\",\n  \"distance\": 1050000,\n  \"estimatedDuration\": 960,\n  \"description\": \"Ruta turística por la costa norte colombiana\",\n  \"stops\": \"Medellín, Montería\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/routes",
+							"host": ["{{base_url}}"],
+							"path": ["routes"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "8. Itinerarios",
+			"item": [
+				{
+					"name": "Listar Itinerarios",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/itinerary-transports",
+							"host": ["{{base_url}}"],
+							"path": ["itinerary-transports"]
+						}
+					}
+				},
+				{
+					"name": "Crear Itinerario",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"tripId\": 1,\n  \"routeId\": 1,\n  \"transportServiceId\": 1,\n  \"dayNumber\": 1,\n  \"orderInDay\": 1,\n  \"numPassengers\": 20,\n  \"totalCost\": 500000,\n  \"notes\": \"Salida temprano en la mañana\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/itinerary-transports",
+							"host": ["{{base_url}}"],
+							"path": ["itinerary-transports"]
+						}
+					}
+				},
+				{
+					"name": "Obtener Itinerario por ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/itinerary-transports/{{itinerary_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["itinerary-transports", "{{itinerary_id}}"]
+						}
+					}
+				},
+				{
+					"name": "Actualizar Itinerario",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"tripId\": 1,\n  \"routeId\": 1,\n  \"transportServiceId\": 1,\n  \"dayNumber\": 1,\n  \"orderInDay\": 2,\n  \"numPassengers\": 22,\n  \"totalCost\": 550000,\n  \"notes\": \"Salida modificada a medio día\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/itinerary-transports/{{itinerary_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["itinerary-transports", "{{itinerary_id}}"]
+						}
+					}
+				},
+				{
+					"name": "Eliminar Itinerario",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/itinerary-transports/{{itinerary_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["itinerary-transports", "{{itinerary_id}}"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "9. Municipios",
+			"item": [
+				{
+					"name": "Listar Municipios",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/municipalities",
+							"host": ["{{base_url}}"],
+							"path": ["municipalities"]
+						}
+					}
+				},
+				{
+					"name": "Buscar Municipios",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/municipalities/search?name=Cartagena",
+							"host": ["{{base_url}}"],
+							"path": ["municipalities", "search"],
+							"query": [
+								{
+									"key": "name",
+									"value": "Cartagena"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "Obtener Municipio por ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/municipalities/{{municipality_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["municipalities", "{{municipality_id}}"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "TESTS - Validaciones",
+			"item": [
+				{
+					"name": "FAIL - Room Tipo Inválido",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"hotelId\": 1,\n  \"roomNumber\": \"101\",\n  \"roomType\": \"presidencial\",\n  \"capacity\": 2,\n  \"pricePerNight\": 150000,\n  \"isAvailable\": true\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/rooms",
+							"host": ["{{base_url}}"],
+							"path": ["rooms"]
+						}
+					}
+				},
+				{
+					"name": "FAIL - BankCard Número Inválido",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"clientId\": 1,\n  \"cardNumber\": \"123\",\n  \"cardholderName\": \"Juan Perez\",\n  \"expiryDate\": \"12/27\",\n  \"cvv\": \"123\",\n  \"cardType\": \"visa\",\n  \"isDefault\": false\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/clients/1/bank-cards",
+							"host": ["{{base_url}}"],
+							"path": ["clients", "1", "bank-cards"]
+						}
+					}
+				},
+				{
+					"name": "FAIL - Activity Dificultad Inválida",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"municipalityId\": 1,\n  \"name\": \"Parapente\",\n  \"activityType\": \"Aventura\",\n  \"duration\": 60,\n  \"difficulty\": \"imposible\",\n  \"price\": 150000,\n  \"isActive\": true\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/tourist-activities",
+							"host": ["{{base_url}}"],
+							"path": ["tourist-activities"]
+						}
+					}
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:3333/api/v1",
+			"type": "string"
+		},
+		{
+			"key": "client_id",
+			"value": "1",
+			"type": "string"
+		},
+		{
+			"key": "trip_id",
+			"value": "1",
+			"type": "string"
+		},
+		{
+			"key": "plan_id",
+			"value": "1",
+			"type": "string"
+		},
+		{
+			"key": "hotel_id",
+			"value": "1",
+			"type": "string"
+		},
+		{
+			"key": "room_id",
+			"value": "1",
+			"type": "string"
+		},
+		{
+			"key": "activity_id",
+			"value": "1",
+			"type": "string"
+		},
+		{
+			"key": "municipality_id",
+			"value": "1",
+			"type": "string"
+		},
+		{
+			"key": "itinerary_id",
+			"value": "1",
+			"type": "string"
+		}
+	]
+}

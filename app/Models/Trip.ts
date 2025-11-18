@@ -35,6 +35,15 @@ export default class Trip extends BaseModel {
   @column()
   public capacity: number
 
+  @column()
+  public status: string
+
+  @column({ columnName: 'payment_status' })
+  public paymentStatus: string
+
+  @column()
+  public notes: string
+
   // Relación muchos a muchos con Client
   @manyToMany(() => Client, {
     pivotTable: 'client_trip',

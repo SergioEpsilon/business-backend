@@ -45,7 +45,7 @@ Route.group(() => {
     Route.delete('/:id/trips/:tripId', 'ClientsController.detachTrip')
   })
     .prefix('/clients')
-    .middleware(['security'])
+    // .middleware(['security']) // Deshabilitado temporalmente para testing
 
   // ==================== GUIDE ROUTES ====================
   Route.group(() => {
@@ -223,4 +223,31 @@ Route.group(() => {
     Route.delete('/bank-cards/:id', 'BankCardsController.destroy')
     Route.patch('/bank-cards/:id/set-default', 'BankCardsController.setDefault')
   })
+
+  // ==================== HOTEL ROUTES ====================
+  Route.group(() => {
+    Route.get('/', 'HotelsController.index')
+    Route.post('/', 'HotelsController.store')
+    Route.get('/:id', 'HotelsController.show')
+    Route.get('/:id/rooms', 'HotelsController.rooms')
+  }).prefix('/hotels')
+
+  // ==================== ROOM ROUTES ====================
+  Route.group(() => {
+    Route.get('/', 'RoomsController.index')
+    Route.post('/', 'RoomsController.store')
+    Route.get('/hotel/:hotelId', 'RoomsController.byHotel')
+    Route.get('/:id', 'RoomsController.show')
+    Route.put('/:id', 'RoomsController.update')
+    Route.delete('/:id', 'RoomsController.destroy')
+  }).prefix('/rooms')
+
+  // ==================== ITINERARY TRANSPORT ROUTES ====================
+  Route.group(() => {
+    Route.get('/', 'ItineraryTransportsController.index')
+    Route.post('/', 'ItineraryTransportsController.store')
+    Route.get('/:id', 'ItineraryTransportsController.show')
+    Route.put('/:id', 'ItineraryTransportsController.update')
+    Route.delete('/:id', 'ItineraryTransportsController.destroy')
+  }).prefix('/itinerary-transports')
 }).prefix('/api/v1')

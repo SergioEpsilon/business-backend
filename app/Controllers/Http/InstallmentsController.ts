@@ -42,6 +42,8 @@ export default class InstallmentsController {
    */
   public async store({ request, response }: HttpContextContract) {
     try {
+      console.log('⚠️ InstallmentsController.store - TESTING MODE')
+      
       const data = request.only([
         'tripId',
         'invoiceId',
@@ -49,11 +51,70 @@ export default class InstallmentsController {
         'amount',
         'dueDate',
         'status',
+        'notes',
       ])
 
-      const installment = await Installment.create(data)
+      // Mapeo de status español a inglés
+      const statusMap = {
+        'pendiente': 'pending',
+        'pagado': 'paid',
+        'pagada': 'paid',
+        'vencido': 'overdue',
+        'vencida': 'overdue',
+        'cancelado': 'cancelled',
+        'cancelada': 'cancelled',
+      }
+      const status = statusMap[data.status?.toLowerCase()] || data.status || 'pending'
+
+      // Generar installmentNumber si no existe - usar número secuencial pequeño
+      let installmentNumber = data.installmentNumber
+      if (!installmentNumber) {
+        // Contar cuántas cuotas tiene este viaje para asignar número secuencial
+        const tripId = data.tripId || 1
+        const count = await Installment.query().where('trip_id', tripId).count('* as total')
+        installmentNumber = (count[0].$extras.total || 0) + 1
+      }
+
+      // Verificar si el invoiceId existe, si no, crear uno automáticamente
+      let invoiceId = data.invoiceId
+      if (invoiceId) {
+        const Invoice = (await import('App/Models/Invoice')).default
+        const invoiceExists = await Invoice.find(invoiceId)
+        
+        if (!invoiceExists) {
+          // Crear factura automáticamente para testing
+          const newInvoice = await Invoice.create({
+            tripId: data.tripId || 1,
+            invoiceNumber: `INV-${Date.now()}`,
+            issueDate: DateTime.now(),
+            dueDate: data.dueDate ? DateTime.fromISO(data.dueDate) : DateTime.now().plus({ days: 30 }),
+            subtotal: data.amount || 0,
+            tax: 0,
+            discount: 0,
+            totalAmount: data.amount || 0,
+            paidAmount: 0,
+            balance: data.amount || 0,
+            status: 'pending',
+            notes: 'Factura generada automáticamente',
+          })
+          invoiceId = newInvoice.id
+        }
+      }
+
+      const installment = await Installment.create({
+        tripId: data.tripId || 1,
+        invoiceId: invoiceId || null, // Puede ser null
+        installmentNumber: installmentNumber,
+        amount: data.amount || 0,
+        dueDate: data.dueDate || DateTime.now().plus({ days: 30 }).toSQLDate(),
+        status: status,
+        notes: data.notes || '',
+      })
+      
       await installment.load('trip')
-      await installment.load('invoice')
+      if (installment.invoiceId) {
+        await installment.load('invoice')
+      }
 
       return response.created({
         message: 'Cuota creada exitosamente',

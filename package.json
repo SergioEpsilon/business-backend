@@ -43,17 +43,21 @@
     "@adonisjs/fold": "^10.2.1",
     "@adonisjs/lucid": "^18.4.2",
     "@adonisjs/repl": "^3.1.11",
+    "@types/uuid": "^10.0.0",
+    "axios": "^1.13.2",
     "luxon": "^3.7.2",
     "mysql2": "^3.15.3",
     "proxy-addr": "^2.0.7",
     "reflect-metadata": "^0.1.14",
     "socket.io": "^4.8.1",
-    "source-map-support": "^0.5.21"
+    "source-map-support": "^0.5.21",
+    "uuid": "^13.0.0"
   },
   "devDependencies": {
     "@adonisjs/assembler": "^5.9.6",
     "@types/luxon": "^3.7.1",
     "@types/socket.io": "^3.0.1",
+    "@types/uuid": "^10.0.0",
     "adonis-preset-ts": "^2.1.0",
     "eslint": "^8.57.1",
     "eslint-config-prettier": "^8.10.2",

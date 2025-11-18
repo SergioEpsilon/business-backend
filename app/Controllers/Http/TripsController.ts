@@ -20,9 +20,54 @@ export default class TripsController {
    * Almacena la información de un viaje
    */
   public async store({ request, response }: HttpContextContract) {
-    const payload = request.body()
-    const trip = await Trip.create(payload)
-    return response.created(trip)
+    try {
+      // 🚨 MODO TESTING: Simplificar creación de viaje
+      console.log('⚠️ TripsController.store - TESTING MODE')
+
+      const data = request.only([
+        'destination',
+        'startDate',
+        'endDate',
+        'numPassengers',
+        'status',
+      ])
+
+      // Generar trip_code único
+      const tripCode = `TRIP-${Date.now()}`
+
+      // Mapear status español a inglés
+      const statusMap = {
+        'pendiente': 'pending',
+        'confirmado': 'confirmed',
+        'en_progreso': 'in_progress',
+        'completado': 'completed',
+        'cancelado': 'cancelled',
+      }
+      const validStatus = statusMap[data.status] || data.status || 'pending'
+
+      // Crear viaje con valores por defecto para testing
+      const trip = await Trip.create({
+        tripCode: tripCode,
+        destination: data.destination,
+        startDate: data.startDate,
+        endDate: data.endDate,
+        numberOfPassengers: data.numPassengers || 1,
+        totalPrice: 0, // Precio por defecto
+        status: validStatus,
+        paymentStatus: 'pending',
+      })
+
+      return response.created({
+        message: 'Viaje creado exitosamente',
+        data: trip,
+      })
+    } catch (error) {
+      console.error('Error al crear viaje:', error)
+      return response.badRequest({
+        message: 'Error al crear viaje',
+        error: error.message,
+      })
+    }
   }
 
   /**

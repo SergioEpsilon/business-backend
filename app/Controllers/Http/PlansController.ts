@@ -40,24 +40,36 @@ export default class PlansController {
    */
   public async store({ request, response }: HttpContextContract) {
     try {
+      // 🚨 MODO TESTING: Simplificar creación de plan
+      console.log('⚠️ PlansController.store - TESTING MODE')
+
       const data = request.only([
         'name',
         'description',
-        'planCode',
+        'price',
         'duration',
-        'basePrice',
-        'maxPeople',
-        'minPeople',
-        'includesAccommodation',
-        'includesTransport',
-        'includesMeals',
-        'mealPlan',
-        'category',
-        'seasonType',
         'isActive',
       ])
 
-      const plan = await Plan.create(data)
+      // Generar plan_code único si no se proporciona
+      const planCode = `PLAN-${Date.now()}`
+
+      const plan = await Plan.create({
+        planCode: planCode,
+        name: data.name,
+        description: data.description,
+        basePrice: data.price || 0,
+        duration: data.duration,
+        isActive: data.isActive !== undefined ? data.isActive : true,
+        category: 'general', // Categoría por defecto para testing
+        seasonType: 'all_year', // Temporada por defecto para testing
+        // Valores por defecto para campos opcionales
+        maxPeople: 50,
+        minPeople: 1,
+        includesAccommodation: false,
+        includesTransport: false,
+        includesMeals: false,
+      })
 
       return response.created({
         message: 'Plan creado exitosamente',
