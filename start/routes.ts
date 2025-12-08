@@ -229,6 +229,8 @@ Route.group(() => {
     Route.get('/', 'HotelsController.index')
     Route.post('/', 'HotelsController.store')
     Route.get('/:id', 'HotelsController.show')
+    Route.put('/:id', 'HotelsController.update')
+    Route.delete('/:id', 'HotelsController.destroy')
     Route.get('/:id/rooms', 'HotelsController.rooms')
   }).prefix('/hotels')
 

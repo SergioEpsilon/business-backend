@@ -175,18 +175,50 @@ export default class PlansController {
    */
   public async attachActivities({ params, request, response }: HttpContextContract) {
     try {
+      console.log('⚠️ PlansController.attachActivities - TESTING MODE')
+      
       const plan = await Plan.findOrFail(params.id)
-      const { activityIds, customData } = request.only(['activityIds', 'customData'])
-
-      if (!activityIds || !Array.isArray(activityIds)) {
-        return response.badRequest({ message: 'activityIds debe ser un array' })
+      const data = request.all()
+      console.log('📦 Datos recibidos:', JSON.stringify(data))
+      
+      let activityIds = data.activityIds
+      
+      // Si viene como string, intentar parsearlo
+      if (typeof activityIds === 'string') {
+        try {
+          activityIds = JSON.parse(activityIds)
+        } catch (e) {
+          // Si no es JSON válido, intentar split por comas
+          activityIds = activityIds.split(',').map(id => parseInt(id.trim()))
+        }
       }
+      
+      // Si no es array, convertirlo en array
+      if (!Array.isArray(activityIds)) {
+        if (activityIds) {
+          activityIds = [activityIds]
+        } else {
+          return response.badRequest({ 
+            message: 'activityIds es requerido',
+            received: data 
+          })
+        }
+      }
+
+      console.log('✅ activityIds procesados:', activityIds)
 
       // Preparar datos del pivot con información personalizada
       const pivotData = {}
+      const customData = data.customData
+      
       if (customData) {
         activityIds.forEach((activityId) => {
           pivotData[activityId] = customData[activityId] || {}
+        })
+      } else {
+        // Si no hay customData, simplemente usar el array de IDs
+        activityIds.forEach((activityId) => {
+          pivotData[activityId] = {}
         })
       }
 

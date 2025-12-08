@@ -35,22 +35,23 @@ export default class TripsController {
       // Generar trip_code único
       const tripCode = `TRIP-${Date.now()}`
 
-      // Mapear status español a inglés
-      const statusMap = {
-        'pendiente': 'pending',
-        'confirmado': 'confirmed',
-        'en_progreso': 'in_progress',
-        'completado': 'completed',
-        'cancelado': 'cancelled',
+      // Validar que el status sea uno de los valores permitidos
+      const validStatuses = ['pending', 'confirmed', 'in_progress', 'completed', 'cancelled']
+      const validStatus = validStatuses.includes(data.status) ? data.status : 'pending'
+
+      // Convertir fechas de ISO a formato MySQL (YYYY-MM-DD)
+      const formatDate = (dateString: string) => {
+        if (!dateString) return undefined
+        const date = new Date(dateString)
+        return date.toISOString().split('T')[0] // Extrae solo YYYY-MM-DD
       }
-      const validStatus = statusMap[data.status] || data.status || 'pending'
 
       // Crear viaje con valores por defecto para testing
       const trip = await Trip.create({
         tripCode: tripCode,
         destination: data.destination,
-        startDate: data.startDate,
-        endDate: data.endDate,
+        startDate: formatDate(data.startDate) as any,
+        endDate: formatDate(data.endDate) as any,
         numberOfPassengers: data.numPassengers || 1,
         totalPrice: 0, // Precio por defecto
         status: validStatus,

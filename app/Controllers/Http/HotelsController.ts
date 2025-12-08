@@ -117,6 +117,70 @@ export default class HotelsController {
   }
 
   /**
+   * PUT /api/v1/hotels/:id
+   * Actualizar un hotel
+   */
+  public async update({ params, request, response }: HttpContextContract) {
+    try {
+      console.log('⚠️ HotelsController.update - TESTING MODE')
+
+      const hotel = await Hotel.findOrFail(params.id)
+
+      const data = request.only([
+        'name',
+        'address',
+        'phone',
+        'email',
+        'website',
+        'stars',
+        'description',
+        'amenities',
+        'hasParking',
+        'hasPool',
+        'hasRestaurant',
+        'hasWifi',
+        'hasGym',
+        'isActive',
+      ])
+
+      hotel.merge(data)
+      await hotel.save()
+
+      return response.ok({
+        message: 'Hotel actualizado exitosamente',
+        data: hotel,
+      })
+    } catch (error) {
+      return response.badRequest({
+        message: 'Error al actualizar hotel',
+        error: error.message,
+      })
+    }
+  }
+
+  /**
+   * DELETE /api/v1/hotels/:id
+   * Eliminar un hotel
+   */
+  public async destroy({ params, response }: HttpContextContract) {
+    try {
+      console.log('⚠️ HotelsController.destroy - TESTING MODE')
+
+      const hotel = await Hotel.findOrFail(params.id)
+      await hotel.delete()
+
+      return response.ok({
+        message: 'Hotel eliminado exitosamente',
+      })
+    } catch (error) {
+      return response.badRequest({
+        message: 'Error al eliminar hotel',
+        error: error.message,
+      })
+    }
+  }
+
+  /**
    * GET /api/v1/hotels/:id/rooms
    * Obtener todas las habitaciones de un hotel
    */
