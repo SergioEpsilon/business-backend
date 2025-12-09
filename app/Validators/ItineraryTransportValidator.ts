@@ -5,30 +5,15 @@ export default class ItineraryTransportValidator {
   constructor(protected ctx: HttpContextContract) {}
 
   public schema = schema.create({
-    tripId: schema.number([
-      rules.exists({ table: 'trips', column: 'id' }),
-    ]),
-    routeId: schema.number([
-      rules.exists({ table: 'routes', column: 'id' }),
-    ]),
+    tripId: schema.number([rules.exists({ table: 'trips', column: 'id' })]),
+    routeId: schema.number([rules.exists({ table: 'routes', column: 'id' })]),
     transportServiceId: schema.number.optional([
       rules.exists({ table: 'transport_services', column: 'id' }),
     ]),
-    dayNumber: schema.number([
-      rules.unsigned(),
-      rules.range(1, 365),
-    ]),
-    orderInDay: schema.number([
-      rules.unsigned(),
-      rules.range(1, 100),
-    ]),
-    numPassengers: schema.number([
-      rules.unsigned(),
-      rules.range(1, 1000),
-    ]),
-    totalCost: schema.number([
-      rules.unsigned(),
-    ]),
+    dayNumber: schema.number([rules.unsigned(), rules.range(1, 365)]),
+    orderInDay: schema.number([rules.unsigned(), rules.range(1, 100)]),
+    numPassengers: schema.number([rules.unsigned(), rules.range(1, 1000)]),
+    totalCost: schema.number([rules.unsigned()]),
     notes: schema.string.optional(),
   })
 

@@ -35,69 +35,45 @@ export default class GuidesController {
   /**
    * Crea un nuevo guía
    * POST /guides
-   * Valida que el user_id existe en el microservicio de seguridad
+   * El id debe ser el _id del usuario de MS-SECURITY
    */
   public async store({ request, response }: HttpContextContract) {
     try {
       const data = request.only([
-        'userId',
+        'id',
         'document',
         'phone',
-        'licenseNumber',
+        'license_number',
         'specialization',
         'languages',
-        'yearsOfExperience',
+        'years_of_experience',
       ])
 
-      // Validar que el usuario existe en MS-Security
-      const token = request.header('Authorization')?.replace('Bearer ', '')
-
-      if (!token) {
-        return response.unauthorized({
-          message: 'Token de autenticación requerido',
-        })
-      }
-
-      // Validar contra MS-Security que el usuario existe y es tipo 'guide'
-      try {
-        const axios = (await import('axios')).default
-        const Env = (await import('@ioc:Adonis/Core/Env')).default
-        const { v4: uuidv4 } = await import('uuid')
-
-        const userValidation = await axios.get(
-          `${Env.get('MS_SECURITY')}/api/users/${data.userId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        )
-
-        if (!userValidation.data) {
-          return response.badRequest({
-            message: 'El usuario no existe en MS-Security',
-          })
-        }
-
-        // Validar userType solo si existe y no es 'guide'
-        const userType = userValidation.data.userType
-        if (userType && userType !== 'guide') {
-          return response.badRequest({
-            message: `El usuario es de tipo '${userType}', debe ser 'guide'`,
-          })
-        }
-      } catch (error) {
-        console.error('Error al validar con MS-Security:', error.message)
+      // Validar que se envió el id (debe ser el _id del usuario de MS-SECURITY)
+      if (!data.id) {
         return response.badRequest({
-          message: 'Error al validar usuario en MS-Security',
-          error: error.response?.data || error.message,
+          message: 'El campo id es requerido (debe ser el _id del usuario de MS-SECURITY)',
         })
       }
 
-      const axios = (await import('axios')).default
+      // Verificar que el guía no exista previamente
+      const existingGuide = await Guide.find(data.id)
+      if (existingGuide) {
+        return response.conflict({
+          message: 'Ya existe un guía con este ID',
+          data: existingGuide,
+        })
+      }
+
+      // Crear guía usando el MISMO ID del usuario de MS-SECURITY
       const guide = await Guide.create({
-        id: data.userId,
-        ...data,
+        id: data.id,
+        document: data.document,
+        phone: data.phone,
+        licenseNumber: data.license_number,
+        specialization: data.specialization,
+        languages: JSON.stringify(data.languages), // Convertir array a JSON string
+        yearsOfExperience: data.years_of_experience || 0,
         isAvailable: true,
       })
 

@@ -5,30 +5,14 @@ export default class RoomValidator {
   constructor(protected ctx: HttpContextContract) {}
 
   public schema = schema.create({
-    hotelId: schema.number([
-      rules.exists({ table: 'hotels', column: 'id' }),
-    ]),
-    roomNumber: schema.string({ trim: true }, [
-      rules.minLength(1),
-      rules.maxLength(20),
-    ]),
+    hotelId: schema.number([rules.exists({ table: 'hotels', column: 'id' })]),
+    roomNumber: schema.string({ trim: true }, [rules.minLength(1), rules.maxLength(20)]),
     roomType: schema.enum(['single', 'double', 'triple', 'suite', 'family'] as const),
-    capacity: schema.number([
-      rules.unsigned(),
-      rules.range(1, 20),
-    ]),
-    numBeds: schema.number([
-      rules.unsigned(),
-      rules.range(1, 10),
-    ]),
+    capacity: schema.number([rules.unsigned(), rules.range(1, 20)]),
+    numBeds: schema.number([rules.unsigned(), rules.range(1, 10)]),
     bedType: schema.enum(['single', 'double', 'queen', 'king'] as const),
-    pricePerNight: schema.number([
-      rules.unsigned(),
-      rules.range(0, 999999999),
-    ]),
-    description: schema.string.optional({ trim: true }, [
-      rules.maxLength(500),
-    ]),
+    pricePerNight: schema.number([rules.unsigned(), rules.range(0, 999999999)]),
+    description: schema.string.optional({ trim: true }, [rules.maxLength(500)]),
     hasBathroom: schema.boolean.optional(),
     hasTv: schema.boolean.optional(),
     hasMinibar: schema.boolean.optional(),

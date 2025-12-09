@@ -9,7 +9,7 @@ export default class BankCard extends BaseModel {
 
   // Relación n-1 con Client (cada tarjeta pertenece a un cliente)
   @column()
-  public clientId: number
+  public clientId: string
 
   @belongsTo(() => Client, {
     foreignKey: 'clientId',

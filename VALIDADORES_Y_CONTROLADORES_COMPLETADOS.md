@@ -9,8 +9,9 @@ Se han completado exitosamente **todos los validadores y controladores** necesar
 ## ✅ Validadores Creados (8 nuevos)
 
 ### 1. **PlanValidator.ts**
+
 - **Ubicación**: `app/Validators/PlanValidator.ts`
-- **Campos validados**: 
+- **Campos validados**:
   - `name` (string, 3-100 caracteres)
   - `description` (string, 10-500 caracteres)
   - `price` (unsigned, rango 0-1000000000)
@@ -22,8 +23,9 @@ Se han completado exitosamente **todos los validadores y controladores** necesar
   - Validación de longitud de texto
 
 ### 2. **RoomValidator.ts**
+
 - **Ubicación**: `app/Validators/RoomValidator.ts`
-- **Campos validados**: 
+- **Campos validados**:
   - `hotelId` (exists en tabla hotels)
   - `roomNumber` (string, 1-20 caracteres)
   - `roomType` (enum: individual, doble, suite, familiar)
@@ -41,8 +43,9 @@ Se han completado exitosamente **todos los validadores y controladores** necesar
   - Validaciones opcionales para características extras
 
 ### 3. **TouristActivityValidator.ts**
+
 - **Ubicación**: `app/Validators/TouristActivityValidator.ts`
-- **Campos validados**: 
+- **Campos validados**:
   - `municipalityId` (exists en tabla municipalities)
   - `name` (string, 3-200 caracteres)
   - `description` (string opcional, 0-1000 caracteres)
@@ -60,8 +63,9 @@ Se han completado exitosamente **todos los validadores y controladores** necesar
   - Validación de capacidad y edad mínima
 
 ### 4. **InstallmentValidator.ts**
+
 - **Ubicación**: `app/Validators/InstallmentValidator.ts`
-- **Campos validados**: 
+- **Campos validados**:
   - `invoiceId` (exists en tabla invoices)
   - `tripId` (exists en tabla trips)
   - `amount` (unsigned, rango 0-1000000000)
@@ -75,8 +79,9 @@ Se han completado exitosamente **todos los validadores y controladores** necesar
   - Validación de relaciones con factura y viaje
 
 ### 5. **BankCardValidator.ts**
+
 - **Ubicación**: `app/Validators/BankCardValidator.ts`
-- **Campos validados**: 
+- **Campos validados**:
   - `clientId` (exists en tabla clients)
   - `cardNumber` (string, regex 13-19 dígitos)
   - `cardholderName` (string, 3-100 caracteres, solo letras y espacios)
@@ -92,8 +97,9 @@ Se han completado exitosamente **todos los validadores y controladores** necesar
   - Enum para tipos de tarjeta
 
 ### 6. **VehicleValidator.ts**
+
 - **Ubicación**: `app/Validators/VehicleValidator.ts`
-- **Campos validados**: 
+- **Campos validados**:
   - `vehicleType` (enum: bus, minibus, van, car, suv)
   - `licensePlate` (string, regex alfanumérico con guiones)
   - `brand` (string, 2-50 caracteres)
@@ -108,8 +114,9 @@ Se han completado exitosamente **todos los validadores y controladores** necesar
   - Validación de año y capacidad
 
 ### 7. **RouteValidator.ts**
+
 - **Ubicación**: `app/Validators/RouteValidator.ts`
-- **Campos validados**: 
+- **Campos validados**:
   - `name` (string, 3-200 caracteres)
   - `origin` (string, 3-200 caracteres)
   - `destination` (string, 3-200 caracteres)
@@ -122,8 +129,9 @@ Se han completado exitosamente **todos los validadores y controladores** necesar
   - Campos opcionales para descripción y paradas
 
 ### 8. **ItineraryTransportValidator.ts**
+
 - **Ubicación**: `app/Validators/ItineraryTransportValidator.ts`
-- **Campos validados**: 
+- **Campos validados**:
   - `tripId` (exists en tabla trips)
   - `routeId` (exists en tabla routes)
   - `transportServiceId` (exists en tabla transport_services)
@@ -142,6 +150,7 @@ Se han completado exitosamente **todos los validadores y controladores** necesar
 ## ✅ Controladores Creados (3 nuevos)
 
 ### 1. **RoomsController.ts**
+
 - **Ubicación**: `app/Controllers/Http/RoomsController.ts`
 - **Métodos implementados**:
   - `index()`: Listar habitaciones con paginación y hotel precargado
@@ -157,6 +166,7 @@ Se han completado exitosamente **todos los validadores y controladores** necesar
   - Respuestas estructuradas (ok, created, notFound, badRequest)
 
 ### 2. **HotelsController.ts**
+
 - **Ubicación**: `app/Controllers/Http/HotelsController.ts`
 - **Métodos implementados**:
   - `index()`: Listar hoteles con paginación y habitaciones precargadas
@@ -168,6 +178,7 @@ Se han completado exitosamente **todos los validadores y controladores** necesar
   - Paginación en listado
 
 ### 3. **ItineraryTransportsController.ts**
+
 - **Ubicación**: `app/Controllers/Http/ItineraryTransportsController.ts`
 - **Métodos implementados**:
   - `index()`: Listar itinerarios ordenados por dayNumber y orderInDay
@@ -185,6 +196,7 @@ Se han completado exitosamente **todos los validadores y controladores** necesar
 ## ✅ Controladores Existentes Verificados (8)
 
 ### Ya implementados en el backend:
+
 1. **ClientsController.ts** - CRUD de clientes ✅
 2. **TripsController.ts** - CRUD de viajes ✅
 3. **PlansController.ts** - CRUD de planes ✅
@@ -231,6 +243,7 @@ Route.group(() => {
 ## 🎯 Estado del Backend
 
 ### ✅ Completado
+
 - **Migraciones**: 53 migraciones ejecutadas correctamente
 - **Modelos**: 22 modelos con relaciones Lucid ORM (@belongsTo, @manyToMany, @hasMany)
 - **Validadores**: 10 validadores totales (2 existentes + 8 nuevos)
@@ -240,18 +253,18 @@ Route.group(() => {
 
 ### 📊 Cobertura de las 10 Entidades Principales
 
-| Entidad | Modelo | Validador | Controlador | Rutas |
-|---------|--------|-----------|-------------|-------|
-| Client | ✅ | ✅ | ✅ | ✅ |
-| Trip | ✅ | ✅ | ✅ | ✅ |
-| Plan | ✅ | ✅ (nuevo) | ✅ | ✅ |
-| Room | ✅ | ✅ (nuevo) | ✅ (nuevo) | ✅ (nuevo) |
-| TouristActivity | ✅ | ✅ (nuevo) | ✅ | ✅ |
-| Installment | ✅ | ✅ (nuevo) | ✅ | ✅ |
-| BankCard | ✅ | ✅ (nuevo) | ✅ | ✅ |
-| Vehicle | ✅ | ✅ (nuevo) | ✅ | ✅ |
-| Route | ✅ | ✅ (nuevo) | ✅ | ✅ |
-| ItineraryTransport | ✅ | ✅ (nuevo) | ✅ (nuevo) | ✅ (nuevo) |
+| Entidad            | Modelo | Validador  | Controlador | Rutas      |
+| ------------------ | ------ | ---------- | ----------- | ---------- |
+| Client             | ✅     | ✅         | ✅          | ✅         |
+| Trip               | ✅     | ✅         | ✅          | ✅         |
+| Plan               | ✅     | ✅ (nuevo) | ✅          | ✅         |
+| Room               | ✅     | ✅ (nuevo) | ✅ (nuevo)  | ✅ (nuevo) |
+| TouristActivity    | ✅     | ✅ (nuevo) | ✅          | ✅         |
+| Installment        | ✅     | ✅ (nuevo) | ✅          | ✅         |
+| BankCard           | ✅     | ✅ (nuevo) | ✅          | ✅         |
+| Vehicle            | ✅     | ✅ (nuevo) | ✅          | ✅         |
+| Route              | ✅     | ✅ (nuevo) | ✅          | ✅         |
+| ItineraryTransport | ✅     | ✅ (nuevo) | ✅ (nuevo)  | ✅ (nuevo) |
 
 **Cobertura: 100% ✅**
 
@@ -260,6 +273,7 @@ Route.group(() => {
 ## 🧪 Próximos Pasos - Testing Backend
 
 ### 1. Iniciar el servidor
+
 ```bash
 npm run dev
 # El servidor debería iniciar en http://localhost:3333
@@ -268,12 +282,14 @@ npm run dev
 ### 2. Probar endpoints principales
 
 #### Test de conexión
+
 ```bash
 curl http://localhost:3333
 # Esperado: {"message":"Travel Agency Management API","version":"1.0.0","endpoints":"/api/v1"}
 ```
 
 #### Test de Hoteles
+
 ```bash
 # Listar hoteles
 curl http://localhost:3333/api/v1/hotels
@@ -286,6 +302,7 @@ curl http://localhost:3333/api/v1/hotels/1/rooms
 ```
 
 #### Test de Habitaciones
+
 ```bash
 # Listar habitaciones
 curl http://localhost:3333/api/v1/rooms
@@ -325,6 +342,7 @@ curl -X DELETE http://localhost:3333/api/v1/rooms/1
 ```
 
 #### Test de Itinerarios de Transporte
+
 ```bash
 # Listar itinerarios
 curl http://localhost:3333/api/v1/itinerary-transports
@@ -363,6 +381,7 @@ curl -X DELETE http://localhost:3333/api/v1/itinerary-transports/1
 ```
 
 #### Test de Planes
+
 ```bash
 # Listar planes
 curl http://localhost:3333/api/v1/plans
@@ -380,6 +399,7 @@ curl -X POST http://localhost:3333/api/v1/plans \
 ```
 
 #### Test de Actividades Turísticas
+
 ```bash
 # Listar actividades
 curl http://localhost:3333/api/v1/tourist-activities
@@ -400,6 +420,7 @@ curl -X POST http://localhost:3333/api/v1/tourist-activities \
 ```
 
 #### Test de Cuotas
+
 ```bash
 # Listar cuotas
 curl http://localhost:3333/api/v1/installments
@@ -419,6 +440,7 @@ curl -X POST http://localhost:3333/api/v1/installments \
 ### 3. Verificar validaciones
 
 #### Test de validación de Room (debe fallar)
+
 ```bash
 # Campo requerido faltante
 curl -X POST http://localhost:3333/api/v1/rooms \
@@ -443,6 +465,7 @@ curl -X POST http://localhost:3333/api/v1/rooms \
 ```
 
 #### Test de validación de BankCard (debe fallar)
+
 ```bash
 # Número de tarjeta inválido
 curl -X POST http://localhost:3333/api/v1/clients/1/bank-cards \
@@ -464,6 +487,7 @@ curl -X POST http://localhost:3333/api/v1/clients/1/bank-cards \
 ## 📝 Notas Importantes
 
 ### Características de los Validadores
+
 - ✅ Mensajes de error en español
 - ✅ Validación con `schema.create()`
 - ✅ Reglas de validación: minLength, maxLength, unsigned, range, enum, regex, exists
@@ -471,6 +495,7 @@ curl -X POST http://localhost:3333/api/v1/clients/1/bank-cards \
 - ✅ Validación de claves foráneas con `rules.exists()`
 
 ### Características de los Controladores
+
 - ✅ Try-catch para manejo de errores
 - ✅ Respuestas estructuradas: ok(), created(), notFound(), badRequest()
 - ✅ Paginación configurable (page, perPage)
@@ -479,6 +504,7 @@ curl -X POST http://localhost:3333/api/v1/clients/1/bank-cards \
 - ✅ Mensajes de éxito/error descriptivos
 
 ### Relaciones de Modelos Verificadas
+
 - ✅ **Room**: belongsTo(Hotel), manyToMany(Trip)
 - ✅ **ItineraryTransport**: belongsTo(Trip), belongsTo(Route), belongsTo(TransportService)
 - ✅ **Plan**: manyToMany(TouristActivity), manyToMany(Trip)
@@ -492,6 +518,7 @@ curl -X POST http://localhost:3333/api/v1/clients/1/bank-cards \
 ## 🚀 Estado: LISTO PARA TESTING
 
 El backend está completamente preparado para:
+
 1. ✅ Pruebas de endpoints con curl/Postman
 2. ✅ Validación de datos de entrada
 3. ✅ Verificación de relaciones entre entidades

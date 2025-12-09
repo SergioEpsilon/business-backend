@@ -5,14 +5,8 @@ export default class RouteValidator {
   constructor(protected ctx: HttpContextContract) {}
 
   public schema = schema.create({
-    origin: schema.string({ trim: true }, [
-      rules.minLength(3),
-      rules.maxLength(100),
-    ]),
-    destination: schema.string({ trim: true }, [
-      rules.minLength(3),
-      rules.maxLength(100),
-    ]),
+    origin: schema.string({ trim: true }, [rules.minLength(3), rules.maxLength(100)]),
+    destination: schema.string({ trim: true }, [rules.minLength(3), rules.maxLength(100)]),
     distance: schema.number([
       rules.unsigned(),
       rules.range(1, 50000), // Hasta 50,000 km
@@ -21,10 +15,7 @@ export default class RouteValidator {
       rules.unsigned(),
       rules.range(1, 100000), // Hasta 100,000 minutos (~69 días)
     ]),
-    price: schema.number([
-      rules.unsigned(),
-      rules.range(0, 999999999),
-    ]),
+    price: schema.number([rules.unsigned(), rules.range(0, 999999999)]),
   })
 
   public messages: CustomMessages = {

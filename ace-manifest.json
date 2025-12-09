@@ -1,5 +1,41 @@
 {
   "commands": {
+    "fix:administrators_table": {
+      "settings": {
+        "loadApp": true,
+        "stayAlive": false
+      },
+      "commandPath": "./commands/FixAdministratorsTable",
+      "commandName": "fix:administrators_table",
+      "description": "Fix administrators table structure (remove user_id column)",
+      "args": [],
+      "aliases": [],
+      "flags": []
+    },
+    "fix:clients_table": {
+      "settings": {
+        "loadApp": true,
+        "stayAlive": false
+      },
+      "commandPath": "./commands/FixClientsTable",
+      "commandName": "fix:clients_table",
+      "description": "Fix clients table structure (remove id_old column)",
+      "args": [],
+      "aliases": [],
+      "flags": []
+    },
+    "fix:guides_table": {
+      "settings": {
+        "loadApp": true,
+        "stayAlive": false
+      },
+      "commandPath": "./commands/FixGuidesTable",
+      "commandName": "fix:guides_table",
+      "description": "Fix guides table structure (remove user_id column)",
+      "args": [],
+      "aliases": [],
+      "flags": []
+    },
     "dump:rcfile": {
       "settings": {},
       "commandPath": "@adonisjs/core/build/commands/DumpRc",

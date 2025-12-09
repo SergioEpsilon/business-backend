@@ -5,25 +5,15 @@ export default class TouristActivityValidator {
   constructor(protected ctx: HttpContextContract) {}
 
   public schema = schema.create({
-    name: schema.string({ trim: true }, [
-      rules.minLength(3),
-      rules.maxLength(100),
-    ]),
-    description: schema.string.optional({ trim: true }, [
-      rules.maxLength(500),
-    ]),
-    price: schema.number([
-      rules.unsigned(),
-      rules.range(0, 999999999),
-    ]),
+    name: schema.string({ trim: true }, [rules.minLength(3), rules.maxLength(100)]),
+    description: schema.string.optional({ trim: true }, [rules.maxLength(500)]),
+    price: schema.number([rules.unsigned(), rules.range(0, 999999999)]),
     duration: schema.number([
       rules.unsigned(),
       rules.range(1, 720), // Hasta 12 horas
     ]),
     difficulty: schema.enum(['easy', 'medium', 'hard'] as const),
-    municipalityId: schema.number([
-      rules.exists({ table: 'municipalities', column: 'id' }),
-    ]),
+    municipalityId: schema.number([rules.exists({ table: 'municipalities', column: 'id' })]),
   })
 
   public messages: CustomMessages = {

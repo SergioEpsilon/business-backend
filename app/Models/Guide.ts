@@ -6,11 +6,8 @@ export default class Guide extends BaseModel {
   @column({ isPrimary: true })
   public id: string
 
-  // Referencia al usuario en MS-SECURITY
-  @column()
-  public userId: string
+  // NO hay userId separado - el id ES el userId de MS-SECURITY
 
-  // Información del guía
   @column()
   public document: string
 

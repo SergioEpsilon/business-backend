@@ -5,19 +5,12 @@ export default class InstallmentValidator {
   constructor(protected ctx: HttpContextContract) {}
 
   public schema = schema.create({
-    amount: schema.number([
-      rules.unsigned(),
-      rules.range(1, 999999999),
-    ]),
+    amount: schema.number([rules.unsigned(), rules.range(1, 999999999)]),
     dueDate: schema.date({ format: 'yyyy-MM-dd' }),
     paidDate: schema.date.optional({ format: 'yyyy-MM-dd' }),
     status: schema.enum(['pending', 'paid', 'overdue'] as const),
-    tripId: schema.number([
-      rules.exists({ table: 'trips', column: 'id' }),
-    ]),
-    invoiceId: schema.number.optional([
-      rules.exists({ table: 'invoices', column: 'id' }),
-    ]),
+    tripId: schema.number([rules.exists({ table: 'trips', column: 'id' })]),
+    invoiceId: schema.number.optional([rules.exists({ table: 'invoices', column: 'id' })]),
   })
 
   public messages: CustomMessages = {

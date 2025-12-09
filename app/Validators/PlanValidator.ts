@@ -5,21 +5,10 @@ export default class PlanValidator {
   constructor(protected ctx: HttpContextContract) {}
 
   public schema = schema.create({
-    name: schema.string({ trim: true }, [
-      rules.minLength(3),
-      rules.maxLength(100),
-    ]),
-    description: schema.string.optional({ trim: true }, [
-      rules.maxLength(500),
-    ]),
-    price: schema.number([
-      rules.unsigned(),
-      rules.range(0, 999999999),
-    ]),
-    duration: schema.number([
-      rules.unsigned(),
-      rules.range(1, 365),
-    ]),
+    name: schema.string({ trim: true }, [rules.minLength(3), rules.maxLength(100)]),
+    description: schema.string.optional({ trim: true }, [rules.maxLength(500)]),
+    price: schema.number([rules.unsigned(), rules.range(0, 999999999)]),
+    duration: schema.number([rules.unsigned(), rules.range(1, 365)]),
     isActive: schema.boolean.optional(),
   })
 

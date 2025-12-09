@@ -20,6 +20,7 @@ El frontend de Angular está **bien estructurado** y puede integrarse con el bac
 ### 1. **ARQUITECTURA FRONTEND (Angular 16)**
 
 #### ✅ Puntos Fuertes:
+
 - **Framework:** Angular 16.2.0 (estable y moderno)
 - **UI Library:** Angular Material 16.2.14
 - **Autenticación:** JWT (@auth0/angular-jwt)
@@ -30,6 +31,7 @@ El frontend de Angular está **bien estructurado** y puede integrarse con el bac
 - **ReCaptcha:** Implementado para seguridad
 
 #### Características Principales:
+
 ```typescript
 ├── core/
 │   ├── guards/          # AuthGuard, RoleGuard
@@ -52,6 +54,7 @@ El frontend de Angular está **bien estructurado** y puede integrarse con el bac
 ### 2. **ARQUITECTURA BACKEND (AdonisJS 5)**
 
 #### ✅ Características:
+
 - **Framework:** AdonisJS 5.9.0
 - **Base de Datos:** MySQL (`airline` database)
 - **ORM:** Lucid ORM
@@ -60,6 +63,7 @@ El frontend de Angular está **bien estructurado** y puede integrarse con el bac
 - **Endpoints:** 75+ endpoints RESTful
 
 #### Módulos Principales:
+
 ```typescript
 ├── Clientes (Clients)
 ├── Guías (Guides)
@@ -85,6 +89,7 @@ El frontend de Angular está **bien estructurado** y puede integrarse con el bac
 #### 1. **URLs de API Completamente Diferentes**
 
 **Frontend Actual (Java/Spring Boot):**
+
 ```typescript
 apiUrl: 'http://127.0.0.1:8080/api'
 authUrl: 'http://127.0.0.1:8080/api/auth'
@@ -92,6 +97,7 @@ securityUrl: 'http://127.0.0.1:8080/api/public/security'
 ```
 
 **Backend Adonis Actual:**
+
 ```typescript
 Server: http://127.0.0.1:3333
 API Base: http://127.0.0.1:3333/api/v1
@@ -104,21 +110,23 @@ API Base: http://127.0.0.1:3333/api/v1
 #### 2. **Estructura de Modelos Diferentes**
 
 **Frontend (MongoDB con `_id`):**
+
 ```typescript
 interface User {
-  _id: string;              // ❌ MongoDB style
-  name: string;
-  email: string;
-  password?: string;
-  provider?: string;
-  providerId?: string;
-  photoUrl?: string;
-  roles?: Role[];
-  permissions?: Permission[];
+  _id: string // ❌ MongoDB style
+  name: string
+  email: string
+  password?: string
+  provider?: string
+  providerId?: string
+  photoUrl?: string
+  roles?: Role[]
+  permissions?: Permission[]
 }
 ```
 
 **Backend Adonis (MySQL con `id` numérico/string):**
+
 ```typescript
 // Cliente en Adonis
 {
@@ -139,7 +147,8 @@ interface User {
 }
 ```
 
-**❌ PROBLEMA:** 
+**❌ PROBLEMA:**
+
 - Frontend espera `_id`, backend usa `id`
 - Frontend espera datos de usuario completos (name, email), backend los delega a MS-SECURITY
 - Frontend tiene modelos de User/Role/Permission, backend tiene Client/Guide/Administrator
@@ -149,6 +158,7 @@ interface User {
 #### 3. **Autenticación Completamente Diferente**
 
 **Frontend (Maneja JWT + Firebase directamente):**
+
 ```typescript
 // Auth Service hace:
 login(email, password) → POST /api/auth/login
@@ -159,12 +169,14 @@ loginWithGoogle() → Firebase → POST /api/public/security/firebase-login
 ```
 
 **Backend Adonis (Delega autenticación a MS-SECURITY):**
+
 ```typescript
 // Backend NO maneja autenticación, solo valida:
 Middleware Security → POST http://127.0.0.1:8080/api/public/security/permissions-validation
 ```
 
-**❌ PROBLEMA:** 
+**❌ PROBLEMA:**
+
 - Frontend espera endpoints de auth en el backend
 - Backend Adonis NO tiene endpoints de autenticación
 - Backend Adonis depende 100% de MS-SECURITY (puerto 8080)
@@ -174,6 +186,7 @@ Middleware Security → POST http://127.0.0.1:8080/api/public/security/permissio
 #### 4. **Endpoints No Existen en Backend Adonis**
 
 **Frontend Espera:**
+
 ```
 POST /api/auth/login
 POST /api/auth/register
@@ -189,6 +202,7 @@ POST /api/permissions
 ```
 
 **Backend Adonis Tiene:**
+
 ```
 GET  /api/v1/clients
 POST /api/v1/clients
@@ -201,7 +215,8 @@ POST /api/v1/plans
 ... (75+ endpoints de gestión de agencia de viajes)
 ```
 
-**❌ PROBLEMA:** 
+**❌ PROBLEMA:**
+
 - **0% de coincidencia en endpoints**
 - Frontend gestiona usuarios/roles/permisos
 - Backend gestiona clientes/guías/viajes/planes
@@ -213,11 +228,13 @@ POST /api/v1/plans
 #### 5. **Middleware de Seguridad Diferente**
 
 **Frontend:**
+
 - AuthInterceptor añade `Authorization: Bearer <token>` a todas las peticiones
 - AuthGuard valida JWT localmente
 - RoleGuard valida permisos desde localStorage
 
 **Backend Adonis:**
+
 - Middleware `Security` valida CADA petición contra MS-SECURITY
 - NO valida JWT localmente
 - Depende 100% de respuesta de MS-SECURITY
@@ -233,19 +250,20 @@ Modificar solo el frontend para usar los endpoints existentes del backend:
 #### Cambios Necesarios:
 
 **1. Actualizar `environment.ts`:**
+
 ```typescript
 export const environment = {
   production: false,
   // ✅ NUEVO: Apuntar al backend AdonisJS
   apiUrl: 'http://127.0.0.1:3333/api/v1',
-  
+
   // ✅ MANTENER: MS-SECURITY para autenticación
   authUrl: 'http://127.0.0.1:8080/api/auth',
   securityUrl: 'http://127.0.0.1:8080/api/public/security',
-  
+
   // ✅ NUEVO: URL del backend de negocio
   businessUrl: 'http://127.0.0.1:3333/api/v1',
-  
+
   recaptcha: { ... },
   firebase: { ... }
 };
@@ -270,39 +288,39 @@ src/app/core/services/
 // src/app/core/models/business.model.ts
 
 export interface Client {
-  id: string;
-  document: string;
-  phone: string;
-  address: string;
-  createdAt?: Date;
-  updatedAt?: Date;
+  id: string
+  document: string
+  phone: string
+  address: string
+  createdAt?: Date
+  updatedAt?: Date
 }
 
 export interface Guide {
-  id: string;
-  document: string;
-  specialization: string;
-  isAvailable: boolean;
-  experienceYears?: number;
+  id: string
+  document: string
+  specialization: string
+  isAvailable: boolean
+  experienceYears?: number
 }
 
 export interface Trip {
-  id: number;
-  destination: string;
-  description: string;
-  startDate: Date;
-  endDate: Date;
-  price: number;
-  capacity: number;
+  id: number
+  destination: string
+  description: string
+  startDate: Date
+  endDate: Date
+  price: number
+  capacity: number
 }
 
 export interface Plan {
-  id: number;
-  name: string;
-  description: string;
-  price: number;
-  duration: number;
-  isActive: boolean;
+  id: number
+  name: string
+  description: string
+  price: number
+  duration: number
+  isActive: boolean
 }
 ```
 
@@ -338,7 +356,7 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     children: [
       { path: 'dashboard', ... },
-      
+
       // ✅ NUEVAS RUTAS para backend Adonis
       {
         path: 'clients',
@@ -356,7 +374,7 @@ const routes: Routes = [
         path: 'plans',
         loadChildren: () => import('./features/plans/plans.module')
       },
-      
+
       // ✅ MANTENER: Rutas de MS-SECURITY
       { path: 'users', ... },
       { path: 'roles', ... },
@@ -383,43 +401,32 @@ export default class AuthProxyController {
   // Proxy para login
   public async login({ request, response }) {
     try {
-      const result = await axios.post(
-        `${Env.get('MS_SECURITY')}/api/auth/login`,
-        request.all()
-      )
+      const result = await axios.post(`${Env.get('MS_SECURITY')}/api/auth/login`, request.all())
       return response.json(result.data)
     } catch (error) {
-      return response.status(error.response?.status || 500)
-        .json(error.response?.data)
+      return response.status(error.response?.status || 500).json(error.response?.data)
     }
   }
 
   // Proxy para registro
   public async register({ request, response }) {
     try {
-      const result = await axios.post(
-        `${Env.get('MS_SECURITY')}/api/auth/register`,
-        request.all()
-      )
+      const result = await axios.post(`${Env.get('MS_SECURITY')}/api/auth/register`, request.all())
       return response.json(result.data)
     } catch (error) {
-      return response.status(error.response?.status || 500)
-        .json(error.response?.data)
+      return response.status(error.response?.status || 500).json(error.response?.data)
     }
   }
 
   // Proxy para verificación
   public async verify({ request, response }) {
     try {
-      const result = await axios.post(
-        `${Env.get('MS_SECURITY')}/api/auth/verify-login`,
-        null,
-        { params: request.qs() }
-      )
+      const result = await axios.post(`${Env.get('MS_SECURITY')}/api/auth/verify-login`, null, {
+        params: request.qs(),
+      })
       return response.json(result.data)
     } catch (error) {
-      return response.status(error.response?.status || 500)
-        .json(error.response?.data)
+      return response.status(error.response?.status || 500).json(error.response?.data)
     }
   }
 
@@ -427,14 +434,12 @@ export default class AuthProxyController {
   public async myRoles({ request, response }) {
     try {
       const token = request.header('Authorization')
-      const result = await axios.get(
-        `${Env.get('MS_SECURITY')}/api/auth/my-roles`,
-        { headers: { Authorization: token } }
-      )
+      const result = await axios.get(`${Env.get('MS_SECURITY')}/api/auth/my-roles`, {
+        headers: { Authorization: token },
+      })
       return response.json(result.data)
     } catch (error) {
-      return response.status(error.response?.status || 500)
-        .json(error.response?.data)
+      return response.status(error.response?.status || 500).json(error.response?.data)
     }
   }
 }
@@ -473,12 +478,14 @@ export const environment = {
 Unificar todo en el backend AdonisJS:
 
 1. **Migrar MS-SECURITY a AdonisJS**
+
    - Crear modelos User, Role, Permission en AdonisJS
    - Implementar autenticación JWT en AdonisJS
    - Migrar lógica de 2FA a AdonisJS
    - Implementar Firebase OAuth en AdonisJS
 
 2. **Beneficios:**
+
    - Un solo backend
    - Base de datos única (MySQL)
    - Sin dependencias externas
@@ -494,20 +501,20 @@ Unificar todo en el backend AdonisJS:
 
 ### Frontend Actual → Backend Adonis
 
-| Frontend Espera | Backend Adonis | Estado | Solución |
-|----------------|----------------|--------|----------|
-| `POST /api/auth/login` | ❌ No existe | 🔴 | Crear proxy o migrar |
-| `POST /api/auth/register` | ❌ No existe | 🔴 | Crear proxy o migrar |
-| `GET /api/users` | ❌ No existe | 🔴 | Usar MS-SECURITY o migrar |
-| `GET /api/roles` | ❌ No existe | 🔴 | Usar MS-SECURITY o migrar |
-| `GET /api/permissions` | ❌ No existe | 🔴 | Usar MS-SECURITY o migrar |
-| **Nuevos endpoints** | ✅ | ✅ | **Crear en frontend** |
-| `GET /api/v1/clients` | ✅ Existe | ✅ | Crear ClientService |
-| `POST /api/v1/clients` | ✅ Existe | ✅ | Crear ClientService |
-| `GET /api/v1/guides` | ✅ Existe | ✅ | Crear GuideService |
-| `GET /api/v1/trips` | ✅ Existe | ✅ | Crear TripService |
-| `GET /api/v1/plans` | ✅ Existe | ✅ | Crear PlanService |
-| `GET /api/v1/invoices` | ✅ Existe | ✅ | Crear InvoiceService |
+| Frontend Espera           | Backend Adonis | Estado | Solución                  |
+| ------------------------- | -------------- | ------ | ------------------------- |
+| `POST /api/auth/login`    | ❌ No existe   | 🔴     | Crear proxy o migrar      |
+| `POST /api/auth/register` | ❌ No existe   | 🔴     | Crear proxy o migrar      |
+| `GET /api/users`          | ❌ No existe   | 🔴     | Usar MS-SECURITY o migrar |
+| `GET /api/roles`          | ❌ No existe   | 🔴     | Usar MS-SECURITY o migrar |
+| `GET /api/permissions`    | ❌ No existe   | 🔴     | Usar MS-SECURITY o migrar |
+| **Nuevos endpoints**      | ✅             | ✅     | **Crear en frontend**     |
+| `GET /api/v1/clients`     | ✅ Existe      | ✅     | Crear ClientService       |
+| `POST /api/v1/clients`    | ✅ Existe      | ✅     | Crear ClientService       |
+| `GET /api/v1/guides`      | ✅ Existe      | ✅     | Crear GuideService        |
+| `GET /api/v1/trips`       | ✅ Existe      | ✅     | Crear TripService         |
+| `GET /api/v1/plans`       | ✅ Existe      | ✅     | Crear PlanService         |
+| `GET /api/v1/invoices`    | ✅ Existe      | ✅     | Crear InvoiceService      |
 
 ---
 
@@ -518,6 +525,7 @@ Unificar todo en el backend AdonisJS:
 1. ✅ Backend AdonisJS ya está operativo
 2. ✅ MS-SECURITY ya está corriendo (puerto 8080)
 3. ⚠️ **Instalar dependencias del frontend:**
+
    ```bash
    cd "Proyectico Frontend"
    npm install
@@ -531,11 +539,11 @@ Unificar todo en el backend AdonisJS:
      authUrl: 'http://127.0.0.1:8080/api/auth',
      securityUrl: 'http://127.0.0.1:8080/api/public/security',
      msSecurityUrl: 'http://127.0.0.1:8080/api',
-     
+
      // AdonisJS para lógica de negocio
      businessUrl: 'http://127.0.0.1:3333/api/v1',
      apiUrl: 'http://127.0.0.1:3333/api/v1',
-     
+
      recaptcha: { ... },
      firebase: { ... }
    };
@@ -559,50 +567,50 @@ ng generate service core/services/invoice
 
 ```typescript
 // src/app/core/services/client.service.ts
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { environment } from '../../../environments/environment';
+import { Injectable } from '@angular/core'
+import { HttpClient } from '@angular/common/http'
+import { Observable } from 'rxjs'
+import { environment } from '../../../environments/environment'
 
 export interface Client {
-  id: string;
-  document: string;
-  phone: string;
-  address: string;
-  createdAt?: Date;
-  updatedAt?: Date;
+  id: string
+  document: string
+  phone: string
+  address: string
+  createdAt?: Date
+  updatedAt?: Date
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ClientService {
-  private apiUrl = `${environment.businessUrl}/clients`;
+  private apiUrl = `${environment.businessUrl}/clients`
 
   constructor(private http: HttpClient) {}
 
-  getAll(): Observable<{ meta: any, data: Client[] }> {
-    return this.http.get<{ meta: any, data: Client[] }>(this.apiUrl);
+  getAll(): Observable<{ meta: any; data: Client[] }> {
+    return this.http.get<{ meta: any; data: Client[] }>(this.apiUrl)
   }
 
   getById(id: string): Observable<Client> {
-    return this.http.get<Client>(`${this.apiUrl}/${id}`);
+    return this.http.get<Client>(`${this.apiUrl}/${id}`)
   }
 
   create(client: Partial<Client>): Observable<Client> {
-    return this.http.post<Client>(this.apiUrl, client);
+    return this.http.post<Client>(this.apiUrl, client)
   }
 
   update(id: string, client: Partial<Client>): Observable<Client> {
-    return this.http.put<Client>(`${this.apiUrl}/${id}`, client);
+    return this.http.put<Client>(`${this.apiUrl}/${id}`, client)
   }
 
   delete(id: string): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+    return this.http.delete<void>(`${this.apiUrl}/${id}`)
   }
 
   getTrips(id: string): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/${id}/trips`);
+    return this.http.get<any[]>(`${this.apiUrl}/${id}/trips`)
   }
 }
 ```
@@ -642,6 +650,7 @@ ng generate component features/plans/plan-form
 ### **FASE 4: INTEGRACIÓN Y PRUEBAS (2-3 días)**
 
 1. **Configurar CORS en backend AdonisJS:**
+
    ```typescript
    // config/cors.ts
    {
@@ -651,6 +660,7 @@ ng generate component features/plans/plan-form
    ```
 
 2. **Probar endpoints:**
+
    - Login → MS-SECURITY
    - Obtener clientes → AdonisJS
    - Crear viaje → AdonisJS
@@ -665,6 +675,7 @@ ng generate component features/plans/plan-form
 ## ✅ CHECKLIST DE COMPATIBILIDAD
 
 ### Backend AdonisJS
+
 - [x] Servidor corriendo (puerto 3333)
 - [x] Base de datos conectada
 - [x] 53 migraciones ejecutadas
@@ -675,6 +686,7 @@ ng generate component features/plans/plan-form
 - [ ] Endpoints de proxy para auth (opcional)
 
 ### Frontend Angular
+
 - [x] Proyecto Angular 16 funcional
 - [x] Angular Material configurado
 - [x] Guards y Interceptors implementados
@@ -711,15 +723,15 @@ ng serve
 
 ### 🎯 **VEREDICTO: INTEGRACIÓN VIABLE CON ADAPTACIONES**
 
-| Aspecto | Estado | Comentario |
-|---------|--------|------------|
-| **Compatibilidad Técnica** | ✅ | Angular 16 y AdonisJS 5 son compatibles |
-| **Arquitectura** | ✅ | Ambos usan arquitectura moderna y modular |
-| **Autenticación** | ⚠️ | Requiere mantener MS-SECURITY o crear proxy |
-| **Modelos de Datos** | ⚠️ | Requiere crear nuevos modelos en frontend |
-| **Endpoints** | ❌ | 0% coincidencia, requiere nuevos servicios |
-| **UI Components** | ✅ | Material UI puede reutilizarse |
-| **Guards/Interceptors** | ✅ | Pueden reutilizarse con ajustes mínimos |
+| Aspecto                    | Estado | Comentario                                  |
+| -------------------------- | ------ | ------------------------------------------- |
+| **Compatibilidad Técnica** | ✅     | Angular 16 y AdonisJS 5 son compatibles     |
+| **Arquitectura**           | ✅     | Ambos usan arquitectura moderna y modular   |
+| **Autenticación**          | ⚠️     | Requiere mantener MS-SECURITY o crear proxy |
+| **Modelos de Datos**       | ⚠️     | Requiere crear nuevos modelos en frontend   |
+| **Endpoints**              | ❌     | 0% coincidencia, requiere nuevos servicios  |
+| **UI Components**          | ✅     | Material UI puede reutilizarse              |
+| **Guards/Interceptors**    | ✅     | Pueden reutilizarse con ajustes mínimos     |
 
 ### 📋 **TIEMPO ESTIMADO DE INTEGRACIÓN:**
 
@@ -730,12 +742,14 @@ ng serve
 ### 🎯 **RECOMENDACIÓN:**
 
 **Usar OPCIÓN 1 o 2:**
+
 - Mantener MS-SECURITY para autenticación
 - Crear servicios nuevos en Angular para AdonisJS
 - Mantener módulos existentes de users/roles/permissions apuntando a MS-SECURITY
 - Crear módulos nuevos de clients/guides/trips apuntando a AdonisJS
 
 **Esto permite:**
+
 - ✅ Desarrollo rápido
 - ✅ Reutilización del frontend existente
 - ✅ Aprovechamiento del backend AdonisJS

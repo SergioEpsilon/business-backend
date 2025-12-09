@@ -47,18 +47,18 @@
 
 Basado en el modelo relacional y tu especificación:
 
-| # | Entidad | Backend Endpoint | Prioridad | Componentes UI |
-|---|---------|------------------|-----------|----------------|
-| 1 | **Cliente** | `/api/v1/clients` | 🔴 Alta | Lista, Formulario, Detalle |
-| 2 | **Viaje** | `/api/v1/trips` | 🔴 Alta | Lista, Formulario, Detalle |
-| 3 | **Plan** | `/api/v1/plans` | 🔴 Alta | Lista, Formulario, Selector |
-| 4 | **Habitación** | `/api/v1/rooms` | 🟡 Media | Lista, Formulario |
-| 5 | **Actividad Turística** | `/api/v1/tourist-activities` | 🟡 Media | Lista, Formulario, Selector |
-| 6 | **Cuota** | `/api/v1/installments` | 🟡 Media | Lista, Formulario |
-| 7 | **Tarjeta Bancaria** | `/api/v1/bank-cards` | 🟡 Media | Lista, Formulario |
-| 8 | **Vehículo** | `/api/v1/vehicles` | 🟢 Baja | Lista, Formulario |
-| 9 | **Trayecto** | `/api/v1/routes` | 🟢 Baja | Lista, Formulario |
-| 10 | **Itinerario Transporte** | `/api/v1/itinerary-transports` | 🟢 Baja | Vista detalle |
+| #   | Entidad                   | Backend Endpoint               | Prioridad | Componentes UI              |
+| --- | ------------------------- | ------------------------------ | --------- | --------------------------- |
+| 1   | **Cliente**               | `/api/v1/clients`              | 🔴 Alta   | Lista, Formulario, Detalle  |
+| 2   | **Viaje**                 | `/api/v1/trips`                | 🔴 Alta   | Lista, Formulario, Detalle  |
+| 3   | **Plan**                  | `/api/v1/plans`                | 🔴 Alta   | Lista, Formulario, Selector |
+| 4   | **Habitación**            | `/api/v1/rooms`                | 🟡 Media  | Lista, Formulario           |
+| 5   | **Actividad Turística**   | `/api/v1/tourist-activities`   | 🟡 Media  | Lista, Formulario, Selector |
+| 6   | **Cuota**                 | `/api/v1/installments`         | 🟡 Media  | Lista, Formulario           |
+| 7   | **Tarjeta Bancaria**      | `/api/v1/bank-cards`           | 🟡 Media  | Lista, Formulario           |
+| 8   | **Vehículo**              | `/api/v1/vehicles`             | 🟢 Baja   | Lista, Formulario           |
+| 9   | **Trayecto**              | `/api/v1/routes`               | 🟢 Baja   | Lista, Formulario           |
+| 10  | **Itinerario Transporte** | `/api/v1/itinerary-transports` | 🟢 Baja   | Vista detalle               |
 
 ### ⚠️ **DECISIONES ARQUITECTÓNICAS:**
 
@@ -80,29 +80,29 @@ Basado en el modelo relacional y tu especificación:
 ```typescript
 export const environment = {
   production: false,
-  
+
   // ✅ MS-SECURITY (Java/Spring Boot) - MANTENER INTACTO
   apiUrl: 'http://127.0.0.1:8080/api',
   authUrl: 'http://127.0.0.1:8080/api/auth',
   securityUrl: 'http://127.0.0.1:8080/api/public/security',
-  
+
   // ✅ NUEVO: Backend AdonisJS para lógica de negocio
   businessApiUrl: 'http://127.0.0.1:3333/api/v1',
 
   recaptcha: {
-    siteKey: '6Lc20OErAAAAAEPsH7g-4R_PjFYT0b1jPRDQGJMA' 
+    siteKey: '6Lc20OErAAAAAEPsH7g-4R_PjFYT0b1jPRDQGJMA',
   },
 
   firebase: {
-    apiKey: "AIzaSyC-RCDl-JRigVVGSGhupeEo_5Q-w6lapLY",
-    authDomain: "ms--security.firebaseapp.com",
-    projectId: "ms--security",
-    storageBucket: "ms--security.firebasestorage.app",
-    messagingSenderId: "1017318337411",
-    appId: "1:1017318337411:web:fc6e8e9b1918073919a4b6",
-    measurementId: "G-NG848YBX8C"
-  }
-};
+    apiKey: 'AIzaSyC-RCDl-JRigVVGSGhupeEo_5Q-w6lapLY',
+    authDomain: 'ms--security.firebaseapp.com',
+    projectId: 'ms--security',
+    storageBucket: 'ms--security.firebasestorage.app',
+    messagingSenderId: '1017318337411',
+    appId: '1:1017318337411:web:fc6e8e9b1918073919a4b6',
+    measurementId: 'G-NG848YBX8C',
+  },
+}
 ```
 
 ---
@@ -116,19 +116,16 @@ import { CorsConfig } from '@ioc:Adonis/Core/Cors'
 
 const corsConfig: CorsConfig = {
   enabled: true,
-  
+
   // ✅ Permitir peticiones desde Angular
-  origin: [
-    'http://localhost:4200',
-    'http://127.0.0.1:4200'
-  ],
-  
+  origin: ['http://localhost:4200', 'http://127.0.0.1:4200'],
+
   credentials: true,
-  
+
   methods: ['GET', 'HEAD', 'POST', 'PUT', 'DELETE', 'PATCH'],
-  
+
   headers: true,
-  
+
   exposeHeaders: [
     'cache-control',
     'content-language',
@@ -137,7 +134,7 @@ const corsConfig: CorsConfig = {
     'last-modified',
     'pragma',
   ],
-  
+
   maxAge: 90,
 }
 
@@ -162,264 +159,264 @@ export default corsConfig
  * Vinculado a Usuario por document (cédula)
  */
 export interface Client {
-  id: string;
-  document: string;      // Cédula (vínculo con Usuario en MS-SECURITY)
-  phone: string;
-  address: string;
-  createdAt?: Date;
-  updatedAt?: Date;
-  
+  id: string
+  document: string // Cédula (vínculo con Usuario en MS-SECURITY)
+  phone: string
+  address: string
+  createdAt?: Date
+  updatedAt?: Date
+
   // Relaciones
-  trips?: Trip[];
-  bankCards?: BankCard[];
+  trips?: Trip[]
+  bankCards?: BankCard[]
 }
 
 /**
  * Viaje contratado por un cliente
  */
 export interface Trip {
-  id: number;
-  destination: string;
-  description?: string;
-  startDate: Date;
-  endDate: Date;
-  price: number;
-  capacity: number;
-  clientId: string;
-  createdAt?: Date;
-  updatedAt?: Date;
-  
+  id: number
+  destination: string
+  description?: string
+  startDate: Date
+  endDate: Date
+  price: number
+  capacity: number
+  clientId: string
+  createdAt?: Date
+  updatedAt?: Date
+
   // Relaciones
-  client?: Client;
-  plans?: Plan[];
-  installments?: Installment[];
-  routes?: Route[];
+  client?: Client
+  plans?: Plan[]
+  installments?: Installment[]
+  routes?: Route[]
 }
 
 /**
  * Plan turístico (paquete de actividades)
  */
 export interface Plan {
-  id: number;
-  name: string;
-  description: string;
-  price: number;
-  duration: number;        // Días
-  isActive: boolean;
-  createdAt?: Date;
-  updatedAt?: Date;
-  
+  id: number
+  name: string
+  description: string
+  price: number
+  duration: number // Días
+  isActive: boolean
+  createdAt?: Date
+  updatedAt?: Date
+
   // Relaciones
-  touristActivities?: TouristActivity[];
-  trips?: Trip[];
+  touristActivities?: TouristActivity[]
+  trips?: Trip[]
 }
 
 /**
  * Habitación de hotel
  */
 export interface Room {
-  id: number;
-  roomNumber: string;
-  type: string;            // 'single' | 'double' | 'suite' | 'family'
-  pricePerNight: number;
-  capacity: number;
-  hasBalcony: boolean;
-  hotelId: number;
-  createdAt?: Date;
-  updatedAt?: Date;
-  
+  id: number
+  roomNumber: string
+  type: string // 'single' | 'double' | 'suite' | 'family'
+  pricePerNight: number
+  capacity: number
+  hasBalcony: boolean
+  hotelId: number
+  createdAt?: Date
+  updatedAt?: Date
+
   // Relaciones
-  hotel?: Hotel;
+  hotel?: Hotel
 }
 
 /**
  * Hotel (para contexto de habitaciones)
  */
 export interface Hotel {
-  id: number;
-  name: string;
-  address: string;
-  stars: number;
-  phone: string;
-  administratorId: string;
-  createdAt?: Date;
-  updatedAt?: Date;
-  
+  id: number
+  name: string
+  address: string
+  stars: number
+  phone: string
+  administratorId: string
+  createdAt?: Date
+  updatedAt?: Date
+
   // Relaciones
-  rooms?: Room[];
+  rooms?: Room[]
 }
 
 /**
  * Actividad turística dentro de un municipio
  */
 export interface TouristActivity {
-  id: number;
-  name: string;
-  description: string;
-  price: number;
-  duration: number;        // Horas
-  difficulty: string;      // 'easy' | 'medium' | 'hard'
-  municipalityId: number;
-  createdAt?: Date;
-  updatedAt?: Date;
-  
+  id: number
+  name: string
+  description: string
+  price: number
+  duration: number // Horas
+  difficulty: string // 'easy' | 'medium' | 'hard'
+  municipalityId: number
+  createdAt?: Date
+  updatedAt?: Date
+
   // Relaciones
-  municipality?: Municipality;
-  plans?: Plan[];
-  guides?: Guide[];
+  municipality?: Municipality
+  plans?: Plan[]
+  guides?: Guide[]
 }
 
 /**
  * Municipio donde se realizan actividades
  */
 export interface Municipality {
-  id: number;
-  name: string;
-  department: string;
-  postalCode?: string;
-  createdAt?: Date;
-  updatedAt?: Date;
-  
+  id: number
+  name: string
+  department: string
+  postalCode?: string
+  createdAt?: Date
+  updatedAt?: Date
+
   // Relaciones
-  touristActivities?: TouristActivity[];
+  touristActivities?: TouristActivity[]
 }
 
 /**
  * Guía turístico (solo para referencia, no UI)
  */
 export interface Guide {
-  id: string;
-  document: string;
-  specialization: string;
-  isAvailable: boolean;
-  experienceYears?: number;
+  id: string
+  document: string
+  specialization: string
+  isAvailable: boolean
+  experienceYears?: number
 }
 
 /**
  * Cuota de pago de un viaje
  */
 export interface Installment {
-  id: number;
-  amount: number;
-  dueDate: Date;
-  paidDate?: Date;
-  status: string;          // 'pending' | 'paid' | 'overdue'
-  tripId: number;
-  invoiceId?: number;
-  createdAt?: Date;
-  updatedAt?: Date;
-  
+  id: number
+  amount: number
+  dueDate: Date
+  paidDate?: Date
+  status: string // 'pending' | 'paid' | 'overdue'
+  tripId: number
+  invoiceId?: number
+  createdAt?: Date
+  updatedAt?: Date
+
   // Relaciones
-  trip?: Trip;
-  invoice?: Invoice;
+  trip?: Trip
+  invoice?: Invoice
 }
 
 /**
  * Factura de pago
  */
 export interface Invoice {
-  id: number;
-  totalAmount: number;
-  issueDate: Date;
-  dueDate: Date;
-  status: string;          // 'pending' | 'paid' | 'cancelled'
-  administratorId: string;
-  bankCardId?: number;
-  createdAt?: Date;
-  updatedAt?: Date;
-  
+  id: number
+  totalAmount: number
+  issueDate: Date
+  dueDate: Date
+  status: string // 'pending' | 'paid' | 'cancelled'
+  administratorId: string
+  bankCardId?: number
+  createdAt?: Date
+  updatedAt?: Date
+
   // Relaciones
-  installments?: Installment[];
-  bankCard?: BankCard;
+  installments?: Installment[]
+  bankCard?: BankCard
 }
 
 /**
  * Tarjeta bancaria de cliente
  */
 export interface BankCard {
-  id: number;
-  cardNumber: string;      // Encriptado o últimos 4 dígitos
-  cardholderName: string;
-  expiryDate: string;      // MM/YY
-  cardType: string;        // 'visa' | 'mastercard' | 'amex'
-  clientId: string;
-  createdAt?: Date;
-  updatedAt?: Date;
-  
+  id: number
+  cardNumber: string // Encriptado o últimos 4 dígitos
+  cardholderName: string
+  expiryDate: string // MM/YY
+  cardType: string // 'visa' | 'mastercard' | 'amex'
+  clientId: string
+  createdAt?: Date
+  updatedAt?: Date
+
   // Relaciones
-  client?: Client;
-  invoices?: Invoice[];
+  client?: Client
+  invoices?: Invoice[]
 }
 
 /**
  * Vehículo (base para carro/aeronave)
  */
 export interface Vehicle {
-  id: number;
-  plate: string;
-  model: string;
-  capacity: number;
-  type: string;            // 'car' | 'aircraft'
-  status: string;          // 'available' | 'in_use' | 'maintenance'
-  gpsId?: number;
-  createdAt?: Date;
-  updatedAt?: Date;
-  
+  id: number
+  plate: string
+  model: string
+  capacity: number
+  type: string // 'car' | 'aircraft'
+  status: string // 'available' | 'in_use' | 'maintenance'
+  gpsId?: number
+  createdAt?: Date
+  updatedAt?: Date
+
   // Relaciones
-  gps?: GPS;
-  routes?: Route[];
+  gps?: GPS
+  routes?: Route[]
 }
 
 /**
  * GPS del vehículo
  */
 export interface GPS {
-  id: number;
-  serialNumber: string;
-  brand: string;
-  model: string;
-  createdAt?: Date;
-  updatedAt?: Date;
-  
+  id: number
+  serialNumber: string
+  brand: string
+  model: string
+  createdAt?: Date
+  updatedAt?: Date
+
   // Relaciones
-  vehicle?: Vehicle;
+  vehicle?: Vehicle
 }
 
 /**
  * Trayecto (ruta de transporte)
  */
 export interface Route {
-  id: number;
-  origin: string;
-  destination: string;
-  distance: number;        // Km
-  estimatedDuration: number; // Minutos
-  price: number;
-  createdAt?: Date;
-  updatedAt?: Date;
-  
+  id: number
+  origin: string
+  destination: string
+  distance: number // Km
+  estimatedDuration: number // Minutos
+  price: number
+  createdAt?: Date
+  updatedAt?: Date
+
   // Relaciones
-  vehicles?: Vehicle[];
-  trips?: Trip[];
-  itineraries?: ItineraryTransport[];
+  vehicles?: Vehicle[]
+  trips?: Trip[]
+  itineraries?: ItineraryTransport[]
 }
 
 /**
  * Itinerario de transporte (tabla intermedia vehículo-trayecto)
  */
 export interface ItineraryTransport {
-  id: number;
-  departureTime: Date;
-  arrivalTime: Date;
-  sequence: number;        // Orden en el itinerario
-  vehicleId: number;
-  routeId: number;
-  createdAt?: Date;
-  updatedAt?: Date;
-  
+  id: number
+  departureTime: Date
+  arrivalTime: Date
+  sequence: number // Orden en el itinerario
+  vehicleId: number
+  routeId: number
+  createdAt?: Date
+  updatedAt?: Date
+
   // Relaciones
-  vehicle?: Vehicle;
-  route?: Route;
+  vehicle?: Vehicle
+  route?: Route
 }
 
 /**
@@ -427,15 +424,15 @@ export interface ItineraryTransport {
  * No requiere UI separada, se gestiona desde Trip o Route
  */
 export interface TransportService {
-  id: number;
-  startDate: Date;
-  endDate: Date;
-  flightNumber?: string;   // Para vuelos
-  cost: number;
-  tripId: number;
-  routeId: number;
-  createdAt?: Date;
-  updatedAt?: Date;
+  id: number
+  startDate: Date
+  endDate: Date
+  flightNumber?: string // Para vuelos
+  cost: number
+  tripId: number
+  routeId: number
+  createdAt?: Date
+  updatedAt?: Date
 }
 
 // ====================================
@@ -443,46 +440,46 @@ export interface TransportService {
 // ====================================
 
 export interface ClientCreateDto {
-  document: string;
-  phone: string;
-  address: string;
+  document: string
+  phone: string
+  address: string
 }
 
 export interface TripCreateDto {
-  destination: string;
-  description?: string;
-  startDate: Date;
-  endDate: Date;
-  price: number;
-  capacity: number;
-  clientId: string;
-  planIds?: number[];      // IDs de planes a asociar
+  destination: string
+  description?: string
+  startDate: Date
+  endDate: Date
+  price: number
+  capacity: number
+  clientId: string
+  planIds?: number[] // IDs de planes a asociar
 }
 
 export interface PlanCreateDto {
-  name: string;
-  description: string;
-  price: number;
-  duration: number;
-  isActive: boolean;
-  touristActivityIds?: number[];
+  name: string
+  description: string
+  price: number
+  duration: number
+  isActive: boolean
+  touristActivityIds?: number[]
 }
 
 export interface RoomCreateDto {
-  roomNumber: string;
-  type: string;
-  pricePerNight: number;
-  capacity: number;
-  hasBalcony: boolean;
-  hotelId: number;
+  roomNumber: string
+  type: string
+  pricePerNight: number
+  capacity: number
+  hasBalcony: boolean
+  hotelId: number
 }
 
 export interface BankCardCreateDto {
-  cardNumber: string;
-  cardholderName: string;
-  expiryDate: string;
-  cardType: string;
-  clientId: string;
+  cardNumber: string
+  cardholderName: string
+  expiryDate: string
+  cardType: string
+  clientId: string
 }
 
 // ====================================
@@ -491,17 +488,17 @@ export interface BankCardCreateDto {
 
 export interface ApiResponse<T> {
   meta: {
-    page: number;
-    perPage: number;
-    total: number;
-    lastPage: number;
-  };
-  data: T;
+    page: number
+    perPage: number
+    total: number
+    lastPage: number
+  }
+  data: T
 }
 
 export interface ApiError {
-  message: string;
-  errors?: { [key: string]: string[] };
+  message: string
+  errors?: { [key: string]: string[] }
 }
 ```
 
@@ -512,6 +509,7 @@ export interface ApiError {
 ### 3.1 Crear Servicios para cada Entidad
 
 **Comando PowerShell:**
+
 ```powershell
 cd "c:\Users\USER\Desktop\Backend\Proyectico Frontend"
 
@@ -538,17 +536,17 @@ ng generate service core/services/municipality --skip-tests
 **Archivo:** `src/app/core/services/client.service.ts`
 
 ```typescript
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { environment } from '../../../environments/environment';
-import { Client, ClientCreateDto, ApiResponse } from '../models/business.model';
+import { Injectable } from '@angular/core'
+import { HttpClient, HttpParams } from '@angular/common/http'
+import { Observable } from 'rxjs'
+import { environment } from '../../../environments/environment'
+import { Client, ClientCreateDto, ApiResponse } from '../models/business.model'
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ClientService {
-  private apiUrl = `${environment.businessApiUrl}/clients`;
+  private apiUrl = `${environment.businessApiUrl}/clients`
 
   constructor(private http: HttpClient) {}
 
@@ -556,60 +554,58 @@ export class ClientService {
    * Obtener todos los clientes (con paginación)
    */
   getAll(page: number = 1, perPage: number = 10): Observable<ApiResponse<Client[]>> {
-    const params = new HttpParams()
-      .set('page', page.toString())
-      .set('perPage', perPage.toString());
-    
-    return this.http.get<ApiResponse<Client[]>>(this.apiUrl, { params });
+    const params = new HttpParams().set('page', page.toString()).set('perPage', perPage.toString())
+
+    return this.http.get<ApiResponse<Client[]>>(this.apiUrl, { params })
   }
 
   /**
    * Obtener cliente por ID
    */
   getById(id: string): Observable<Client> {
-    return this.http.get<Client>(`${this.apiUrl}/${id}`);
+    return this.http.get<Client>(`${this.apiUrl}/${id}`)
   }
 
   /**
    * Buscar cliente por documento (cédula)
    */
   getByDocument(document: string): Observable<Client> {
-    return this.http.get<Client>(`${this.apiUrl}/document/${document}`);
+    return this.http.get<Client>(`${this.apiUrl}/document/${document}`)
   }
 
   /**
    * Crear nuevo cliente
    */
   create(client: ClientCreateDto): Observable<Client> {
-    return this.http.post<Client>(this.apiUrl, client);
+    return this.http.post<Client>(this.apiUrl, client)
   }
 
   /**
    * Actualizar cliente existente
    */
   update(id: string, client: Partial<ClientCreateDto>): Observable<Client> {
-    return this.http.put<Client>(`${this.apiUrl}/${id}`, client);
+    return this.http.put<Client>(`${this.apiUrl}/${id}`, client)
   }
 
   /**
    * Eliminar cliente
    */
   delete(id: string): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+    return this.http.delete<void>(`${this.apiUrl}/${id}`)
   }
 
   /**
    * Obtener viajes de un cliente
    */
   getTrips(id: string): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/${id}/trips`);
+    return this.http.get<any[]>(`${this.apiUrl}/${id}/trips`)
   }
 
   /**
    * Obtener tarjetas bancarias de un cliente
    */
   getBankCards(id: string): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/${id}/bank-cards`);
+    return this.http.get<any[]>(`${this.apiUrl}/${id}/bank-cards`)
   }
 }
 ```
@@ -621,63 +617,61 @@ export class ClientService {
 **Archivo:** `src/app/core/services/trip.service.ts`
 
 ```typescript
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { environment } from '../../../environments/environment';
-import { Trip, TripCreateDto, ApiResponse } from '../models/business.model';
+import { Injectable } from '@angular/core'
+import { HttpClient, HttpParams } from '@angular/common/http'
+import { Observable } from 'rxjs'
+import { environment } from '../../../environments/environment'
+import { Trip, TripCreateDto, ApiResponse } from '../models/business.model'
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class TripService {
-  private apiUrl = `${environment.businessApiUrl}/trips`;
+  private apiUrl = `${environment.businessApiUrl}/trips`
 
   constructor(private http: HttpClient) {}
 
   getAll(page: number = 1, perPage: number = 10): Observable<ApiResponse<Trip[]>> {
-    const params = new HttpParams()
-      .set('page', page.toString())
-      .set('perPage', perPage.toString());
-    
-    return this.http.get<ApiResponse<Trip[]>>(this.apiUrl, { params });
+    const params = new HttpParams().set('page', page.toString()).set('perPage', perPage.toString())
+
+    return this.http.get<ApiResponse<Trip[]>>(this.apiUrl, { params })
   }
 
   getById(id: number): Observable<Trip> {
-    return this.http.get<Trip>(`${this.apiUrl}/${id}`);
+    return this.http.get<Trip>(`${this.apiUrl}/${id}`)
   }
 
   create(trip: TripCreateDto): Observable<Trip> {
-    return this.http.post<Trip>(this.apiUrl, trip);
+    return this.http.post<Trip>(this.apiUrl, trip)
   }
 
   update(id: number, trip: Partial<TripCreateDto>): Observable<Trip> {
-    return this.http.put<Trip>(`${this.apiUrl}/${id}`, trip);
+    return this.http.put<Trip>(`${this.apiUrl}/${id}`, trip)
   }
 
   delete(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+    return this.http.delete<void>(`${this.apiUrl}/${id}`)
   }
 
   /**
    * Asociar plan a viaje
    */
   addPlan(tripId: number, planId: number): Observable<void> {
-    return this.http.post<void>(`${this.apiUrl}/${tripId}/plans/${planId}`, {});
+    return this.http.post<void>(`${this.apiUrl}/${tripId}/plans/${planId}`, {})
   }
 
   /**
    * Obtener planes asociados al viaje
    */
   getPlans(tripId: number): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/${tripId}/plans`);
+    return this.http.get<any[]>(`${this.apiUrl}/${tripId}/plans`)
   }
 
   /**
    * Obtener trayectos del viaje
    */
   getRoutes(tripId: number): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/${tripId}/routes`);
+    return this.http.get<any[]>(`${this.apiUrl}/${tripId}/routes`)
   }
 }
 ```
@@ -689,50 +683,48 @@ export class TripService {
 **Archivo:** `src/app/core/services/plan.service.ts`
 
 ```typescript
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { environment } from '../../../environments/environment';
-import { Plan, PlanCreateDto, ApiResponse } from '../models/business.model';
+import { Injectable } from '@angular/core'
+import { HttpClient, HttpParams } from '@angular/common/http'
+import { Observable } from 'rxjs'
+import { environment } from '../../../environments/environment'
+import { Plan, PlanCreateDto, ApiResponse } from '../models/business.model'
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class PlanService {
-  private apiUrl = `${environment.businessApiUrl}/plans`;
+  private apiUrl = `${environment.businessApiUrl}/plans`
 
   constructor(private http: HttpClient) {}
 
   getAll(page: number = 1, perPage: number = 10): Observable<ApiResponse<Plan[]>> {
-    const params = new HttpParams()
-      .set('page', page.toString())
-      .set('perPage', perPage.toString());
-    
-    return this.http.get<ApiResponse<Plan[]>>(this.apiUrl, { params });
+    const params = new HttpParams().set('page', page.toString()).set('perPage', perPage.toString())
+
+    return this.http.get<ApiResponse<Plan[]>>(this.apiUrl, { params })
   }
 
   getActive(): Observable<Plan[]> {
-    return this.http.get<Plan[]>(`${this.apiUrl}/active`);
+    return this.http.get<Plan[]>(`${this.apiUrl}/active`)
   }
 
   getById(id: number): Observable<Plan> {
-    return this.http.get<Plan>(`${this.apiUrl}/${id}`);
+    return this.http.get<Plan>(`${this.apiUrl}/${id}`)
   }
 
   create(plan: PlanCreateDto): Observable<Plan> {
-    return this.http.post<Plan>(this.apiUrl, plan);
+    return this.http.post<Plan>(this.apiUrl, plan)
   }
 
   update(id: number, plan: Partial<PlanCreateDto>): Observable<Plan> {
-    return this.http.put<Plan>(`${this.apiUrl}/${id}`, plan);
+    return this.http.put<Plan>(`${this.apiUrl}/${id}`, plan)
   }
 
   delete(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+    return this.http.delete<void>(`${this.apiUrl}/${id}`)
   }
 
   getTouristActivities(id: number): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/${id}/tourist-activities`);
+    return this.http.get<any[]>(`${this.apiUrl}/${id}/tourist-activities`)
   }
 }
 ```
@@ -744,6 +736,7 @@ export class PlanService {
 **RoomService, TouristActivityService, InstallmentService, BankCardService, VehicleService, RouteService, ItineraryTransportService**
 
 Todos siguen el mismo patrón:
+
 - `getAll()` con paginación
 - `getById()`
 - `create()`
@@ -877,90 +870,90 @@ ng generate component features/business/routes/route-form
 **Archivo:** `client-list.component.ts`
 
 ```typescript
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
-import { MatTableDataSource } from '@angular/material/table';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { MatDialog } from '@angular/material/dialog';
-import { ClientService } from '../../../core/services/client.service';
-import { Client } from '../../../core/models/business.model';
+import { Component, OnInit, ViewChild } from '@angular/core'
+import { Router } from '@angular/router'
+import { MatTableDataSource } from '@angular/material/table'
+import { MatPaginator } from '@angular/material/paginator'
+import { MatSort } from '@angular/material/sort'
+import { MatDialog } from '@angular/material/dialog'
+import { ClientService } from '../../../core/services/client.service'
+import { Client } from '../../../core/models/business.model'
 
 @Component({
   selector: 'app-client-list',
   templateUrl: './client-list.component.html',
-  styleUrls: ['./client-list.component.scss']
+  styleUrls: ['./client-list.component.scss'],
 })
 export class ClientListComponent implements OnInit {
-  displayedColumns: string[] = ['id', 'document', 'phone', 'address', 'actions'];
-  dataSource: MatTableDataSource<Client>;
-  
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
-  
-  isLoading = false;
-  totalClients = 0;
+  displayedColumns: string[] = ['id', 'document', 'phone', 'address', 'actions']
+  dataSource: MatTableDataSource<Client>
+
+  @ViewChild(MatPaginator) paginator!: MatPaginator
+  @ViewChild(MatSort) sort!: MatSort
+
+  isLoading = false
+  totalClients = 0
 
   constructor(
     private clientService: ClientService,
     private router: Router,
     private dialog: MatDialog
   ) {
-    this.dataSource = new MatTableDataSource<Client>([]);
+    this.dataSource = new MatTableDataSource<Client>([])
   }
 
   ngOnInit(): void {
-    this.loadClients();
+    this.loadClients()
   }
 
   ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator
+    this.dataSource.sort = this.sort
   }
 
   loadClients(): void {
-    this.isLoading = true;
+    this.isLoading = true
     this.clientService.getAll().subscribe({
       next: (response) => {
-        this.dataSource.data = response.data;
-        this.totalClients = response.meta.total;
-        this.isLoading = false;
+        this.dataSource.data = response.data
+        this.totalClients = response.meta.total
+        this.isLoading = false
       },
       error: (error) => {
-        console.error('Error loading clients:', error);
-        this.isLoading = false;
-      }
-    });
+        console.error('Error loading clients:', error)
+        this.isLoading = false
+      },
+    })
   }
 
   applyFilter(event: Event): void {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+    const filterValue = (event.target as HTMLInputElement).value
+    this.dataSource.filter = filterValue.trim().toLowerCase()
   }
 
   viewClient(client: Client): void {
-    this.router.navigate(['/clients', client.id]);
+    this.router.navigate(['/clients', client.id])
   }
 
   editClient(client: Client): void {
-    this.router.navigate(['/clients/edit', client.id]);
+    this.router.navigate(['/clients/edit', client.id])
   }
 
   deleteClient(client: Client): void {
     if (confirm(`¿Eliminar cliente ${client.document}?`)) {
       this.clientService.delete(client.id).subscribe({
         next: () => {
-          this.loadClients();
+          this.loadClients()
         },
         error: (error) => {
-          console.error('Error deleting client:', error);
-        }
-      });
+          console.error('Error deleting client:', error)
+        },
+      })
     }
   }
 
   addClient(): void {
-    this.router.navigate(['/clients/new']);
+    this.router.navigate(['/clients/new'])
   }
 }
 ```
@@ -979,42 +972,46 @@ export class ClientListComponent implements OnInit {
 
   <mat-form-field class="filter">
     <mat-label>Buscar</mat-label>
-    <input matInput (keyup)="applyFilter($event)" placeholder="Documento, teléfono...">
+    <input matInput (keyup)="applyFilter($event)" placeholder="Documento, teléfono..." />
     <mat-icon matSuffix>search</mat-icon>
   </mat-form-field>
 
   <div class="table-container">
     <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z2">
-      
       <!-- ID Column -->
       <ng-container matColumnDef="id">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
-        <td mat-cell *matCellDef="let client"> {{client.id}} </td>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+        <td mat-cell *matCellDef="let client">{{client.id}}</td>
       </ng-container>
 
       <!-- Document Column -->
       <ng-container matColumnDef="document">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Documento </th>
-        <td mat-cell *matCellDef="let client"> {{client.document}} </td>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Documento</th>
+        <td mat-cell *matCellDef="let client">{{client.document}}</td>
       </ng-container>
 
       <!-- Phone Column -->
       <ng-container matColumnDef="phone">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Teléfono </th>
-        <td mat-cell *matCellDef="let client"> {{client.phone}} </td>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Teléfono</th>
+        <td mat-cell *matCellDef="let client">{{client.phone}}</td>
       </ng-container>
 
       <!-- Address Column -->
       <ng-container matColumnDef="address">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Dirección </th>
-        <td mat-cell *matCellDef="let client"> {{client.address}} </td>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Dirección</th>
+        <td mat-cell *matCellDef="let client">{{client.address}}</td>
       </ng-container>
 
       <!-- Actions Column -->
       <ng-container matColumnDef="actions">
-        <th mat-header-cell *matHeaderCellDef> Acciones </th>
+        <th mat-header-cell *matHeaderCellDef>Acciones</th>
         <td mat-cell *matCellDef="let client">
-          <button mat-icon-button color="primary" (click)="viewClient(client)" matTooltip="Ver detalle">
+          <button
+            mat-icon-button
+            color="primary"
+            (click)="viewClient(client)"
+            matTooltip="Ver detalle"
+          >
             <mat-icon>visibility</mat-icon>
           </button>
           <button mat-icon-button color="accent" (click)="editClient(client)" matTooltip="Editar">
@@ -1028,13 +1025,11 @@ export class ClientListComponent implements OnInit {
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-      
+
       <!-- Row shown when there is no matching data -->
       <tr class="mat-row" *matNoDataRow>
         <td class="mat-cell" colspan="5">
-          <div class="no-data" *ngIf="!isLoading">
-            No se encontraron clientes.
-          </div>
+          <div class="no-data" *ngIf="!isLoading">No se encontraron clientes.</div>
           <div class="loading" *ngIf="isLoading">
             <mat-spinner diameter="50"></mat-spinner>
             Cargando...
@@ -1043,10 +1038,12 @@ export class ClientListComponent implements OnInit {
       </tr>
     </table>
 
-    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" 
-                   [pageSize]="10"
-                   [length]="totalClients"
-                   showFirstLastButtons>
+    <mat-paginator
+      [pageSizeOptions]="[5, 10, 25, 100]"
+      [pageSize]="10"
+      [length]="totalClients"
+      showFirstLastButtons
+    >
     </mat-paginator>
   </div>
 </div>
@@ -1061,19 +1058,19 @@ export class ClientListComponent implements OnInit {
 **Archivo:** `src/app/app-routing.module.ts`
 
 ```typescript
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
-import { MainLayoutComponent } from './shared/layout/main-layout/main-layout.component';
-import { AuthGuard } from './core/guards/auth.guard';
-import { RoleGuard } from './core/guards/role.guard';
+import { NgModule } from '@angular/core'
+import { RouterModule, Routes } from '@angular/router'
+import { MainLayoutComponent } from './shared/layout/main-layout/main-layout.component'
+import { AuthGuard } from './core/guards/auth.guard'
+import { RoleGuard } from './core/guards/role.guard'
 
 const routes: Routes = [
   // Auth routes (existentes)
   {
     path: 'auth',
-    loadChildren: () => import('./features/auth/auth.module').then(m => m.AuthModule)
+    loadChildren: () => import('./features/auth/auth.module').then((m) => m.AuthModule),
   },
-  
+
   // Main application routes
   {
     path: '',
@@ -1083,110 +1080,128 @@ const routes: Routes = [
       // Dashboard
       {
         path: 'dashboard',
-        loadChildren: () => import('./features/dashboard/dashboard.module').then(m => m.DashboardModule)
+        loadChildren: () =>
+          import('./features/dashboard/dashboard.module').then((m) => m.DashboardModule),
       },
-      
+
       // ========================================
       // MÓDULOS DE MS-SECURITY (MANTENER INTACTOS)
       // ========================================
       {
         path: 'users',
-        loadChildren: () => import('./features/user-management/user-management.module').then(m => m.UserManagementModule),
+        loadChildren: () =>
+          import('./features/user-management/user-management.module').then(
+            (m) => m.UserManagementModule
+          ),
         canActivate: [RoleGuard],
-        data: { roles: ['ADMIN', 'MANAGER'] }
+        data: { roles: ['ADMIN', 'MANAGER'] },
       },
       {
         path: 'roles',
-        loadChildren: () => import('./features/roles/roles.module').then(m => m.RolesModule),
+        loadChildren: () => import('./features/roles/roles.module').then((m) => m.RolesModule),
         canActivate: [RoleGuard],
-        data: { roles: ['ADMIN'] }
+        data: { roles: ['ADMIN'] },
       },
       {
         path: 'permissions',
-        loadChildren: () => import('./features/permissions/permissions.module').then(m => m.PermissionsModule),
+        loadChildren: () =>
+          import('./features/permissions/permissions.module').then((m) => m.PermissionsModule),
         canActivate: [RoleGuard],
-        data: { roles: ['ADMIN'] }
+        data: { roles: ['ADMIN'] },
       },
-      
+
       // ========================================
       // NUEVOS MÓDULOS DE NEGOCIO (ADONIS BACKEND)
       // ========================================
       {
         path: 'clients',
-        loadChildren: () => import('./features/business/clients/clients.module').then(m => m.ClientsModule),
+        loadChildren: () =>
+          import('./features/business/clients/clients.module').then((m) => m.ClientsModule),
         canActivate: [RoleGuard],
-        data: { roles: ['ADMIN', 'MANAGER', 'AGENT'] }
+        data: { roles: ['ADMIN', 'MANAGER', 'AGENT'] },
       },
       {
         path: 'trips',
-        loadChildren: () => import('./features/business/trips/trips.module').then(m => m.TripsModule),
+        loadChildren: () =>
+          import('./features/business/trips/trips.module').then((m) => m.TripsModule),
         canActivate: [RoleGuard],
-        data: { roles: ['ADMIN', 'MANAGER', 'AGENT'] }
+        data: { roles: ['ADMIN', 'MANAGER', 'AGENT'] },
       },
       {
         path: 'plans',
-        loadChildren: () => import('./features/business/plans/plans.module').then(m => m.PlansModule),
+        loadChildren: () =>
+          import('./features/business/plans/plans.module').then((m) => m.PlansModule),
         canActivate: [RoleGuard],
-        data: { roles: ['ADMIN', 'MANAGER'] }
+        data: { roles: ['ADMIN', 'MANAGER'] },
       },
       {
         path: 'rooms',
-        loadChildren: () => import('./features/business/rooms/rooms.module').then(m => m.RoomsModule),
+        loadChildren: () =>
+          import('./features/business/rooms/rooms.module').then((m) => m.RoomsModule),
         canActivate: [RoleGuard],
-        data: { roles: ['ADMIN', 'MANAGER'] }
+        data: { roles: ['ADMIN', 'MANAGER'] },
       },
       {
         path: 'activities',
-        loadChildren: () => import('./features/business/activities/activities.module').then(m => m.ActivitiesModule),
+        loadChildren: () =>
+          import('./features/business/activities/activities.module').then(
+            (m) => m.ActivitiesModule
+          ),
         canActivate: [RoleGuard],
-        data: { roles: ['ADMIN', 'MANAGER'] }
+        data: { roles: ['ADMIN', 'MANAGER'] },
       },
       {
         path: 'installments',
-        loadChildren: () => import('./features/business/installments/installments.module').then(m => m.InstallmentsModule),
+        loadChildren: () =>
+          import('./features/business/installments/installments.module').then(
+            (m) => m.InstallmentsModule
+          ),
         canActivate: [RoleGuard],
-        data: { roles: ['ADMIN', 'MANAGER', 'FINANCE'] }
+        data: { roles: ['ADMIN', 'MANAGER', 'FINANCE'] },
       },
       {
         path: 'bank-cards',
-        loadChildren: () => import('./features/business/bank-cards/bank-cards.module').then(m => m.BankCardsModule),
+        loadChildren: () =>
+          import('./features/business/bank-cards/bank-cards.module').then((m) => m.BankCardsModule),
         canActivate: [RoleGuard],
-        data: { roles: ['ADMIN', 'MANAGER', 'AGENT'] }
+        data: { roles: ['ADMIN', 'MANAGER', 'AGENT'] },
       },
       {
         path: 'vehicles',
-        loadChildren: () => import('./features/business/vehicles/vehicles.module').then(m => m.VehiclesModule),
+        loadChildren: () =>
+          import('./features/business/vehicles/vehicles.module').then((m) => m.VehiclesModule),
         canActivate: [RoleGuard],
-        data: { roles: ['ADMIN', 'MANAGER', 'LOGISTICS'] }
+        data: { roles: ['ADMIN', 'MANAGER', 'LOGISTICS'] },
       },
       {
         path: 'routes',
-        loadChildren: () => import('./features/business/routes/routes.module').then(m => m.RoutesModule),
+        loadChildren: () =>
+          import('./features/business/routes/routes.module').then((m) => m.RoutesModule),
         canActivate: [RoleGuard],
-        data: { roles: ['ADMIN', 'MANAGER', 'LOGISTICS'] }
+        data: { roles: ['ADMIN', 'MANAGER', 'LOGISTICS'] },
       },
-      
+
       // Redirect
       {
         path: '',
         redirectTo: 'dashboard',
-        pathMatch: 'full'
-      }
-    ]
+        pathMatch: 'full',
+      },
+    ],
   },
-  
+
   // Wildcard route
   {
     path: '**',
-    redirectTo: 'dashboard'
-  }
-];
+    redirectTo: 'dashboard',
+  },
+]
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}
 ```
 
 ---
@@ -1199,20 +1214,20 @@ export class AppRoutingModule { }
 
 ```typescript
 export interface MenuItem {
-  label: string;
-  icon: string;
-  route?: string;
-  children?: MenuItem[];
-  roles?: string[];
+  label: string
+  icon: string
+  route?: string
+  children?: MenuItem[]
+  roles?: string[]
 }
 
 export const MENU_ITEMS: MenuItem[] = [
   {
     label: 'Dashboard',
     icon: 'dashboard',
-    route: '/dashboard'
+    route: '/dashboard',
   },
-  
+
   // ========================================
   // ADMINISTRACIÓN (MS-SECURITY)
   // ========================================
@@ -1224,23 +1239,23 @@ export const MENU_ITEMS: MenuItem[] = [
         label: 'Usuarios',
         icon: 'people',
         route: '/users',
-        roles: ['ADMIN', 'MANAGER']
+        roles: ['ADMIN', 'MANAGER'],
       },
       {
         label: 'Roles',
         icon: 'verified_user',
         route: '/roles',
-        roles: ['ADMIN']
+        roles: ['ADMIN'],
       },
       {
         label: 'Permisos',
         icon: 'lock',
         route: '/permissions',
-        roles: ['ADMIN']
-      }
-    ]
+        roles: ['ADMIN'],
+      },
+    ],
   },
-  
+
   // ========================================
   // GESTIÓN DE NEGOCIO (ADONIS)
   // ========================================
@@ -1252,29 +1267,29 @@ export const MENU_ITEMS: MenuItem[] = [
         label: 'Clientes',
         icon: 'person',
         route: '/clients',
-        roles: ['ADMIN', 'MANAGER', 'AGENT']
+        roles: ['ADMIN', 'MANAGER', 'AGENT'],
       },
       {
         label: 'Viajes',
         icon: 'luggage',
         route: '/trips',
-        roles: ['ADMIN', 'MANAGER', 'AGENT']
+        roles: ['ADMIN', 'MANAGER', 'AGENT'],
       },
       {
         label: 'Planes Turísticos',
         icon: 'map',
         route: '/plans',
-        roles: ['ADMIN', 'MANAGER']
+        roles: ['ADMIN', 'MANAGER'],
       },
       {
         label: 'Actividades',
         icon: 'local_activity',
         route: '/activities',
-        roles: ['ADMIN', 'MANAGER']
-      }
-    ]
+        roles: ['ADMIN', 'MANAGER'],
+      },
+    ],
   },
-  
+
   {
     label: 'Alojamiento',
     icon: 'hotel',
@@ -1283,11 +1298,11 @@ export const MENU_ITEMS: MenuItem[] = [
         label: 'Habitaciones',
         icon: 'meeting_room',
         route: '/rooms',
-        roles: ['ADMIN', 'MANAGER']
-      }
-    ]
+        roles: ['ADMIN', 'MANAGER'],
+      },
+    ],
   },
-  
+
   {
     label: 'Transporte',
     icon: 'directions_car',
@@ -1296,17 +1311,17 @@ export const MENU_ITEMS: MenuItem[] = [
         label: 'Vehículos',
         icon: 'directions_bus',
         route: '/vehicles',
-        roles: ['ADMIN', 'MANAGER', 'LOGISTICS']
+        roles: ['ADMIN', 'MANAGER', 'LOGISTICS'],
       },
       {
         label: 'Trayectos',
         icon: 'alt_route',
         route: '/routes',
-        roles: ['ADMIN', 'MANAGER', 'LOGISTICS']
-      }
-    ]
+        roles: ['ADMIN', 'MANAGER', 'LOGISTICS'],
+      },
+    ],
   },
-  
+
   {
     label: 'Finanzas',
     icon: 'account_balance',
@@ -1315,17 +1330,17 @@ export const MENU_ITEMS: MenuItem[] = [
         label: 'Cuotas',
         icon: 'payment',
         route: '/installments',
-        roles: ['ADMIN', 'MANAGER', 'FINANCE']
+        roles: ['ADMIN', 'MANAGER', 'FINANCE'],
       },
       {
         label: 'Tarjetas',
         icon: 'credit_card',
         route: '/bank-cards',
-        roles: ['ADMIN', 'MANAGER', 'AGENT']
-      }
-    ]
-  }
-];
+        roles: ['ADMIN', 'MANAGER', 'AGENT'],
+      },
+    ],
+  },
+]
 ```
 
 ---
@@ -1421,16 +1436,16 @@ ng serve
 
 ## 📊 CRONOGRAMA ESTIMADO
 
-| Fase | Duración | Tareas |
-|------|----------|--------|
-| **Fase 1: Configuración** | 1 hora | Environment.ts, CORS |
-| **Fase 2: Modelos** | 2 horas | business.model.ts completo |
-| **Fase 3: Servicios** | 3-4 horas | 10 servicios HTTP |
-| **Fase 4: Componentes UI** | 5-7 días | 25+ componentes |
-| **Fase 5: Routing** | 1 hora | App routing, lazy loading |
-| **Fase 6: Sidebar** | 1 hora | Menú de navegación |
-| **Fase 7: Testing** | 2-3 días | Pruebas exhaustivas |
-| **TOTAL** | **8-12 días** | Integración completa |
+| Fase                       | Duración      | Tareas                     |
+| -------------------------- | ------------- | -------------------------- |
+| **Fase 1: Configuración**  | 1 hora        | Environment.ts, CORS       |
+| **Fase 2: Modelos**        | 2 horas       | business.model.ts completo |
+| **Fase 3: Servicios**      | 3-4 horas     | 10 servicios HTTP          |
+| **Fase 4: Componentes UI** | 5-7 días      | 25+ componentes            |
+| **Fase 5: Routing**        | 1 hora        | App routing, lazy loading  |
+| **Fase 6: Sidebar**        | 1 hora        | Menú de navegación         |
+| **Fase 7: Testing**        | 2-3 días      | Pruebas exhaustivas        |
+| **TOTAL**                  | **8-12 días** | Integración completa       |
 
 ---
 
@@ -1439,6 +1454,7 @@ ng serve
 Este plan cubre la integración completa de las 10 entidades seleccionadas del backend AdonisJS en el frontend Angular, manteniendo intacto el sistema de autenticación y permisos de MS-SECURITY.
 
 **Ventajas de esta arquitectura:**
+
 - ✅ Sin duplicación de funcionalidad (auth en MS-SECURITY, negocio en Adonis)
 - ✅ Separación de responsabilidades clara
 - ✅ Escalabilidad independiente de cada backend

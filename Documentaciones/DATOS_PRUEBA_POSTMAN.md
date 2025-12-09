@@ -15,9 +15,11 @@ Base URL: `http://127.0.0.1:3333/api/v1`
 ## 👥 Clientes
 
 ### Crear Cliente
+
 **POST** `/clients`
 
 #### Ejemplo 1 - Cliente Bogotá
+
 ```json
 {
   "document": "1234567890",
@@ -27,6 +29,7 @@ Base URL: `http://127.0.0.1:3333/api/v1`
 ```
 
 #### Ejemplo 2 - Cliente Medellín
+
 ```json
 {
   "document": "9876543210",
@@ -36,6 +39,7 @@ Base URL: `http://127.0.0.1:3333/api/v1`
 ```
 
 #### Ejemplo 3 - Cliente Cali
+
 ```json
 {
   "document": "5555555555",
@@ -45,6 +49,7 @@ Base URL: `http://127.0.0.1:3333/api/v1`
 ```
 
 #### Ejemplo 4 - Cliente Barranquilla
+
 ```json
 {
   "document": "1111222233",
@@ -54,6 +59,7 @@ Base URL: `http://127.0.0.1:3333/api/v1`
 ```
 
 ### Otros Endpoints
+
 - **GET** `/clients` - Listar todos los clientes (con paginación: `?page=1&per_page=10`)
 - **GET** `/clients/:id` - Obtener un cliente específico
 - **PUT** `/clients/:id` - Actualizar cliente
@@ -65,9 +71,11 @@ Base URL: `http://127.0.0.1:3333/api/v1`
 ## ✈️ Viajes
 
 ### Crear Viaje
+
 **POST** `/trips`
 
 #### Ejemplo 1 - Viaje a Cartagena
+
 ```json
 {
   "destination": "Cartagena",
@@ -79,17 +87,19 @@ Base URL: `http://127.0.0.1:3333/api/v1`
 ```
 
 #### Ejemplo 2 - Viaje a San Andrés
+
 ```json
 {
   "destination": "San Andrés",
   "startDate": "2025-12-25",
-  "endDate": "2025-12-30",  
+  "endDate": "2025-12-30",
   "numPassengers": 2,
   "status": "confirmed"
 }
 ```
 
 #### Ejemplo 3 - Viaje a Santa Marta
+
 ```json
 {
   "destination": "Santa Marta",
@@ -101,6 +111,7 @@ Base URL: `http://127.0.0.1:3333/api/v1`
 ```
 
 #### Ejemplo 4 - Viaje al Eje Cafetero
+
 ```json
 {
   "destination": "Eje Cafetero",
@@ -112,6 +123,7 @@ Base URL: `http://127.0.0.1:3333/api/v1`
 ```
 
 #### Ejemplo 5 - Viaje a Amazonas
+
 ```json
 {
   "destination": "Amazonas",
@@ -123,6 +135,7 @@ Base URL: `http://127.0.0.1:3333/api/v1`
 ```
 
 ### Estados Válidos
+
 - `pending` - Pendiente
 - `confirmed` - Confirmado
 - `in_progress` - En progreso
@@ -130,6 +143,7 @@ Base URL: `http://127.0.0.1:3333/api/v1`
 - `cancelled` - Cancelado
 
 ### Otros Endpoints
+
 - **GET** `/trips` - Listar todos los viajes (con paginación: `?page=1&per_page=10`)
 - **GET** `/trips/:id` - Obtener un viaje específico
 - **PUT** `/trips/:id` - Actualizar viaje
@@ -141,9 +155,11 @@ Base URL: `http://127.0.0.1:3333/api/v1`
 ## 🗺️ Planes
 
 ### Crear Plan
+
 **POST** `/plans`
 
 #### Ejemplo 1 - Plan Premium Caribe
+
 ```json
 {
   "name": "Plan Caribe Todo Incluido",
@@ -162,6 +178,7 @@ Base URL: `http://127.0.0.1:3333/api/v1`
 ```
 
 #### Ejemplo 2 - Plan Estándar Eje Cafetero
+
 ```json
 {
   "name": "Aventura en el Eje Cafetero",
@@ -180,6 +197,7 @@ Base URL: `http://127.0.0.1:3333/api/v1`
 ```
 
 #### Ejemplo 3 - Plan Lujo San Andrés
+
 ```json
 {
   "name": "Escapada Romántica a San Andrés",
@@ -198,6 +216,7 @@ Base URL: `http://127.0.0.1:3333/api/v1`
 ```
 
 #### Ejemplo 4 - Plan Económico Ciudad Perdida
+
 ```json
 {
   "name": "Tour Económico Ciudad Perdida",
@@ -216,6 +235,7 @@ Base URL: `http://127.0.0.1:3333/api/v1`
 ```
 
 #### Ejemplo 5 - Plan Aventura Tayrona
+
 ```json
 {
   "name": "Aventura Parque Tayrona",
@@ -234,23 +254,27 @@ Base URL: `http://127.0.0.1:3333/api/v1`
 ```
 
 ### Categorías
+
 - `economico` - Económico
 - `estandar` - Estándar
 - `premium` - Premium
 - `lujo` - Lujo
 
 ### Temporadas
+
 - `baja` - Temporada Baja
 - `media` - Temporada Media
 - `alta` - Temporada Alta
 
 ### Planes de Comidas
+
 - `desayuno` - Solo Desayuno
 - `media_pension` - Media Pensión
 - `pension_completa` - Pensión Completa
 - `todo_incluido` - Todo Incluido
 
 ### Otros Endpoints
+
 - **GET** `/plans` - Listar todos los planes (con paginación: `?page=1&per_page=10`)
 - **GET** `/plans/:id` - Obtener un plan específico
 - **PUT** `/plans/:id` - Actualizar plan
@@ -263,9 +287,11 @@ Base URL: `http://127.0.0.1:3333/api/v1`
 ## 🏨 Hoteles
 
 ### Crear Hotel
+
 **POST** `/hotels`
 
 #### Ejemplo 1 - Hotel de Lujo Cartagena
+
 ```json
 {
   "municipalityId": 1,
@@ -289,6 +315,7 @@ Base URL: `http://127.0.0.1:3333/api/v1`
 ```
 
 #### Ejemplo 2 - Posada Eje Cafetero
+
 ```json
 {
   "municipalityId": 1,
@@ -312,6 +339,7 @@ Base URL: `http://127.0.0.1:3333/api/v1`
 ```
 
 #### Ejemplo 3 - Hotel Boutique Santa Marta
+
 ```json
 {
   "municipalityId": 1,
@@ -335,6 +363,7 @@ Base URL: `http://127.0.0.1:3333/api/v1`
 ```
 
 #### Ejemplo 4 - Hostal Económico Bogotá
+
 ```json
 {
   "municipalityId": 1,
@@ -357,6 +386,7 @@ Base URL: `http://127.0.0.1:3333/api/v1`
 ```
 
 #### Ejemplo 5 - Hotel de Playa San Andrés
+
 ```json
 {
   "municipalityId": 1,
@@ -380,6 +410,7 @@ Base URL: `http://127.0.0.1:3333/api/v1`
 ```
 
 ### Otros Endpoints
+
 - **GET** `/hotels` - Listar todos los hoteles (con paginación: `?page=1&per_page=10`)
 - **GET** `/hotels/:id` - Obtener un hotel específico
 - **PUT** `/hotels/:id` - Actualizar hotel
@@ -392,22 +423,27 @@ Base URL: `http://127.0.0.1:3333/api/v1`
 ## 🔗 Relaciones
 
 ### Asignar Cliente a Viaje
+
 **POST** `/trips/:tripId/clients/:clientId`
 
 **Ejemplo:**
+
 ```
 POST /trips/1/clients/01JCZQXXXXXXXXXXXXXX
 ```
-*Body vacío* (no necesita body)
+
+_Body vacío_ (no necesita body)
 
 **Nota:** El `clientId` es un CUID (string largo alfanumérico), debes obtenerlo del GET de clientes.
 
 ---
 
 ### Desasignar Cliente de Viaje
+
 **DELETE** `/trips/:tripId/clients/:clientId`
 
 **Ejemplo:**
+
 ```
 DELETE /trips/1/clients/01JCZQXXXXXXXXXXXXXX
 ```
@@ -415,13 +451,17 @@ DELETE /trips/1/clients/01JCZQXXXXXXXXXXXXXX
 ---
 
 ### Activar/Desactivar Plan
+
 **PATCH** `/plans/:id/toggle-active`
 
 **Ejemplo:**
+
 ```
 PATCH /plans/3/toggle-active
 ```
+
 **Body:**
+
 ```json
 {}
 ```
@@ -429,13 +469,17 @@ PATCH /plans/3/toggle-active
 ---
 
 ### Activar/Desactivar Hotel
+
 **PATCH** `/hotels/:id/toggle-active`
 
 **Ejemplo:**
+
 ```
 PATCH /hotels/2/toggle-active
 ```
+
 **Body:**
+
 ```json
 {}
 ```
@@ -445,11 +489,14 @@ PATCH /hotels/2/toggle-active
 ## 📝 Notas Importantes
 
 ### Tipos de ID
+
 - **Clientes:** Usan CUID (strings alfanuméricos largos como `01JCZQXXXXXXXXXXXXXX`)
 - **Viajes, Planes, Hoteles:** Usan IDs numéricos (1, 2, 3, etc.)
 
 ### Formato de Fechas
+
 Las fechas deben estar en formato **ISO 8601** o **YYYY-MM-DD**:
+
 ```json
 {
   "startDate": "2025-12-15",
@@ -458,13 +505,16 @@ Las fechas deben estar en formato **ISO 8601** o **YYYY-MM-DD**:
 ```
 
 ### Paginación
+
 Todos los endpoints de listado soportan paginación:
+
 ```
 GET /clients?page=1&per_page=10
 GET /trips?page=2&per_page=20
 ```
 
 ### Estados de Pago (Viajes)
+
 - `pending` - Pendiente
 - `partial` - Parcial
 - `paid` - Pagado
@@ -475,6 +525,7 @@ GET /trips?page=2&per_page=20
 ## 🚀 Ejemplos de Uso con cURL
 
 ### Crear un cliente
+
 ```bash
 curl -X POST http://127.0.0.1:3333/api/v1/clients \
   -H "Content-Type: application/json" \
@@ -486,16 +537,19 @@ curl -X POST http://127.0.0.1:3333/api/v1/clients \
 ```
 
 ### Listar viajes con paginación
+
 ```bash
 curl -X GET "http://127.0.0.1:3333/api/v1/trips?page=1&per_page=10"
 ```
 
 ### Asignar cliente a viaje
+
 ```bash
 curl -X POST http://127.0.0.1:3333/api/v1/trips/1/clients/01JCZQXXXXXXXXXXXXXX
 ```
 
 ### Activar/Desactivar plan
+
 ```bash
 curl -X PATCH http://127.0.0.1:3333/api/v1/plans/3/toggle-active \
   -H "Content-Type: application/json" \

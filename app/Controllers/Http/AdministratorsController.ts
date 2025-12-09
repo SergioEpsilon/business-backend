@@ -33,72 +33,48 @@ export default class AdministratorsController {
   /**
    * Crea un nuevo administrador
    * POST /administrators
-   * Valida que el user_id existe en el microservicio de seguridad
+   * El id debe ser el _id del usuario de MS-SECURITY
    */
   public async store({ request, response }: HttpContextContract) {
     try {
       const data = request.only([
-        'userId',
+        'id',
         'document',
         'phone',
         'department',
-        'accessLevel',
-        'canManageUsers',
-        'canManageTrips',
-        'canManageInvoices',
+        'access_level',
+        'can_manage_users',
+        'can_manage_trips',
+        'can_manage_invoices',
       ])
 
-      // Validar que el usuario existe en MS-Security
-      const token = request.header('Authorization')?.replace('Bearer ', '')
-
-      if (!token) {
-        return response.unauthorized({
-          message: 'Token de autenticación requerido',
-        })
-      }
-
-      // Validar contra MS-Security que el usuario existe y es tipo 'administrator'
-      try {
-        const axios = (await import('axios')).default
-        const Env = (await import('@ioc:Adonis/Core/Env')).default
-
-        const userValidation = await axios.get(
-          `${Env.get('MS_SECURITY')}/api/users/${data.userId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        )
-
-        if (!userValidation.data) {
-          return response.badRequest({
-            message: 'El usuario no existe en MS-Security',
-          })
-        }
-
-        // Validar userType: permitir 'administrator' o 'administrator-hotel'
-        const userType = userValidation.data.userType
-        if (userType && userType !== 'administrator' && userType !== 'administrator-hotel') {
-          return response.badRequest({
-            message: `El usuario es de tipo '${userType}', debe ser 'administrator' o 'administrator-hotel'`,
-          })
-        }
-      } catch (error) {
-        console.error('Error al validar con MS-Security:', error.message)
+      // Validar que se envió el id (debe ser el _id del usuario de MS-SECURITY)
+      if (!data.id) {
         return response.badRequest({
-          message: 'Error al validar usuario en MS-Security',
-          error: error.response?.data || error.message,
+          message: 'El campo id es requerido (debe ser el _id del usuario de MS-SECURITY)',
         })
       }
 
+      // Verificar que el administrador no exista previamente
+      const existingAdmin = await Administrator.find(data.id)
+      if (existingAdmin) {
+        return response.conflict({
+          message: 'Ya existe un administrador con este ID',
+          data: existingAdmin,
+        })
+      }
+
+      // Crear administrador usando el MISMO ID del usuario de MS-SECURITY
       const administrator = await Administrator.create({
-        id: data.userId,
-        ...data,
-        accessLevel: data.accessLevel || 1,
-        canManageUsers: data.canManageUsers !== undefined ? data.canManageUsers : false,
-        canManageTrips: data.canManageTrips !== undefined ? data.canManageTrips : false,
-        canManageInvoices: data.canManageInvoices !== undefined ? data.canManageInvoices : false,
+        id: data.id,
+        document: data.document,
+        phone: data.phone,
+        department: data.department,
+        accessLevel: data.access_level || 1,
+        canManageUsers: data.can_manage_users !== undefined ? data.can_manage_users : false,
+        canManageTrips: data.can_manage_trips !== undefined ? data.can_manage_trips : false,
+        canManageInvoices:
+          data.can_manage_invoices !== undefined ? data.can_manage_invoices : false,
       })
 
       return response.created({

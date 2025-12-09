@@ -8,10 +8,7 @@ export default class BankCardValidator {
     cardNumber: schema.string({ trim: true }, [
       rules.regex(/^\d{13,19}$/), // 13-19 dígitos
     ]),
-    cardholderName: schema.string({ trim: true }, [
-      rules.minLength(3),
-      rules.maxLength(100),
-    ]),
+    cardholderName: schema.string({ trim: true }, [rules.minLength(3), rules.maxLength(100)]),
     expiryDate: schema.string({ trim: true }, [
       rules.regex(/^(0[1-9]|1[0-2])\/\d{2}$/), // MM/YY
     ]),
@@ -19,9 +16,7 @@ export default class BankCardValidator {
       rules.regex(/^\d{3,4}$/), // 3-4 dígitos
     ]),
     cardType: schema.enum(['visa', 'mastercard', 'amex', 'dinners'] as const),
-    clientId: schema.string({ trim: true }, [
-      rules.exists({ table: 'clients', column: 'id' }),
-    ]),
+    clientId: schema.string({ trim: true }, [rules.exists({ table: 'clients', column: 'id' })]),
   })
 
   public messages: CustomMessages = {

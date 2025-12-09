@@ -11,9 +11,7 @@ export default class HotelsController {
       const page = request.input('page', 1)
       const perPage = request.input('perPage', 10)
 
-      const hotels = await Hotel.query()
-        .preload('rooms')
-        .paginate(page, perPage)
+      const hotels = await Hotel.query().preload('rooms').paginate(page, perPage)
 
       return response.ok({
         meta: hotels.getMeta(),
@@ -33,10 +31,7 @@ export default class HotelsController {
    */
   public async show({ params, response }: HttpContextContract) {
     try {
-      const hotel = await Hotel.query()
-        .where('id', params.id)
-        .preload('rooms')
-        .firstOrFail()
+      const hotel = await Hotel.query().where('id', params.id).preload('rooms').firstOrFail()
 
       return response.ok({
         data: hotel,

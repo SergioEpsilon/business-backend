@@ -43,7 +43,7 @@ export default class InstallmentsController {
   public async store({ request, response }: HttpContextContract) {
     try {
       console.log('⚠️ InstallmentsController.store - TESTING MODE')
-      
+
       const data = request.only([
         'tripId',
         'invoiceId',
@@ -56,13 +56,13 @@ export default class InstallmentsController {
 
       // Mapeo de status español a inglés
       const statusMap = {
-        'pendiente': 'pending',
-        'pagado': 'paid',
-        'pagada': 'paid',
-        'vencido': 'overdue',
-        'vencida': 'overdue',
-        'cancelado': 'cancelled',
-        'cancelada': 'cancelled',
+        pendiente: 'pending',
+        pagado: 'paid',
+        pagada: 'paid',
+        vencido: 'overdue',
+        vencida: 'overdue',
+        cancelado: 'cancelled',
+        cancelada: 'cancelled',
       }
       const status = statusMap[data.status?.toLowerCase()] || data.status || 'pending'
 
@@ -80,14 +80,16 @@ export default class InstallmentsController {
       if (invoiceId) {
         const Invoice = (await import('App/Models/Invoice')).default
         const invoiceExists = await Invoice.find(invoiceId)
-        
+
         if (!invoiceExists) {
           // Crear factura automáticamente para testing
           const newInvoice = await Invoice.create({
             tripId: data.tripId || 1,
             invoiceNumber: `INV-${Date.now()}`,
             issueDate: DateTime.now(),
-            dueDate: data.dueDate ? DateTime.fromISO(data.dueDate) : DateTime.now().plus({ days: 30 }),
+            dueDate: data.dueDate
+              ? DateTime.fromISO(data.dueDate)
+              : DateTime.now().plus({ days: 30 }),
             subtotal: data.amount || 0,
             tax: 0,
             discount: 0,
@@ -110,7 +112,7 @@ export default class InstallmentsController {
         status: status,
         notes: data.notes || '',
       })
-      
+
       await installment.load('trip')
       if (installment.invoiceId) {
         await installment.load('invoice')

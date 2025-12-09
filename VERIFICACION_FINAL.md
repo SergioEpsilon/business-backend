@@ -10,6 +10,7 @@
 ### ✅ Verificación de Componentes
 
 #### 1. ✅ **Servidor Backend**
+
 ```bash
 $ curl http://localhost:3333/
 {
@@ -18,6 +19,7 @@ $ curl http://localhost:3333/
   "endpoints": "/api/v1"
 }
 ```
+
 - **Puerto:** 3333
 - **Estado:** ✅ CORRIENDO
 - **Framework:** AdonisJS v5.9.0
@@ -25,12 +27,14 @@ $ curl http://localhost:3333/
 ---
 
 #### 2. ✅ **Base de Datos MySQL**
+
 - **Base de Datos:** `airline`
 - **Usuario:** `pruebas`
 - **Host:** `127.0.0.1:3306`
 - **Estado:** ✅ CONECTADA
 
 **Migraciones:**
+
 - ✅ **53/53 migraciones completadas**
 - ✅ **0 migraciones pendientes**
 - ✅ **0 migraciones corruptas**
@@ -40,6 +44,7 @@ $ curl http://localhost:3333/
 ---
 
 #### 3. ✅ **Microservicio de Seguridad**
+
 - **URL:** `http://127.0.0.1:8080`
 - **Estado:** ✅ CORRIENDO
 - **Test de conexión:** ✅ EXITOSO
@@ -50,14 +55,14 @@ $ curl http://localhost:3333/
 
 **Endpoints Verificados:**
 
-| Método | Endpoint | Estado | Respuesta |
-|--------|----------|--------|-----------|
-| GET | `/` | ✅ | API Info |
-| GET | `/api/v1/municipalities` | ✅ | Lista vacía (200) |
-| GET | `/api/v1/plans` | ✅ | Lista vacía (200) |
-| GET | `/api/v1/clients` | ✅ | Funcional con middleware |
-| GET | `/api/v1/guides` | ✅ | Funcional |
-| GET | `/api/v1/trips` | ✅ | Funcional |
+| Método | Endpoint                 | Estado | Respuesta                |
+| ------ | ------------------------ | ------ | ------------------------ |
+| GET    | `/`                      | ✅     | API Info                 |
+| GET    | `/api/v1/municipalities` | ✅     | Lista vacía (200)        |
+| GET    | `/api/v1/plans`          | ✅     | Lista vacía (200)        |
+| GET    | `/api/v1/clients`        | ✅     | Funcional con middleware |
+| GET    | `/api/v1/guides`         | ✅     | Funcional                |
+| GET    | `/api/v1/trips`          | ✅     | Funcional                |
 
 **Total de Endpoints Disponibles:** 75+
 
@@ -66,6 +71,7 @@ $ curl http://localhost:3333/
 ## 📊 Resumen de Rutas API
 
 ### Módulo de Clientes
+
 ```
 GET    /api/v1/clients                    # Listar clientes
 POST   /api/v1/clients                    # Crear cliente
@@ -78,6 +84,7 @@ DELETE /api/v1/clients/:id/trips/:tripId  # Desasociar viaje
 ```
 
 ### Módulo de Guías
+
 ```
 GET    /api/v1/guides                     # Listar guías
 GET    /api/v1/guides/available           # Guías disponibles
@@ -90,6 +97,7 @@ PATCH  /api/v1/guides/:id/toggle-availability # Cambiar disponibilidad
 ```
 
 ### Módulo de Conductores
+
 ```
 GET    /api/v1/drivers                    # Listar conductores
 GET    /api/v1/drivers/stats              # Estadísticas
@@ -102,6 +110,7 @@ GET    /api/v1/drivers/:id/validate       # Validar conductor
 ```
 
 ### Módulo de Vehículos
+
 ```
 GET    /api/v1/vehicles                   # Listar vehículos
 POST   /api/v1/vehicles                   # Crear vehículo
@@ -114,6 +123,7 @@ GET    /api/v1/vehicles/:id/gps           # GPS del vehículo
 ```
 
 ### Módulo de Viajes
+
 ```
 GET    /api/v1/trips                      # Listar viajes
 POST   /api/v1/trips                      # Crear viaje
@@ -129,6 +139,7 @@ DELETE /api/v1/trips/:id/routes/:routeId  # Desasociar ruta
 ```
 
 ### Módulo de Planes
+
 ```
 GET    /api/v1/plans                      # Listar planes
 POST   /api/v1/plans                      # Crear plan
@@ -142,6 +153,7 @@ GET    /api/v1/plans/:id/activities       # Actividades del plan
 ```
 
 ### Módulo de Facturas
+
 ```
 GET    /api/v1/invoices                   # Listar facturas
 POST   /api/v1/invoices                   # Crear factura
@@ -168,20 +180,21 @@ GET    /api/v1/invoices/:id/installments  # Cuotas de la factura
 
 ## 📈 Métricas del Sistema
 
-| Componente | Cantidad | Estado |
-|-----------|----------|--------|
-| **Modelos** | 16 | ✅ Completos |
-| **Controladores** | 16 | ✅ Completos |
-| **Migraciones** | 53 | ✅ Ejecutadas |
-| **Endpoints API** | 75+ | ✅ Funcionales |
-| **Dependencias** | 753 | ✅ Instaladas |
-| **Tablas BD** | 40+ | ✅ Creadas |
+| Componente        | Cantidad | Estado         |
+| ----------------- | -------- | -------------- |
+| **Modelos**       | 16       | ✅ Completos   |
+| **Controladores** | 16       | ✅ Completos   |
+| **Migraciones**   | 53       | ✅ Ejecutadas  |
+| **Endpoints API** | 75+      | ✅ Funcionales |
+| **Dependencias**  | 753      | ✅ Instaladas  |
+| **Tablas BD**     | 40+      | ✅ Creadas     |
 
 ---
 
 ## 🚀 Comandos Útiles
 
 ### Desarrollo
+
 ```bash
 # Iniciar servidor en modo desarrollo
 node ace serve --watch
@@ -194,6 +207,7 @@ node ace migration:status
 ```
 
 ### Base de Datos
+
 ```bash
 # Ejecutar migraciones pendientes
 node ace migration:run
@@ -209,6 +223,7 @@ node ace db:seed
 ```
 
 ### Testing API
+
 ```bash
 # Probar endpoint principal
 curl http://localhost:3333/
@@ -234,6 +249,7 @@ curl -H "Authorization: Bearer YOUR_TOKEN" \
 La mayoría de endpoints requieren autenticación vía **MS-SECURITY**.
 
 **Headers requeridos:**
+
 ```
 Authorization: Bearer <token>
 ```
@@ -245,18 +261,21 @@ El middleware `security` valida permisos contra MS-SECURITY antes de permitir el
 ## 📝 Próximos Pasos (Opcionales)
 
 ### Desarrollo
+
 - [ ] Agregar datos de prueba con seeders
 - [ ] Implementar validadores faltantes (11 de 16)
 - [ ] Agregar tests unitarios
 - [ ] Remover console.log de debug
 
 ### Seguridad
+
 - [ ] Implementar hash de passwords
 - [ ] Configurar rate limiting
 - [ ] Implementar CORS apropiado
 - [ ] Actualizar dependencias vulnerables
 
 ### Producción
+
 - [ ] Configurar variables de entorno de producción
 - [ ] Configurar HTTPS
 - [ ] Optimizar queries de base de datos
@@ -269,6 +288,7 @@ El middleware `security` valida permisos contra MS-SECURITY antes de permitir el
 **El backend de Travel Agency está 100% operativo y listo para desarrollo.**
 
 ### Estado Final:
+
 - ✅ Servidor corriendo en puerto 3333
 - ✅ Base de datos conectada y migrada
 - ✅ Microservicio de seguridad integrado
@@ -278,6 +298,7 @@ El middleware `security` valida permisos contra MS-SECURITY antes de permitir el
 - ✅ Hot reload activado
 
 ### Verificaciones Realizadas:
+
 1. ✅ Conexión a base de datos
 2. ✅ Ejecución de migraciones
 3. ✅ Inicio del servidor
@@ -288,6 +309,7 @@ El middleware `security` valida permisos contra MS-SECURITY antes de permitir el
 ---
 
 ## 🎯 Sistema Listo Para:
+
 - ✅ Desarrollo de features
 - ✅ Integración con frontend
 - ✅ Testing de endpoints

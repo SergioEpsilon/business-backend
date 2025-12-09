@@ -10,12 +10,14 @@
 ### ✅ **ANÁLISIS COMPLETO**
 
 1. **Backend AdonisJS** - 100% funcional
+
    - Puerto 3333
    - 53 migraciones ejecutadas
    - 75+ endpoints operativos
    - MySQL conectada
 
 2. **Frontend Angular** - 100% funcional
+
    - Angular 16.2.0
    - Material UI configurado
    - Auth/Roles/Permissions (MS-SECURITY)
@@ -35,10 +37,11 @@
 ### ✅ **CONFIGURACIÓN COMPLETADA**
 
 1. **Environment.ts actualizado** ✅
+
    ```typescript
    // MS-SECURITY (mantener intacto)
    authUrl: 'http://127.0.0.1:8080/api/auth'
-   
+
    // ADONIS BACKEND (nuevo)
    businessApiUrl: 'http://127.0.0.1:3333/api/v1'
    ```
@@ -72,6 +75,7 @@ export default corsConfig
 ### **PASO 2: Crear Modelos de Datos** (30 min)
 
 **Comando:**
+
 ```powershell
 cd "c:\Users\USER\Desktop\Backend\Proyectico Frontend"
 
@@ -86,6 +90,7 @@ New-Item -ItemType File -Path "src\app\core\models\business.model.ts"
 ### **PASO 3: Generar Servicios HTTP** (1 hora)
 
 **Comandos:**
+
 ```powershell
 cd "c:\Users\USER\Desktop\Backend\Proyectico Frontend"
 
@@ -110,6 +115,7 @@ ng generate service core/services/municipality --skip-tests
 ### **PASO 4: Crear Módulos y Componentes** (5-7 días)
 
 **Comandos de generación:**
+
 ```powershell
 cd "c:\Users\USER\Desktop\Backend\Proyectico Frontend"
 
@@ -146,6 +152,7 @@ Ver código completo en `PLAN_IMPLEMENTACION_FRONTEND.md` Fase 5
 ### **PASO 6: Actualizar Sidebar** (30 min)
 
 Añadir nuevas opciones de menú para:
+
 - Clientes y Viajes
 - Alojamiento
 - Transporte
@@ -159,18 +166,18 @@ Ver configuración completa en `PLAN_IMPLEMENTACION_FRONTEND.md` Fase 6
 
 ### ✅ **10 ENTIDADES SELECCIONADAS**
 
-| # | Entidad | Endpoint | Prioridad |
-|---|---------|----------|-----------|
-| 1 | Cliente | `/api/v1/clients` | 🔴 Alta |
-| 2 | Viaje | `/api/v1/trips` | 🔴 Alta |
-| 3 | Plan | `/api/v1/plans` | 🔴 Alta |
-| 4 | Habitación | `/api/v1/rooms` | 🟡 Media |
-| 5 | Actividad Turística | `/api/v1/tourist-activities` | 🟡 Media |
-| 6 | Cuota | `/api/v1/installments` | 🟡 Media |
-| 7 | Tarjeta Bancaria | `/api/v1/bank-cards` | 🟡 Media |
-| 8 | Vehículo | `/api/v1/vehicles` | 🟢 Baja |
-| 9 | Trayecto | `/api/v1/routes` | 🟢 Baja |
-| 10 | Itinerario Transporte | `/api/v1/itinerary-transports` | 🟢 Baja |
+| #   | Entidad               | Endpoint                       | Prioridad |
+| --- | --------------------- | ------------------------------ | --------- |
+| 1   | Cliente               | `/api/v1/clients`              | 🔴 Alta   |
+| 2   | Viaje                 | `/api/v1/trips`                | 🔴 Alta   |
+| 3   | Plan                  | `/api/v1/plans`                | 🔴 Alta   |
+| 4   | Habitación            | `/api/v1/rooms`                | 🟡 Media  |
+| 5   | Actividad Turística   | `/api/v1/tourist-activities`   | 🟡 Media  |
+| 6   | Cuota                 | `/api/v1/installments`         | 🟡 Media  |
+| 7   | Tarjeta Bancaria      | `/api/v1/bank-cards`           | 🟡 Media  |
+| 8   | Vehículo              | `/api/v1/vehicles`             | 🟢 Baja   |
+| 9   | Trayecto              | `/api/v1/routes`               | 🟢 Baja   |
+| 10  | Itinerario Transporte | `/api/v1/itinerary-transports` | 🟢 Baja   |
 
 ### ⚠️ **NO IMPLEMENTAR EN FRONTEND:**
 
@@ -186,27 +193,32 @@ Ver configuración completa en `PLAN_IMPLEMENTACION_FRONTEND.md` Fase 6
 ### **SEMANA 1: CORE (Servicios y Modelos)**
 
 **Día 1:**
+
 - ✅ Configurar CORS
 - ✅ Crear business.model.ts
 - ✅ Crear ClientService
 - ✅ Crear TripService
 
 **Día 2:**
+
 - ✅ Crear PlanService
 - ✅ Crear RoomService
 - ✅ Crear TouristActivityService
 
 **Día 3:**
+
 - ✅ Crear InstallmentService
 - ✅ Crear BankCardService
 - ✅ Crear VehicleService
 
 **Día 4:**
+
 - ✅ Crear RouteService
 - ✅ Crear ItineraryTransportService
 - ✅ Crear MunicipalityService
 
 **Día 5:**
+
 - ✅ Pruebas de servicios con Postman
 - ✅ Verificar conexión con backend
 
@@ -215,18 +227,21 @@ Ver configuración completa en `PLAN_IMPLEMENTACION_FRONTEND.md` Fase 6
 ### **SEMANA 2: UI PRIORITARIA (Alta prioridad)**
 
 **Día 6-7: Módulo Clientes**
+
 - ClientsModule + routing
 - ClientListComponent
 - ClientFormComponent
 - ClientDetailComponent
 
 **Día 8-9: Módulo Viajes**
+
 - TripsModule + routing
 - TripListComponent
 - TripFormComponent
 - TripDetailComponent
 
 **Día 10: Módulo Planes**
+
 - PlansModule + routing
 - PlanListComponent
 - PlanFormComponent
@@ -236,20 +251,24 @@ Ver configuración completa en `PLAN_IMPLEMENTACION_FRONTEND.md` Fase 6
 ### **SEMANA 3: UI MEDIA (Prioridad media)**
 
 **Día 11: Módulo Habitaciones**
+
 - RoomsModule + routing
 - RoomListComponent
 - RoomFormComponent
 
 **Día 12: Módulo Actividades**
+
 - ActivitiesModule + routing
 - ActivityListComponent
 - ActivityFormComponent
 
 **Día 13: Módulo Cuotas**
+
 - InstallmentsModule + routing
 - InstallmentListComponent
 
 **Día 14: Módulo Tarjetas**
+
 - BankCardsModule + routing
 - BankCardListComponent
 - BankCardFormComponent
@@ -259,21 +278,25 @@ Ver configuración completa en `PLAN_IMPLEMENTACION_FRONTEND.md` Fase 6
 ### **SEMANA 4: UI BAJA + TESTING**
 
 **Día 15: Módulo Vehículos**
+
 - VehiclesModule + routing
 - VehicleListComponent
 - VehicleFormComponent
 
 **Día 16: Módulo Trayectos**
+
 - RoutesModule + routing
 - RouteListComponent
 - RouteFormComponent
 
 **Día 17-18: Integración**
+
 - Actualizar App Routing
 - Actualizar Sidebar
 - Pruebas de navegación
 
 **Día 19-20: Testing completo**
+
 - Pruebas end-to-end
 - Corrección de bugs
 - Ajustes de UI/UX
@@ -357,16 +380,19 @@ curl http://localhost:4200
 ## 📞 ¿QUÉ HACER AHORA?
 
 **OPCIÓN 1: Comenzar implementación automática** (Recomendado)
+
 - Yo puedo crear automáticamente el archivo `business.model.ts` completo
 - Generar los servicios HTTP con Angular CLI
 - Configurar CORS en el backend
 
 **OPCIÓN 2: Implementación manual paso a paso**
+
 - Seguir el `PLAN_IMPLEMENTACION_FRONTEND.md`
 - Copiar código de ejemplo de cada fase
 - Ejecutar comandos manualmente
 
 **OPCIÓN 3: Implementación gradual**
+
 - Empezar solo con Cliente + Viaje (alta prioridad)
 - Probar integración
 - Continuar con resto de entidades
@@ -386,6 +412,7 @@ curl http://localhost:4200
 **¿Quieres que proceda con la Opción 1?** 🚀
 
 Si dices que sí, comenzaré creando:
+
 1. `business.model.ts` con las 10 entidades
 2. ClientService completo
 3. TripService completo

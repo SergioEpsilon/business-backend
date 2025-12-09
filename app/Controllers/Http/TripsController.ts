@@ -24,13 +24,7 @@ export default class TripsController {
       // 🚨 MODO TESTING: Simplificar creación de viaje
       console.log('⚠️ TripsController.store - TESTING MODE')
 
-      const data = request.only([
-        'destination',
-        'startDate',
-        'endDate',
-        'numPassengers',
-        'status',
-      ])
+      const data = request.only(['destination', 'startDate', 'endDate', 'numPassengers', 'status'])
 
       // Generar trip_code único
       const tripCode = `TRIP-${Date.now()}`

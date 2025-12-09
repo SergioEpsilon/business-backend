@@ -1,0 +1,299 @@
+// ============================================
+// Script MongoDB: Crear TODOS los Permisos
+// Sistema de Agencia de Viajes
+// ============================================
+
+// Conectarse a la base de datos ms-security
+use ms-security
+
+// ============================================
+// PASO 1: Limpiar permisos incorrectos
+// ============================================
+print("🧹 Limpiando permisos incorrectos...")
+db.permission.deleteMany({ 
+  $or: [
+    { url: "/api/v1/clients/me" },
+    { url: { $regex: "^/api/v1/clients/me/" } },
+    { url: "/api/v1/bank-cards", method: "POST" }
+  ]
+})
+print("✅ Permisos incorrectos eliminados\n")
+
+// ============================================
+// PASO 2: Crear TODOS los permisos
+// ============================================
+print("📝 Creando permisos del sistema...\n")
+
+// === CLIENTS (8 permisos) ===
+print("👥 Creando permisos de CLIENTS...")
+db.permission.insertMany([
+  { url: "/api/v1/clients", method: "GET", description: "Listar clientes", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/clients", method: "POST", description: "Crear cliente", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/clients/:id", method: "GET", description: "Ver detalle de cliente", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/clients/:id", method: "PUT", description: "Actualizar cliente", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/clients/:id", method: "DELETE", description: "Eliminar cliente", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/clients/:id/trips", method: "GET", description: "Ver viajes del cliente", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/clients/:id/trips/:tripId", method: "POST", description: "Asignar viaje a cliente", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/clients/:id/trips/:tripId", method: "DELETE", description: "Desasignar viaje de cliente", _class: "sb.proyecto.Models.Permission" }
+])
+
+// === GUIDES (8 permisos) ===
+print("🧭 Creando permisos de GUIDES...")
+db.permission.insertMany([
+  { url: "/api/v1/guides", method: "GET", description: "Listar guías", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/guides/available", method: "GET", description: "Listar guías disponibles", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/guides", method: "POST", description: "Crear guía", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/guides/:id", method: "GET", description: "Ver detalle de guía", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/guides/:id", method: "PUT", description: "Actualizar guía", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/guides/:id", method: "DELETE", description: "Eliminar guía", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/guides/:id/activities", method: "GET", description: "Ver actividades del guía", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/guides/:id/toggle-availability", method: "PATCH", description: "Cambiar disponibilidad de guía", _class: "sb.proyecto.Models.Permission" }
+])
+
+// === ADMINISTRATORS (6 permisos) ===
+print("👔 Creando permisos de ADMINISTRATORS...")
+db.permission.insertMany([
+  { url: "/api/v1/administrators", method: "GET", description: "Listar administradores", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/administrators", method: "POST", description: "Crear administrador", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/administrators/:id", method: "GET", description: "Ver detalle de administrador", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/administrators/:id", method: "PUT", description: "Actualizar administrador", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/administrators/:id", method: "DELETE", description: "Eliminar administrador", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/administrators/:id/permissions", method: "PATCH", description: "Actualizar permisos de administrador", _class: "sb.proyecto.Models.Permission" }
+])
+
+// === DRIVERS (8 permisos) ===
+print("🚗 Creando permisos de DRIVERS...")
+db.permission.insertMany([
+  { url: "/api/v1/drivers", method: "GET", description: "Listar conductores", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/drivers/stats", method: "GET", description: "Ver estadísticas de conductores", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/drivers", method: "POST", description: "Crear conductor", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/drivers/weather-alert", method: "POST", description: "Enviar alerta meteorológica", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/drivers/:id", method: "GET", description: "Ver detalle de conductor", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/drivers/:id", method: "PUT", description: "Actualizar conductor", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/drivers/:id", method: "DELETE", description: "Eliminar conductor", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/drivers/:id/validate", method: "GET", description: "Validar conductor", _class: "sb.proyecto.Models.Permission" }
+])
+
+// === VEHICLES (8 permisos) ===
+print("🚙 Creando permisos de VEHICLES...")
+db.permission.insertMany([
+  { url: "/api/v1/vehicles", method: "GET", description: "Listar vehículos", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/vehicles", method: "POST", description: "Crear vehículo", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/vehicles/:id", method: "GET", description: "Ver detalle de vehículo", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/vehicles/:id", method: "PUT", description: "Actualizar vehículo", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/vehicles/:id", method: "DELETE", description: "Eliminar vehículo", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/vehicles/:id/drivers", method: "GET", description: "Ver conductores del vehículo", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/vehicles/:id/routes", method: "GET", description: "Ver rutas del vehículo", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/vehicles/:id/gps", method: "GET", description: "Ver GPS del vehículo", _class: "sb.proyecto.Models.Permission" }
+])
+
+// === CARS (5 permisos) ===
+print("🚗 Creando permisos de CARS...")
+db.permission.insertMany([
+  { url: "/api/v1/cars", method: "GET", description: "Listar autos", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/cars", method: "POST", description: "Crear auto", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/cars/:id", method: "GET", description: "Ver detalle de auto", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/cars/:id", method: "PUT", description: "Actualizar auto", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/cars/:id", method: "DELETE", description: "Eliminar auto", _class: "sb.proyecto.Models.Permission" }
+])
+
+// === AIRCRAFTS (5 permisos) ===
+print("✈️ Creando permisos de AIRCRAFTS...")
+db.permission.insertMany([
+  { url: "/api/v1/aircrafts", method: "GET", description: "Listar aeronaves", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/aircrafts", method: "POST", description: "Crear aeronave", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/aircrafts/:id", method: "GET", description: "Ver detalle de aeronave", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/aircrafts/:id", method: "PUT", description: "Actualizar aeronave", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/aircrafts/:id", method: "DELETE", description: "Eliminar aeronave", _class: "sb.proyecto.Models.Permission" }
+])
+
+// === SHIFTS (7 permisos) ===
+print("⏰ Creando permisos de SHIFTS...")
+db.permission.insertMany([
+  { url: "/api/v1/shifts", method: "GET", description: "Listar turnos", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/shifts", method: "POST", description: "Crear turno", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/shifts/:id", method: "GET", description: "Ver detalle de turno", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/shifts/:id", method: "PUT", description: "Actualizar turno", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/shifts/:id", method: "DELETE", description: "Eliminar turno", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/shifts/:id/start", method: "PATCH", description: "Iniciar turno", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/shifts/:id/complete", method: "PATCH", description: "Completar turno", _class: "sb.proyecto.Models.Permission" }
+])
+
+// === MUNICIPALITIES (7 permisos) ===
+print("🏙️ Creando permisos de MUNICIPALITIES...")
+db.permission.insertMany([
+  { url: "/api/v1/municipalities", method: "GET", description: "Listar municipios", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/municipalities/search", method: "GET", description: "Buscar municipios", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/municipalities", method: "POST", description: "Crear municipio", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/municipalities/:id", method: "GET", description: "Ver detalle de municipio", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/municipalities/:id", method: "PUT", description: "Actualizar municipio", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/municipalities/:id", method: "DELETE", description: "Eliminar municipio", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/municipalities/:id/activities", method: "GET", description: "Ver actividades del municipio", _class: "sb.proyecto.Models.Permission" }
+])
+
+// === TOURIST ACTIVITIES (11 permisos) ===
+print("🎯 Creando permisos de TOURIST ACTIVITIES...")
+db.permission.insertMany([
+  { url: "/api/v1/tourist-activities", method: "GET", description: "Listar actividades turísticas", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/tourist-activities/by-type", method: "GET", description: "Listar actividades por tipo", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/tourist-activities", method: "POST", description: "Crear actividad turística", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/tourist-activities/:id", method: "GET", description: "Ver detalle de actividad", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/tourist-activities/:id", method: "PUT", description: "Actualizar actividad", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/tourist-activities/:id", method: "DELETE", description: "Eliminar actividad", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/tourist-activities/:id/toggle-active", method: "PATCH", description: "Activar/Desactivar actividad", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/tourist-activities/:id/plans", method: "GET", description: "Ver planes de la actividad", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/tourist-activities/:id/guides", method: "GET", description: "Ver guías de la actividad", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/tourist-activities/:id/guides/:guideId", method: "POST", description: "Asignar guía a actividad", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/tourist-activities/:id/guides/:guideId", method: "DELETE", description: "Desasignar guía de actividad", _class: "sb.proyecto.Models.Permission" }
+])
+
+// === PLANS (9 permisos) ===
+print("📋 Creando permisos de PLANS...")
+db.permission.insertMany([
+  { url: "/api/v1/plans", method: "GET", description: "Listar planes", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/plans", method: "POST", description: "Crear plan", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/plans/:id", method: "GET", description: "Ver detalle de plan", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/plans/:id", method: "PUT", description: "Actualizar plan", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/plans/:id", method: "DELETE", description: "Eliminar plan", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/plans/:id/attach-activities", method: "POST", description: "Agregar actividades al plan", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/plans/:id/detach-activities", method: "POST", description: "Quitar actividades del plan", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/plans/:id/toggle-active", method: "PATCH", description: "Activar/Desactivar plan", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/plans/:id/activities", method: "GET", description: "Ver actividades del plan", _class: "sb.proyecto.Models.Permission" }
+])
+
+// === TRIPS (11 permisos) ===
+print("✈️ Creando permisos de TRIPS...")
+db.permission.insertMany([
+  { url: "/api/v1/trips", method: "GET", description: "Listar viajes", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/trips", method: "POST", description: "Crear viaje", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/trips/:id", method: "GET", description: "Ver detalle de viaje", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/trips/:id", method: "PUT", description: "Actualizar viaje", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/trips/:id", method: "DELETE", description: "Eliminar viaje", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/trips/:id/clients", method: "GET", description: "Ver clientes del viaje", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/trips/:id/clients/:clientId", method: "POST", description: "Asignar cliente a viaje", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/trips/:id/clients/:clientId", method: "DELETE", description: "Desasignar cliente de viaje", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/trips/:id/routes", method: "GET", description: "Ver rutas del viaje", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/trips/:id/routes/:routeId", method: "POST", description: "Asignar ruta a viaje", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/trips/:id/routes/:routeId", method: "DELETE", description: "Desasignar ruta de viaje", _class: "sb.proyecto.Models.Permission" }
+])
+
+// === ROUTES (9 permisos) ===
+print("🗺️ Creando permisos de ROUTES...")
+db.permission.insertMany([
+  { url: "/api/v1/routes", method: "GET", description: "Listar rutas", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/routes", method: "POST", description: "Crear ruta", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/routes/:id", method: "GET", description: "Ver detalle de ruta", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/routes/:id", method: "PUT", description: "Actualizar ruta", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/routes/:id", method: "DELETE", description: "Eliminar ruta", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/routes/:id/trips", method: "GET", description: "Ver viajes de la ruta", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/routes/:id/vehicles", method: "GET", description: "Ver vehículos de la ruta", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/routes/:id/vehicles/:vehicleId", method: "POST", description: "Asignar vehículo a ruta", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/routes/:id/vehicles/:vehicleId", method: "DELETE", description: "Desasignar vehículo de ruta", _class: "sb.proyecto.Models.Permission" }
+])
+
+// === INVOICES (8 permisos) ===
+print("🧾 Creando permisos de INVOICES...")
+db.permission.insertMany([
+  { url: "/api/v1/invoices", method: "GET", description: "Listar facturas", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/invoices", method: "POST", description: "Crear factura", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/invoices/:id", method: "GET", description: "Ver detalle de factura", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/invoices/:id", method: "PUT", description: "Actualizar factura", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/invoices/:id", method: "DELETE", description: "Eliminar factura", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/invoices/:id/register-payment", method: "POST", description: "Registrar pago de factura", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/invoices/:id/mark-overdue", method: "PATCH", description: "Marcar factura como vencida", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/invoices/:id/installments", method: "GET", description: "Ver cuotas de factura", _class: "sb.proyecto.Models.Permission" }
+])
+
+// === INSTALLMENTS (8 permisos) ===
+print("💰 Creando permisos de INSTALLMENTS...")
+db.permission.insertMany([
+  { url: "/api/v1/installments", method: "GET", description: "Listar cuotas", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/installments/overdue", method: "GET", description: "Listar cuotas vencidas", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/installments/mark-overdue", method: "PATCH", description: "Marcar cuotas como vencidas", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/installments", method: "POST", description: "Crear cuota", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/installments/:id", method: "GET", description: "Ver detalle de cuota", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/installments/:id", method: "PUT", description: "Actualizar cuota", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/installments/:id", method: "DELETE", description: "Eliminar cuota", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/installments/:id/pay", method: "POST", description: "Pagar cuota", _class: "sb.proyecto.Models.Permission" }
+])
+
+// === BANK CARDS (6 permisos) ===
+print("💳 Creando permisos de BANK CARDS...")
+db.permission.insertMany([
+  { url: "/api/v1/clients/:clientId/bank-cards", method: "GET", description: "Listar tarjetas del cliente", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/clients/:clientId/bank-cards", method: "POST", description: "Crear tarjeta del cliente", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/bank-cards/:id", method: "GET", description: "Ver detalle de tarjeta", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/bank-cards/:id", method: "PUT", description: "Actualizar tarjeta", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/bank-cards/:id", method: "DELETE", description: "Eliminar tarjeta", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/bank-cards/:id/set-default", method: "PATCH", description: "Establecer tarjeta predeterminada", _class: "sb.proyecto.Models.Permission" }
+])
+
+// === HOTELS (6 permisos) ===
+print("🏨 Creando permisos de HOTELS...")
+db.permission.insertMany([
+  { url: "/api/v1/hotels", method: "GET", description: "Listar hoteles", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/hotels", method: "POST", description: "Crear hotel", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/hotels/:id", method: "GET", description: "Ver detalle de hotel", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/hotels/:id", method: "PUT", description: "Actualizar hotel", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/hotels/:id", method: "DELETE", description: "Eliminar hotel", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/hotels/:id/rooms", method: "GET", description: "Ver habitaciones del hotel", _class: "sb.proyecto.Models.Permission" }
+])
+
+// === ROOMS (6 permisos) ===
+print("🛏️ Creando permisos de ROOMS...")
+db.permission.insertMany([
+  { url: "/api/v1/rooms", method: "GET", description: "Listar habitaciones", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/rooms", method: "POST", description: "Crear habitación", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/rooms/hotel/:hotelId", method: "GET", description: "Listar habitaciones por hotel", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/rooms/:id", method: "GET", description: "Ver detalle de habitación", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/rooms/:id", method: "PUT", description: "Actualizar habitación", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/rooms/:id", method: "DELETE", description: "Eliminar habitación", _class: "sb.proyecto.Models.Permission" }
+])
+
+// === ITINERARY TRANSPORTS (5 permisos) ===
+print("🚌 Creando permisos de ITINERARY TRANSPORTS...")
+db.permission.insertMany([
+  { url: "/api/v1/itinerary-transports", method: "GET", description: "Listar itinerarios de transporte", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/itinerary-transports", method: "POST", description: "Crear itinerario de transporte", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/itinerary-transports/:id", method: "GET", description: "Ver detalle de itinerario", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/itinerary-transports/:id", method: "PUT", description: "Actualizar itinerario", _class: "sb.proyecto.Models.Permission" },
+  { url: "/api/v1/itinerary-transports/:id", method: "DELETE", description: "Eliminar itinerario", _class: "sb.proyecto.Models.Permission" }
+])
+
+// ============================================
+// PASO 3: Verificar resultados
+// ============================================
+print("\n📊 Verificación de permisos creados:")
+print("=====================================")
+
+const total = db.permission.countDocuments()
+print("✅ Total de permisos en la base de datos: " + total)
+
+print("\n📈 Permisos por módulo:")
+print("Clients: " + db.permission.countDocuments({ url: { $regex: "^/api/v1/clients" } }))
+print("Guides: " + db.permission.countDocuments({ url: { $regex: "^/api/v1/guides" } }))
+print("Administrators: " + db.permission.countDocuments({ url: { $regex: "^/api/v1/administrators" } }))
+print("Drivers: " + db.permission.countDocuments({ url: { $regex: "^/api/v1/drivers" } }))
+print("Vehicles: " + db.permission.countDocuments({ url: { $regex: "^/api/v1/vehicles" } }))
+print("Cars: " + db.permission.countDocuments({ url: { $regex: "^/api/v1/cars" } }))
+print("Aircrafts: " + db.permission.countDocuments({ url: { $regex: "^/api/v1/aircrafts" } }))
+print("Shifts: " + db.permission.countDocuments({ url: { $regex: "^/api/v1/shifts" } }))
+print("Municipalities: " + db.permission.countDocuments({ url: { $regex: "^/api/v1/municipalities" } }))
+print("Tourist Activities: " + db.permission.countDocuments({ url: { $regex: "^/api/v1/tourist-activities" } }))
+print("Plans: " + db.permission.countDocuments({ url: { $regex: "^/api/v1/plans" } }))
+print("Trips: " + db.permission.countDocuments({ url: { $regex: "^/api/v1/trips" } }))
+print("Routes: " + db.permission.countDocuments({ url: { $regex: "^/api/v1/routes" } }))
+print("Invoices: " + db.permission.countDocuments({ url: { $regex: "^/api/v1/invoices" } }))
+print("Installments: " + db.permission.countDocuments({ url: { $regex: "^/api/v1/installments" } }))
+print("Bank Cards: " + db.permission.countDocuments({ url: { $regex: "bank-cards" } }))
+print("Hotels: " + db.permission.countDocuments({ url: { $regex: "^/api/v1/hotels" } }))
+print("Rooms: " + db.permission.countDocuments({ url: { $regex: "^/api/v1/rooms" } }))
+print("Itinerary Transports: " + db.permission.countDocuments({ url: { $regex: "^/api/v1/itinerary-transports" } }))
+
+print("\n🎉 ¡Script completado exitosamente!")
+print("=====================================")
+print("\n💡 Siguiente paso:")
+print("1. Crear roles en MS-SECURITY")
+print("2. Asignar permisos a roles")
+print("3. Asignar roles a usuarios")
+print("4. Probar en Postman")

@@ -67,15 +67,16 @@ export default class TouristActivitiesController {
 
       // Mapeo de difficulty español → inglés
       const difficultyMap = {
-        'fácil': 'easy',
-        'facil': 'easy',
-        'moderada': 'moderate',
-        'difícil': 'hard',
-        'dificil': 'hard',
-        'extrema': 'hard',
+        fácil: 'easy',
+        facil: 'easy',
+        moderada: 'moderate',
+        difícil: 'hard',
+        dificil: 'hard',
+        extrema: 'hard',
       }
 
-      const validDifficulty = difficultyMap[data.difficulty?.toLowerCase()] || data.difficulty || 'moderate'
+      const validDifficulty =
+        difficultyMap[data.difficulty?.toLowerCase()] || data.difficulty || 'moderate'
 
       const activity = await TouristActivity.create({
         municipalityId: data.municipalityId || 1, // Municipio por defecto

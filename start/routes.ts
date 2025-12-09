@@ -45,7 +45,7 @@ Route.group(() => {
     Route.delete('/:id/trips/:tripId', 'ClientsController.detachTrip')
   })
     .prefix('/clients')
-    // .middleware(['security']) // Deshabilitado temporalmente para testing
+    .middleware('security')
 
   // ==================== GUIDE ROUTES ====================
   Route.group(() => {
@@ -57,7 +57,9 @@ Route.group(() => {
     Route.delete('/:id', 'GuidesController.destroy')
     Route.get('/:id/activities', 'GuidesController.activities')
     Route.patch('/:id/toggle-availability', 'GuidesController.toggleAvailability')
-  }).prefix('/guides')
+  })
+    .prefix('/guides')
+    .middleware('security')
 
   // ==================== ADMINISTRATOR ROUTES ====================
   Route.group(() => {
@@ -67,7 +69,9 @@ Route.group(() => {
     Route.put('/:id', 'AdministratorsController.update')
     Route.delete('/:id', 'AdministratorsController.destroy')
     Route.patch('/:id/permissions', 'AdministratorsController.updatePermissions')
-  }).prefix('/administrators')
+  })
+    .prefix('/administrators')
+    .middleware('security')
 
   // ==================== DRIVER ROUTES ====================
   Route.group(() => {
@@ -79,7 +83,9 @@ Route.group(() => {
     Route.put('/:id', 'DriversController.update')
     Route.delete('/:id', 'DriversController.destroy')
     Route.get('/:id/validate', 'DriversController.validate')
-  }).prefix('/drivers')
+  })
+    .prefix('/drivers')
+    .middleware('security')
 
   // ==================== VEHICLE ROUTES ====================
   Route.group(() => {
@@ -91,7 +97,9 @@ Route.group(() => {
     Route.get('/:id/drivers', 'VehiclesController.drivers')
     Route.get('/:id/routes', 'VehiclesController.routes')
     Route.get('/:id/gps', 'VehiclesController.gps')
-  }).prefix('/vehicles')
+  })
+    .prefix('/vehicles')
+    .middleware('security')
 
   // ==================== CAR ROUTES ====================
   Route.group(() => {
@@ -100,7 +108,9 @@ Route.group(() => {
     Route.get('/:id', 'CarsController.show')
     Route.put('/:id', 'CarsController.update')
     Route.delete('/:id', 'CarsController.destroy')
-  }).prefix('/cars')
+  })
+    .prefix('/cars')
+    .middleware('security')
 
   // ==================== AIRCRAFT ROUTES ====================
   Route.group(() => {
@@ -109,7 +119,9 @@ Route.group(() => {
     Route.get('/:id', 'AircraftsController.show')
     Route.put('/:id', 'AircraftsController.update')
     Route.delete('/:id', 'AircraftsController.destroy')
-  }).prefix('/aircrafts')
+  })
+    .prefix('/aircrafts')
+    .middleware('security')
 
   // ==================== SHIFT ROUTES ====================
   Route.group(() => {
@@ -120,7 +132,9 @@ Route.group(() => {
     Route.delete('/:id', 'ShiftsController.destroy')
     Route.patch('/:id/start', 'ShiftsController.start')
     Route.patch('/:id/complete', 'ShiftsController.complete')
-  }).prefix('/shifts')
+  })
+    .prefix('/shifts')
+    .middleware('security')
 
   // ==================== MUNICIPALITY ROUTES ====================
   Route.group(() => {
@@ -131,7 +145,9 @@ Route.group(() => {
     Route.put('/:id', 'MunicipalitiesController.update')
     Route.delete('/:id', 'MunicipalitiesController.destroy')
     Route.get('/:id/activities', 'MunicipalitiesController.activities')
-  }).prefix('/municipalities')
+  })
+    .prefix('/municipalities')
+    .middleware('security')
 
   // ==================== TOURIST ACTIVITY ROUTES ====================
   Route.group(() => {
@@ -146,7 +162,9 @@ Route.group(() => {
     Route.get('/:id/guides', 'TouristActivitiesController.guides')
     Route.post('/:id/guides/:guideId', 'TouristActivitiesController.attachGuide')
     Route.delete('/:id/guides/:guideId', 'TouristActivitiesController.detachGuide')
-  }).prefix('/tourist-activities')
+  })
+    .prefix('/tourist-activities')
+    .middleware('security')
 
   // ==================== PLAN ROUTES ====================
   Route.group(() => {
@@ -159,7 +177,9 @@ Route.group(() => {
     Route.post('/:id/detach-activities', 'PlansController.detachActivities')
     Route.patch('/:id/toggle-active', 'PlansController.toggleActive')
     Route.get('/:id/activities', 'PlansController.activities')
-  }).prefix('/plans')
+  })
+    .prefix('/plans')
+    .middleware('security')
 
   // ==================== TRIP ROUTES ====================
   Route.group(() => {
@@ -174,7 +194,9 @@ Route.group(() => {
     Route.get('/:id/routes', 'TripsController.routes')
     Route.post('/:id/routes/:routeId', 'TripsController.attachRoute')
     Route.delete('/:id/routes/:routeId', 'TripsController.detachRoute')
-  }).prefix('/trips')
+  })
+    .prefix('/trips')
+    .middleware('security')
 
   // ==================== ROUTE ROUTES ====================
   Route.group(() => {
@@ -187,7 +209,9 @@ Route.group(() => {
     Route.get('/:id/vehicles', 'RoutesController.vehicles')
     Route.post('/:id/vehicles/:vehicleId', 'RoutesController.attachVehicle')
     Route.delete('/:id/vehicles/:vehicleId', 'RoutesController.detachVehicle')
-  }).prefix('/routes')
+  })
+    .prefix('/routes')
+    .middleware('security')
 
   // ==================== INVOICE ROUTES ====================
   Route.group(() => {
@@ -199,8 +223,9 @@ Route.group(() => {
     Route.post('/:id/register-payment', 'InvoicesController.registerPayment')
     Route.patch('/:id/mark-overdue', 'InvoicesController.markOverdue')
     Route.get('/:id/installments', 'InvoicesController.installments')
-  }).prefix('/invoices')
-  // .middleware('security')
+  })
+    .prefix('/invoices')
+    .middleware('security')
 
   // ==================== INSTALLMENT ROUTES ====================
   Route.group(() => {
@@ -212,7 +237,9 @@ Route.group(() => {
     Route.put('/:id', 'InstallmentsController.update')
     Route.delete('/:id', 'InstallmentsController.destroy')
     Route.post('/:id/pay', 'InstallmentsController.pay')
-  }).prefix('/installments')
+  })
+    .prefix('/installments')
+    .middleware('security')
 
   // ==================== BANK CARD ROUTES ====================
   Route.group(() => {
@@ -222,7 +249,7 @@ Route.group(() => {
     Route.put('/bank-cards/:id', 'BankCardsController.update')
     Route.delete('/bank-cards/:id', 'BankCardsController.destroy')
     Route.patch('/bank-cards/:id/set-default', 'BankCardsController.setDefault')
-  })
+  }).middleware('security')
 
   // ==================== HOTEL ROUTES ====================
   Route.group(() => {
@@ -232,7 +259,9 @@ Route.group(() => {
     Route.put('/:id', 'HotelsController.update')
     Route.delete('/:id', 'HotelsController.destroy')
     Route.get('/:id/rooms', 'HotelsController.rooms')
-  }).prefix('/hotels')
+  })
+    .prefix('/hotels')
+    .middleware('security')
 
   // ==================== ROOM ROUTES ====================
   Route.group(() => {
@@ -242,7 +271,9 @@ Route.group(() => {
     Route.get('/:id', 'RoomsController.show')
     Route.put('/:id', 'RoomsController.update')
     Route.delete('/:id', 'RoomsController.destroy')
-  }).prefix('/rooms')
+  })
+    .prefix('/rooms')
+    .middleware('security')
 
   // ==================== ITINERARY TRANSPORT ROUTES ====================
   Route.group(() => {
@@ -251,5 +282,7 @@ Route.group(() => {
     Route.get('/:id', 'ItineraryTransportsController.show')
     Route.put('/:id', 'ItineraryTransportsController.update')
     Route.delete('/:id', 'ItineraryTransportsController.destroy')
-  }).prefix('/itinerary-transports')
+  })
+    .prefix('/itinerary-transports')
+    .middleware('security')
 }).prefix('/api/v1')

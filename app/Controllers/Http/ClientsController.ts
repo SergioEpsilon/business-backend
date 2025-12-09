@@ -51,22 +51,31 @@ export default class ClientsController {
   /**
    * Crea un nuevo cliente
    * POST /clients
-   * Valida que el user_id existe en el microservicio de seguridad
+   * El id debe ser el _id del usuario de MS-SECURITY
    */
   public async store({ request, response }: HttpContextContract) {
     try {
-      const data = request.only(['document', 'phone', 'address'])
+      const data = request.only(['id', 'document', 'phone', 'address'])
 
-      // 🚨 MODO TESTING: Validaciones deshabilitadas temporalmente
-      console.log('⚠️ ClientsController.store - TESTING MODE (sin validaciones)')
+      // Validar que se envió el id (debe ser el _id del usuario de MS-SECURITY)
+      if (!data.id) {
+        return response.badRequest({
+          message: 'El campo id es requerido (debe ser el _id del usuario de MS-SECURITY)',
+        })
+      }
 
-      // Generar ID temporal para testing (simular ID de MS-SECURITY)
-      const cuid2 = await import('@paralleldrive/cuid2')
-      const testId = cuid2.createId()
+      // Verificar que el cliente no exista previamente
+      const existingClient = await Client.find(data.id)
+      if (existingClient) {
+        return response.conflict({
+          message: 'Ya existe un cliente con este ID',
+          data: existingClient,
+        })
+      }
 
-      // Crear cliente SIN validar MS-SECURITY (para testing)
+      // Crear cliente usando el MISMO ID del usuario de MS-SECURITY
       const client = await Client.create({
-        id: testId, // ID generado temporalmente
+        id: data.id, // ⭐ ID del usuario de MS-SECURITY
         document: data.document,
         phone: data.phone,
         address: data.address,
@@ -248,7 +257,7 @@ export default class ClientsController {
   public async update({ params, request, response }: HttpContextContract) {
     try {
       console.log('⚠️ ClientsController.update - TESTING MODE (auth bypassed)')
-      
+
       const client = await Client.findOrFail(params.id)
       const data = request.only(['phone', 'address', 'document'])
       client.merge(data)
@@ -272,7 +281,7 @@ export default class ClientsController {
   public async destroy({ params, response }: HttpContextContract) {
     try {
       console.log('⚠️ ClientsController.destroy - TESTING MODE (auth bypassed)')
-      
+
       const client = await Client.findOrFail(params.id)
       await client.delete()
       return response.ok({
@@ -293,7 +302,7 @@ export default class ClientsController {
   public async attachTrip({ params, response }: HttpContextContract) {
     try {
       console.log('⚠️ ClientsController.attachTrip - TESTING MODE (auth bypassed)')
-      
+
       // Bypass de autenticación para testing
       const client = await Client.findOrFail(params.id)
       await client.related('trips').attach([params.tripId])
@@ -315,7 +324,7 @@ export default class ClientsController {
   public async detachTrip({ params, response }: HttpContextContract) {
     try {
       console.log('⚠️ ClientsController.detachTrip - TESTING MODE (auth bypassed)')
-      
+
       // Bypass de autenticación para testing
       const client = await Client.findOrFail(params.id)
       await client.related('trips').detach([params.tripId])
@@ -337,7 +346,7 @@ export default class ClientsController {
   public async trips({ params, response }: HttpContextContract) {
     try {
       console.log('⚠️ ClientsController.trips - TESTING MODE (auth bypassed)')
-      
+
       // Bypass de autenticación para testing
       const client = await Client.findOrFail(params.id)
       await client.load('trips')

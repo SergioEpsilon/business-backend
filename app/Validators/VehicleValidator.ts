@@ -10,19 +10,11 @@ export default class VehicleValidator {
       rules.maxLength(10),
       rules.regex(/^[A-Z0-9-]+$/),
     ]),
-    model: schema.string({ trim: true }, [
-      rules.minLength(2),
-      rules.maxLength(50),
-    ]),
-    capacity: schema.number([
-      rules.unsigned(),
-      rules.range(1, 300),
-    ]),
+    model: schema.string({ trim: true }, [rules.minLength(2), rules.maxLength(50)]),
+    capacity: schema.number([rules.unsigned(), rules.range(1, 300)]),
     vehicleType: schema.enum(['car', 'bus', 'van', 'aircraft'] as const),
     status: schema.enum(['available', 'in_use', 'maintenance', 'out_of_service'] as const),
-    gpsId: schema.number.optional([
-      rules.exists({ table: 'gps', column: 'id' }),
-    ]),
+    gpsId: schema.number.optional([rules.exists({ table: 'gps', column: 'id' })]),
   })
 
   public messages: CustomMessages = {

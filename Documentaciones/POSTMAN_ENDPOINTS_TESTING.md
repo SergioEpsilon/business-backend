@@ -9,11 +9,13 @@
 ## 1️⃣ CLIENTES (Clients)
 
 ### 📌 GET - Listar Clientes
+
 ```
 GET http://localhost:3333/api/v1/clients
 ```
 
 ### 📌 POST - Crear Cliente
+
 ```
 POST http://localhost:3333/api/v1/clients
 Content-Type: application/json
@@ -26,11 +28,13 @@ Content-Type: application/json
 ```
 
 ### 📌 GET - Obtener Cliente por ID
+
 ```
 GET http://localhost:3333/api/v1/clients/1
 ```
 
 ### 📌 PUT - Actualizar Cliente
+
 ```
 PUT http://localhost:3333/api/v1/clients/1
 Content-Type: application/json
@@ -43,11 +47,13 @@ Content-Type: application/json
 ```
 
 ### 📌 DELETE - Eliminar Cliente
+
 ```
 DELETE http://localhost:3333/api/v1/clients/1
 ```
 
 ### 📌 GET - Obtener Viajes de un Cliente
+
 ```
 GET http://localhost:3333/api/v1/clients/1/trips
 ```
@@ -57,11 +63,13 @@ GET http://localhost:3333/api/v1/clients/1/trips
 ## 2️⃣ VIAJES (Trips)
 
 ### 📌 GET - Listar Viajes
+
 ```
 GET http://localhost:3333/api/v1/trips
 ```
 
 ### 📌 POST - Crear Viaje
+
 ```
 POST http://localhost:3333/api/v1/trips
 Content-Type: application/json
@@ -76,11 +84,13 @@ Content-Type: application/json
 ```
 
 ### 📌 GET - Obtener Viaje por ID
+
 ```
 GET http://localhost:3333/api/v1/trips/1
 ```
 
 ### 📌 PUT - Actualizar Viaje
+
 ```
 PUT http://localhost:3333/api/v1/trips/1
 Content-Type: application/json
@@ -95,21 +105,25 @@ Content-Type: application/json
 ```
 
 ### 📌 DELETE - Eliminar Viaje
+
 ```
 DELETE http://localhost:3333/api/v1/trips/1
 ```
 
 ### 📌 GET - Obtener Clientes de un Viaje
+
 ```
 GET http://localhost:3333/api/v1/trips/1/clients
 ```
 
 ### 📌 POST - Asociar Cliente a Viaje
+
 ```
 POST http://localhost:3333/api/v1/trips/1/clients/1
 ```
 
 ### 📌 DELETE - Desasociar Cliente de Viaje
+
 ```
 DELETE http://localhost:3333/api/v1/trips/1/clients/1
 ```
@@ -119,11 +133,13 @@ DELETE http://localhost:3333/api/v1/trips/1/clients/1
 ## 3️⃣ PLANES (Plans)
 
 ### 📌 GET - Listar Planes
+
 ```
 GET http://localhost:3333/api/v1/plans
 ```
 
 ### 📌 POST - Crear Plan
+
 ```
 POST http://localhost:3333/api/v1/plans
 Content-Type: application/json
@@ -138,11 +154,13 @@ Content-Type: application/json
 ```
 
 ### 📌 GET - Obtener Plan por ID
+
 ```
 GET http://localhost:3333/api/v1/plans/1
 ```
 
 ### 📌 PUT - Actualizar Plan
+
 ```
 PUT http://localhost:3333/api/v1/plans/1
 Content-Type: application/json
@@ -157,16 +175,19 @@ Content-Type: application/json
 ```
 
 ### 📌 DELETE - Eliminar Plan
+
 ```
 DELETE http://localhost:3333/api/v1/plans/1
 ```
 
 ### 📌 GET - Obtener Actividades de un Plan
+
 ```
 GET http://localhost:3333/api/v1/plans/1/activities
 ```
 
 ### 📌 PATCH - Activar/Desactivar Plan
+
 ```
 PATCH http://localhost:3333/api/v1/plans/1/toggle-active
 ```
@@ -176,11 +197,13 @@ PATCH http://localhost:3333/api/v1/plans/1/toggle-active
 ## 4️⃣ HOTELES (Hotels)
 
 ### 📌 GET - Listar Hoteles
+
 ```
 GET http://localhost:3333/api/v1/hotels
 ```
 
 ### 📌 POST - Crear Hotel
+
 ```
 POST http://localhost:3333/api/v1/hotels
 Content-Type: application/json
@@ -204,11 +227,13 @@ Content-Type: application/json
 ```
 
 ### 📌 GET - Obtener Hotel por ID
+
 ```
 GET http://localhost:3333/api/v1/hotels/1
 ```
 
 ### 📌 GET - Obtener Habitaciones de un Hotel
+
 ```
 GET http://localhost:3333/api/v1/hotels/1/rooms
 ```
@@ -218,11 +243,13 @@ GET http://localhost:3333/api/v1/hotels/1/rooms
 ## 5️⃣ HABITACIONES (Rooms)
 
 ### 📌 GET - Listar Habitaciones
+
 ```
 GET http://localhost:3333/api/v1/rooms
 ```
 
 ### 📌 POST - Crear Habitación
+
 ```
 POST http://localhost:3333/api/v1/rooms
 Content-Type: application/json
@@ -244,16 +271,19 @@ Content-Type: application/json
 ```
 
 ### 📌 GET - Obtener Habitación por ID
+
 ```
 GET http://localhost:3333/api/v1/rooms/1
 ```
 
 ### 📌 GET - Obtener Habitaciones por Hotel
+
 ```
 GET http://localhost:3333/api/v1/rooms/hotel/1
 ```
 
 ### 📌 PUT - Actualizar Habitación
+
 ```
 PUT http://localhost:3333/api/v1/rooms/1
 Content-Type: application/json
@@ -275,6 +305,7 @@ Content-Type: application/json
 ```
 
 ### 📌 DELETE - Eliminar Habitación
+
 ```
 DELETE http://localhost:3333/api/v1/rooms/1
 ```
@@ -284,11 +315,13 @@ DELETE http://localhost:3333/api/v1/rooms/1
 ## 6️⃣ ACTIVIDADES TURÍSTICAS (Tourist Activities)
 
 ### 📌 GET - Listar Actividades
+
 ```
 GET http://localhost:3333/api/v1/tourist-activities
 ```
 
 ### 📌 POST - Crear Actividad
+
 ```
 POST http://localhost:3333/api/v1/tourist-activities
 Content-Type: application/json
@@ -309,11 +342,13 @@ Content-Type: application/json
 ```
 
 ### 📌 GET - Obtener Actividad por ID
+
 ```
 GET http://localhost:3333/api/v1/tourist-activities/1
 ```
 
 ### 📌 PUT - Actualizar Actividad
+
 ```
 PUT http://localhost:3333/api/v1/tourist-activities/1
 Content-Type: application/json
@@ -334,16 +369,19 @@ Content-Type: application/json
 ```
 
 ### 📌 DELETE - Eliminar Actividad
+
 ```
 DELETE http://localhost:3333/api/v1/tourist-activities/1
 ```
 
 ### 📌 PATCH - Activar/Desactivar Actividad
+
 ```
 PATCH http://localhost:3333/api/v1/tourist-activities/1/toggle-active
 ```
 
 ### 📌 GET - Obtener Actividades por Tipo
+
 ```
 GET http://localhost:3333/api/v1/tourist-activities/by-type?type=Acuática
 ```
@@ -353,11 +391,13 @@ GET http://localhost:3333/api/v1/tourist-activities/by-type?type=Acuática
 ## 7️⃣ CUOTAS (Installments)
 
 ### 📌 GET - Listar Cuotas
+
 ```
 GET http://localhost:3333/api/v1/installments
 ```
 
 ### 📌 POST - Crear Cuota
+
 ```
 POST http://localhost:3333/api/v1/installments
 Content-Type: application/json
@@ -373,11 +413,13 @@ Content-Type: application/json
 ```
 
 ### 📌 GET - Obtener Cuota por ID
+
 ```
 GET http://localhost:3333/api/v1/installments/1
 ```
 
 ### 📌 PUT - Actualizar Cuota
+
 ```
 PUT http://localhost:3333/api/v1/installments/1
 Content-Type: application/json
@@ -393,16 +435,19 @@ Content-Type: application/json
 ```
 
 ### 📌 DELETE - Eliminar Cuota
+
 ```
 DELETE http://localhost:3333/api/v1/installments/1
 ```
 
 ### 📌 POST - Pagar Cuota
+
 ```
 POST http://localhost:3333/api/v1/installments/1/pay
 ```
 
 ### 📌 GET - Listar Cuotas Vencidas
+
 ```
 GET http://localhost:3333/api/v1/installments/overdue
 ```
@@ -412,11 +457,13 @@ GET http://localhost:3333/api/v1/installments/overdue
 ## 8️⃣ TARJETAS BANCARIAS (Bank Cards)
 
 ### 📌 GET - Listar Tarjetas de un Cliente
+
 ```
 GET http://localhost:3333/api/v1/clients/1/bank-cards
 ```
 
 ### 📌 POST - Crear Tarjeta
+
 ```
 POST http://localhost:3333/api/v1/clients/1/bank-cards
 Content-Type: application/json
@@ -433,11 +480,13 @@ Content-Type: application/json
 ```
 
 ### 📌 GET - Obtener Tarjeta por ID
+
 ```
 GET http://localhost:3333/api/v1/bank-cards/1
 ```
 
 ### 📌 PUT - Actualizar Tarjeta
+
 ```
 PUT http://localhost:3333/api/v1/bank-cards/1
 Content-Type: application/json
@@ -454,11 +503,13 @@ Content-Type: application/json
 ```
 
 ### 📌 DELETE - Eliminar Tarjeta
+
 ```
 DELETE http://localhost:3333/api/v1/bank-cards/1
 ```
 
 ### 📌 PATCH - Establecer como Predeterminada
+
 ```
 PATCH http://localhost:3333/api/v1/bank-cards/1/set-default
 ```
@@ -468,11 +519,13 @@ PATCH http://localhost:3333/api/v1/bank-cards/1/set-default
 ## 9️⃣ VEHÍCULOS (Vehicles)
 
 ### 📌 GET - Listar Vehículos
+
 ```
 GET http://localhost:3333/api/v1/vehicles
 ```
 
 ### 📌 POST - Crear Vehículo
+
 ```
 POST http://localhost:3333/api/v1/vehicles
 Content-Type: application/json
@@ -490,11 +543,13 @@ Content-Type: application/json
 ```
 
 ### 📌 GET - Obtener Vehículo por ID
+
 ```
 GET http://localhost:3333/api/v1/vehicles/1
 ```
 
 ### 📌 PUT - Actualizar Vehículo
+
 ```
 PUT http://localhost:3333/api/v1/vehicles/1
 Content-Type: application/json
@@ -512,16 +567,19 @@ Content-Type: application/json
 ```
 
 ### 📌 DELETE - Eliminar Vehículo
+
 ```
 DELETE http://localhost:3333/api/v1/vehicles/1
 ```
 
 ### 📌 GET - Obtener Rutas de un Vehículo
+
 ```
 GET http://localhost:3333/api/v1/vehicles/1/routes
 ```
 
 ### 📌 GET - Obtener GPS de un Vehículo
+
 ```
 GET http://localhost:3333/api/v1/vehicles/1/gps
 ```
@@ -531,11 +589,13 @@ GET http://localhost:3333/api/v1/vehicles/1/gps
 ## 🔟 RUTAS (Routes)
 
 ### 📌 GET - Listar Rutas
+
 ```
 GET http://localhost:3333/api/v1/routes
 ```
 
 ### 📌 POST - Crear Ruta
+
 ```
 POST http://localhost:3333/api/v1/routes
 Content-Type: application/json
@@ -552,11 +612,13 @@ Content-Type: application/json
 ```
 
 ### 📌 GET - Obtener Ruta por ID
+
 ```
 GET http://localhost:3333/api/v1/routes/1
 ```
 
 ### 📌 PUT - Actualizar Ruta
+
 ```
 PUT http://localhost:3333/api/v1/routes/1
 Content-Type: application/json
@@ -573,16 +635,19 @@ Content-Type: application/json
 ```
 
 ### 📌 DELETE - Eliminar Ruta
+
 ```
 DELETE http://localhost:3333/api/v1/routes/1
 ```
 
 ### 📌 GET - Obtener Viajes de una Ruta
+
 ```
 GET http://localhost:3333/api/v1/routes/1/trips
 ```
 
 ### 📌 POST - Asociar Vehículo a Ruta
+
 ```
 POST http://localhost:3333/api/v1/routes/1/vehicles/1
 ```
@@ -592,11 +657,13 @@ POST http://localhost:3333/api/v1/routes/1/vehicles/1
 ## 1️⃣1️⃣ ITINERARIOS DE TRANSPORTE (Itinerary Transports)
 
 ### 📌 GET - Listar Itinerarios
+
 ```
 GET http://localhost:3333/api/v1/itinerary-transports
 ```
 
 ### 📌 POST - Crear Itinerario
+
 ```
 POST http://localhost:3333/api/v1/itinerary-transports
 Content-Type: application/json
@@ -614,11 +681,13 @@ Content-Type: application/json
 ```
 
 ### 📌 GET - Obtener Itinerario por ID
+
 ```
 GET http://localhost:3333/api/v1/itinerary-transports/1
 ```
 
 ### 📌 PUT - Actualizar Itinerario
+
 ```
 PUT http://localhost:3333/api/v1/itinerary-transports/1
 Content-Type: application/json
@@ -636,6 +705,7 @@ Content-Type: application/json
 ```
 
 ### 📌 DELETE - Eliminar Itinerario
+
 ```
 DELETE http://localhost:3333/api/v1/itinerary-transports/1
 ```
@@ -645,21 +715,25 @@ DELETE http://localhost:3333/api/v1/itinerary-transports/1
 ## 1️⃣2️⃣ MUNICIPIOS (Municipalities)
 
 ### 📌 GET - Listar Municipios
+
 ```
 GET http://localhost:3333/api/v1/municipalities
 ```
 
 ### 📌 GET - Buscar Municipios
+
 ```
 GET http://localhost:3333/api/v1/municipalities/search?name=Cartagena
 ```
 
 ### 📌 GET - Obtener Municipio por ID
+
 ```
 GET http://localhost:3333/api/v1/municipalities/1
 ```
 
 ### 📌 GET - Obtener Actividades de un Municipio
+
 ```
 GET http://localhost:3333/api/v1/municipalities/1/activities
 ```
@@ -669,6 +743,7 @@ GET http://localhost:3333/api/v1/municipalities/1/activities
 ## 🧪 PRUEBAS DE VALIDACIÓN (Deben FALLAR)
 
 ### ❌ Room - Tipo inválido
+
 ```
 POST http://localhost:3333/api/v1/rooms
 Content-Type: application/json
@@ -682,9 +757,11 @@ Content-Type: application/json
   "isAvailable": true
 }
 ```
+
 **Resultado esperado**: Error - "roomType debe ser individual, doble, suite o familiar"
 
 ### ❌ Room - Campo requerido faltante
+
 ```
 POST http://localhost:3333/api/v1/rooms
 Content-Type: application/json
@@ -697,9 +774,11 @@ Content-Type: application/json
   "isAvailable": true
 }
 ```
+
 **Resultado esperado**: Error - "hotelId es requerido"
 
 ### ❌ BankCard - Número de tarjeta inválido
+
 ```
 POST http://localhost:3333/api/v1/clients/1/bank-cards
 Content-Type: application/json
@@ -714,9 +793,11 @@ Content-Type: application/json
   "isDefault": false
 }
 ```
+
 **Resultado esperado**: Error - "El número de tarjeta debe tener entre 13 y 19 dígitos"
 
 ### ❌ BankCard - Formato de expiración inválido
+
 ```
 POST http://localhost:3333/api/v1/clients/1/bank-cards
 Content-Type: application/json
@@ -731,9 +812,11 @@ Content-Type: application/json
   "isDefault": false
 }
 ```
+
 **Resultado esperado**: Error - "El formato debe ser MM/YY"
 
 ### ❌ TouristActivity - Dificultad inválida
+
 ```
 POST http://localhost:3333/api/v1/tourist-activities
 Content-Type: application/json
@@ -748,9 +831,11 @@ Content-Type: application/json
   "isActive": true
 }
 ```
+
 **Resultado esperado**: Error - "difficulty debe ser fácil, moderada, difícil o extrema"
 
 ### ❌ Plan - Precio fuera de rango
+
 ```
 POST http://localhost:3333/api/v1/plans
 Content-Type: application/json
@@ -763,9 +848,11 @@ Content-Type: application/json
   "isActive": true
 }
 ```
+
 **Resultado esperado**: Error - "El precio debe ser un número positivo"
 
 ### ❌ Vehicle - Tipo inválido
+
 ```
 POST http://localhost:3333/api/v1/vehicles
 Content-Type: application/json
@@ -780,6 +867,7 @@ Content-Type: application/json
   "isAvailable": true
 }
 ```
+
 **Resultado esperado**: Error - "vehicleType debe ser bus, minibus, van, car o suv"
 
 ---
@@ -787,6 +875,7 @@ Content-Type: application/json
 ## 📊 PRUEBAS DE PAGINACIÓN
 
 ### Con parámetros personalizados
+
 ```
 GET http://localhost:3333/api/v1/clients?page=1&perPage=5
 GET http://localhost:3333/api/v1/trips?page=2&perPage=10
@@ -798,11 +887,14 @@ GET http://localhost:3333/api/v1/rooms?page=1&perPage=20
 ## 🔍 TIPS PARA POSTMAN
 
 ### 1. Crear Colección
+
 - Crea una colección llamada "Travel Agency API"
 - Organiza los endpoints por carpetas (Clients, Trips, Plans, etc.)
 
 ### 2. Variables de Entorno
+
 Crea un Environment con:
+
 - `base_url`: `http://localhost:3333/api/v1`
 - `client_id`: `1` (actualiza después de crear un cliente)
 - `trip_id`: `1` (actualiza después de crear un viaje)
@@ -812,6 +904,7 @@ Crea un Environment con:
 ### 3. Orden de Pruebas Recomendado
 
 1. **Crear datos base:**
+
    - ✅ Crear Cliente
    - ✅ Crear Viaje
    - ✅ Crear Plan
@@ -822,19 +915,23 @@ Crea un Environment con:
    - ✅ Crear Ruta
 
 2. **Probar relaciones:**
+
    - ✅ Asociar Cliente a Viaje
    - ✅ Obtener viajes de un cliente
    - ✅ Obtener habitaciones de un hotel
    - ✅ Crear Itinerario de Transporte
 
 3. **Probar validaciones:**
+
    - ❌ Intentar crear con datos inválidos
    - ❌ Verificar mensajes de error en español
 
 4. **Probar paginación:**
+
    - ✅ Listar con diferentes valores de page y perPage
 
 5. **Probar actualizaciones:**
+
    - ✅ Actualizar entidades existentes
 
 6. **Probar eliminaciones:**
@@ -854,6 +951,7 @@ Crea un Environment con:
 ## 📝 NOTAS IMPORTANTES
 
 1. **Orden de creación**: Siempre crear las entidades padre antes de las hijas
+
    - Ejemplo: Crear Hotel antes de Habitación
    - Ejemplo: Crear Trip antes de Installment
 

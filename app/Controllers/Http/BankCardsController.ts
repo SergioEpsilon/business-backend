@@ -35,7 +35,7 @@ export default class BankCardsController {
   public async store({ params, request, response }: HttpContextContract) {
     try {
       console.log('⚠️ BankCardsController.store - TESTING MODE')
-      
+
       const clientId = params.clientId
 
       const data = request.only([
@@ -70,10 +70,10 @@ export default class BankCardsController {
 
       // Mapeo de cardType español a inglés
       const cardTypeMap = {
-        'credito': 'credit',
-        'crédito': 'credit',
-        'debito': 'debit',
-        'débito': 'debit',
+        credito: 'credit',
+        crédito: 'credit',
+        debito: 'debit',
+        débito: 'debit',
       }
       const cardType = cardTypeMap[data.cardType?.toLowerCase()] || data.cardType || 'credit'
 

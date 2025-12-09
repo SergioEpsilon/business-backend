@@ -17,17 +17,18 @@ Ambos sistemas (Frontend Angular 16 y Backend AdonisJS 5) están **completamente
 
 ### ✅ **BACKEND ADONIS (100% OPERATIVO)**
 
-| Componente | Estado | Detalles |
-|------------|--------|----------|
-| Servidor | ✅ Running | Puerto 3333 |
-| Base de Datos | ✅ Connected | MySQL `airline` |
-| Migraciones | ✅ Completado | 53 migraciones |
-| Endpoints | ✅ Funcional | 75+ endpoints RESTful |
-| Dependencies | ✅ Instaladas | 753 paquetes |
-| MS-SECURITY | ✅ Integrado | Puerto 8080 |
-| API Response | ✅ Verified | `curl localhost:3333` OK |
+| Componente    | Estado        | Detalles                 |
+| ------------- | ------------- | ------------------------ |
+| Servidor      | ✅ Running    | Puerto 3333              |
+| Base de Datos | ✅ Connected  | MySQL `airline`          |
+| Migraciones   | ✅ Completado | 53 migraciones           |
+| Endpoints     | ✅ Funcional  | 75+ endpoints RESTful    |
+| Dependencies  | ✅ Instaladas | 753 paquetes             |
+| MS-SECURITY   | ✅ Integrado  | Puerto 8080              |
+| API Response  | ✅ Verified   | `curl localhost:3333` OK |
 
 **Endpoints principales:**
+
 ```
 GET  /api/v1/clients
 POST /api/v1/clients
@@ -46,18 +47,19 @@ POST /api/v1/invoices
 
 ### ✅ **FRONTEND ANGULAR (100% FUNCIONAL)**
 
-| Componente | Estado | Detalles |
-|------------|--------|----------|
-| Framework | ✅ Angular 16 | v16.2.0 |
-| Dependencies | ✅ Instaladas | node_modules OK |
-| UI Library | ✅ Material | v16.2.14 |
-| Auth System | ✅ JWT | @auth0/angular-jwt |
-| Firebase | ✅ Configurado | OAuth integrado |
-| Guards | ✅ Implementado | Auth + Role guards |
-| Interceptors | ✅ Implementado | Auth + Error |
-| ReCaptcha | ✅ Configurado | ng-recaptcha |
+| Componente   | Estado          | Detalles           |
+| ------------ | --------------- | ------------------ |
+| Framework    | ✅ Angular 16   | v16.2.0            |
+| Dependencies | ✅ Instaladas   | node_modules OK    |
+| UI Library   | ✅ Material     | v16.2.14           |
+| Auth System  | ✅ JWT          | @auth0/angular-jwt |
+| Firebase     | ✅ Configurado  | OAuth integrado    |
+| Guards       | ✅ Implementado | Auth + Role guards |
+| Interceptors | ✅ Implementado | Auth + Error       |
+| ReCaptcha    | ✅ Configurado  | ng-recaptcha       |
 
 **Estructura de módulos:**
+
 ```
 ✅ Auth Module (Login, Register, Verify)
 ✅ Dashboard Module
@@ -75,13 +77,15 @@ POST /api/v1/invoices
 ### 🔴 **PROBLEMA PRINCIPAL: DIFERENTES ARQUITECTURAS**
 
 #### **Frontend está configurado para Java/Spring Boot:**
+
 ```typescript
 // environment.ts (ACTUAL)
-apiUrl: 'http://127.0.0.1:8080/api'           // ❌ Puerto 8080 (Java)
-authUrl: 'http://127.0.0.1:8080/api/auth'     // ❌ Java backend
+apiUrl: 'http://127.0.0.1:8080/api' // ❌ Puerto 8080 (Java)
+authUrl: 'http://127.0.0.1:8080/api/auth' // ❌ Java backend
 ```
 
 #### **Backend es AdonisJS:**
+
 ```typescript
 // Backend real
 Server: http://127.0.0.1:3333                 // ✅ Puerto 3333 (Adonis)
@@ -92,13 +96,13 @@ API: http://127.0.0.1:3333/api/v1             // ✅ Adonis API
 
 ### 📋 **TABLA DE INCOMPATIBILIDADES**
 
-| Aspecto | Frontend | Backend Adonis | Solución |
-|---------|----------|----------------|----------|
-| **Puerto** | 8080 | 3333 | ⚠️ Actualizar environment.ts |
-| **Base Path** | `/api` | `/api/v1` | ⚠️ Actualizar environment.ts |
-| **Auth Endpoints** | Espera `/api/auth/*` | ❌ No existen | ✅ Mantener MS-SECURITY |
-| **Modelos de datos** | `_id` (MongoDB) | `id` (MySQL) | ⚠️ Adaptar interfaces |
-| **Endpoints de negocio** | No existen | `/api/v1/clients`, `/trips`, etc. | ✅ Crear servicios nuevos |
+| Aspecto                  | Frontend             | Backend Adonis                    | Solución                     |
+| ------------------------ | -------------------- | --------------------------------- | ---------------------------- |
+| **Puerto**               | 8080                 | 3333                              | ⚠️ Actualizar environment.ts |
+| **Base Path**            | `/api`               | `/api/v1`                         | ⚠️ Actualizar environment.ts |
+| **Auth Endpoints**       | Espera `/api/auth/*` | ❌ No existen                     | ✅ Mantener MS-SECURITY      |
+| **Modelos de datos**     | `_id` (MongoDB)      | `id` (MySQL)                      | ⚠️ Adaptar interfaces        |
+| **Endpoints de negocio** | No existen           | `/api/v1/clients`, `/trips`, etc. | ✅ Crear servicios nuevos    |
 
 ---
 
@@ -107,10 +111,12 @@ API: http://127.0.0.1:3333/api/v1             // ✅ Adonis API
 ### 📝 **ESTRATEGIA: ARQUITECTURA DUAL**
 
 **Mantener dos backends:**
+
 1. **MS-SECURITY (puerto 8080):** Para autenticación (login, register, roles, users, permissions)
 2. **AdonisJS (puerto 3333):** Para lógica de negocio (clients, trips, guides, plans, invoices)
 
 **Beneficios:**
+
 - ✅ Sin necesidad de migrar autenticación
 - ✅ Aprovecha el sistema de auth existente y funcional
 - ✅ Integración rápida (7-10 días)
@@ -128,16 +134,16 @@ Modificar `environment.ts` para soportar ambos backends:
 // src/environments/environment.ts
 export const environment = {
   production: false,
-  
+
   // ✅ MS-SECURITY: Para autenticación
   authUrl: 'http://127.0.0.1:8080/api/auth',
   securityUrl: 'http://127.0.0.1:8080/api/public/security',
   msSecurityUrl: 'http://127.0.0.1:8080/api',
-  
+
   // ✅ ADONIS: Para lógica de negocio
   businessUrl: 'http://127.0.0.1:3333/api/v1',
   apiUrl: 'http://127.0.0.1:3333/api/v1',
-  
+
   recaptcha: {
     siteKey: '6Lcj1m0qAAAAAH5BZ-f-h_aVLQaHcUPa-b7hwMxY'
   },
@@ -167,48 +173,48 @@ ng generate service core/services/municipality
 **Ejemplo: `client.service.ts`**
 
 ```typescript
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { environment } from '../../../environments/environment';
+import { Injectable } from '@angular/core'
+import { HttpClient } from '@angular/common/http'
+import { Observable } from 'rxjs'
+import { environment } from '../../../environments/environment'
 
 export interface Client {
-  id: string;
-  document: string;
-  phone: string;
-  address: string;
-  createdAt?: Date;
-  updatedAt?: Date;
+  id: string
+  document: string
+  phone: string
+  address: string
+  createdAt?: Date
+  updatedAt?: Date
 }
 
 @Injectable({ providedIn: 'root' })
 export class ClientService {
-  private apiUrl = `${environment.businessUrl}/clients`;
+  private apiUrl = `${environment.businessUrl}/clients`
 
   constructor(private http: HttpClient) {}
 
-  getAll(): Observable<{ meta: any, data: Client[] }> {
-    return this.http.get<{ meta: any, data: Client[] }>(this.apiUrl);
+  getAll(): Observable<{ meta: any; data: Client[] }> {
+    return this.http.get<{ meta: any; data: Client[] }>(this.apiUrl)
   }
 
   getById(id: string): Observable<Client> {
-    return this.http.get<Client>(`${this.apiUrl}/${id}`);
+    return this.http.get<Client>(`${this.apiUrl}/${id}`)
   }
 
   create(client: Partial<Client>): Observable<Client> {
-    return this.http.post<Client>(this.apiUrl, client);
+    return this.http.post<Client>(this.apiUrl, client)
   }
 
   update(id: string, client: Partial<Client>): Observable<Client> {
-    return this.http.put<Client>(`${this.apiUrl}/${id}`, client);
+    return this.http.put<Client>(`${this.apiUrl}/${id}`, client)
   }
 
   delete(id: string): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+    return this.http.delete<void>(`${this.apiUrl}/${id}`)
   }
 
   getTrips(id: string): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/${id}/trips`);
+    return this.http.get<any[]>(`${this.apiUrl}/${id}/trips`)
   }
 }
 ```
@@ -257,21 +263,51 @@ const routes: Routes = [
     component: MainLayoutComponent,
     canActivate: [AuthGuard],
     children: [
-      { path: 'dashboard', loadChildren: () => import('./features/dashboard/dashboard.module').then(m => m.DashboardModule) },
-      
+      {
+        path: 'dashboard',
+        loadChildren: () =>
+          import('./features/dashboard/dashboard.module').then((m) => m.DashboardModule),
+      },
+
       // ✅ Rutas existentes (MS-SECURITY)
-      { path: 'users', loadChildren: () => import('./features/user-management/user-management.module').then(m => m.UserManagementModule) },
-      { path: 'roles', loadChildren: () => import('./features/roles/roles.module').then(m => m.RolesModule) },
-      { path: 'permissions', loadChildren: () => import('./features/permissions/permissions.module').then(m => m.PermissionsModule) },
-      
+      {
+        path: 'users',
+        loadChildren: () =>
+          import('./features/user-management/user-management.module').then(
+            (m) => m.UserManagementModule
+          ),
+      },
+      {
+        path: 'roles',
+        loadChildren: () => import('./features/roles/roles.module').then((m) => m.RolesModule),
+      },
+      {
+        path: 'permissions',
+        loadChildren: () =>
+          import('./features/permissions/permissions.module').then((m) => m.PermissionsModule),
+      },
+
       // ✅ NUEVAS RUTAS (AdonisJS)
-      { path: 'clients', loadChildren: () => import('./features/clients/clients.module').then(m => m.ClientsModule) },
-      { path: 'guides', loadChildren: () => import('./features/guides/guides.module').then(m => m.GuidesModule) },
-      { path: 'trips', loadChildren: () => import('./features/trips/trips.module').then(m => m.TripsModule) },
-      { path: 'plans', loadChildren: () => import('./features/plans/plans.module').then(m => m.PlansModule) },
-    ]
-  }
-];
+      {
+        path: 'clients',
+        loadChildren: () =>
+          import('./features/clients/clients.module').then((m) => m.ClientsModule),
+      },
+      {
+        path: 'guides',
+        loadChildren: () => import('./features/guides/guides.module').then((m) => m.GuidesModule),
+      },
+      {
+        path: 'trips',
+        loadChildren: () => import('./features/trips/trips.module').then((m) => m.TripsModule),
+      },
+      {
+        path: 'plans',
+        loadChildren: () => import('./features/plans/plans.module').then((m) => m.PlansModule),
+      },
+    ],
+  },
+]
 ```
 
 ---
@@ -289,7 +325,7 @@ export default {
   exposeHeaders: [],
   methods: ['GET', 'HEAD', 'POST', 'PUT', 'DELETE'],
   headers: true,
-  maxAge: 90
+  maxAge: 90,
 }
 ```
 
@@ -322,18 +358,21 @@ ng serve
 ### **PRUEBAS A REALIZAR:**
 
 1. **Autenticación:**
+
    - ✅ Login con usuario/password → MS-SECURITY
    - ✅ Login con Google/Facebook → Firebase → MS-SECURITY
    - ✅ Verificar token JWT se guarda en localStorage
    - ✅ Verificar redirección a dashboard
 
 2. **Gestión de Usuarios (MS-SECURITY):**
+
    - ✅ Listar usuarios
    - ✅ Crear usuario
    - ✅ Editar roles
    - ✅ Asignar permisos
 
 3. **Gestión de Clientes (AdonisJS):**
+
    - ✅ Listar clientes desde `/api/v1/clients`
    - ✅ Crear nuevo cliente
    - ✅ Editar cliente existente
@@ -372,15 +411,15 @@ ng serve
 
 ## ⏱️ ESTIMACIÓN DE TIEMPOS
 
-| Fase | Duración | Descripción |
-|------|----------|-------------|
-| **Setup Inicial** | 1 hora | Actualizar environment.ts y configurar CORS |
-| **Servicios** | 2-3 días | Crear 6 servicios (client, guide, trip, plan, invoice, municipality) |
-| **Modelos** | 1 día | Crear interfaces TypeScript para entidades |
-| **Componentes UI** | 3-5 días | Crear componentes de lista/formulario/detalle |
-| **Rutas** | 1 hora | Actualizar app-routing.module.ts |
-| **Pruebas** | 1-2 días | Pruebas de integración y ajustes |
-| **Total** | **7-10 días** | Integración completa funcional |
+| Fase               | Duración      | Descripción                                                          |
+| ------------------ | ------------- | -------------------------------------------------------------------- |
+| **Setup Inicial**  | 1 hora        | Actualizar environment.ts y configurar CORS                          |
+| **Servicios**      | 2-3 días      | Crear 6 servicios (client, guide, trip, plan, invoice, municipality) |
+| **Modelos**        | 1 día         | Crear interfaces TypeScript para entidades                           |
+| **Componentes UI** | 3-5 días      | Crear componentes de lista/formulario/detalle                        |
+| **Rutas**          | 1 hora        | Actualizar app-routing.module.ts                                     |
+| **Pruebas**        | 1-2 días      | Pruebas de integración y ajustes                                     |
+| **Total**          | **7-10 días** | Integración completa funcional                                       |
 
 ---
 
@@ -410,6 +449,7 @@ code "c:\Users\USER\Desktop\Backend\business-backend\config\cors.ts"
 ### **OPCIÓN B: REVISIÓN MANUAL**
 
 Revisar los documentos generados:
+
 - `INTEGRACION_FRONTEND_BACKEND.md` - Análisis técnico detallado
 - Este documento (`DIAGNOSTICO_FINAL.md`) - Resumen ejecutivo
 
@@ -419,33 +459,37 @@ Revisar los documentos generados:
 
 ### 🎊 **ESTADO: APTO PARA IMPLEMENTACIÓN**
 
-| Criterio | Evaluación | Estado |
-|----------|------------|--------|
-| **Backend funcional** | ✅ Verificado | 100% operativo |
-| **Frontend funcional** | ✅ Verificado | 100% operativo |
-| **Compatibilidad técnica** | ✅ Compatible | Angular 16 + AdonisJS 5 |
-| **Arquitectura** | ✅ Modular | Clean Architecture |
-| **Autenticación** | ✅ Implementada | JWT + Firebase OAuth |
-| **Base de datos** | ✅ Conectada | MySQL con 53 migraciones |
-| **APIs disponibles** | ✅ Funcionales | 75+ endpoints |
+| Criterio                   | Evaluación      | Estado                   |
+| -------------------------- | --------------- | ------------------------ |
+| **Backend funcional**      | ✅ Verificado   | 100% operativo           |
+| **Frontend funcional**     | ✅ Verificado   | 100% operativo           |
+| **Compatibilidad técnica** | ✅ Compatible   | Angular 16 + AdonisJS 5  |
+| **Arquitectura**           | ✅ Modular      | Clean Architecture       |
+| **Autenticación**          | ✅ Implementada | JWT + Firebase OAuth     |
+| **Base de datos**          | ✅ Conectada    | MySQL con 53 migraciones |
+| **APIs disponibles**       | ✅ Funcionales  | 75+ endpoints            |
 
 ---
 
 ### 📋 **RECOMENDACIONES FINALES:**
 
 1. **✅ MANTENER arquitectura dual:**
+
    - MS-SECURITY para autenticación/usuarios/roles
    - AdonisJS para lógica de negocio (clientes/viajes/planes)
 
 2. **✅ REUTILIZAR código existente:**
+
    - Guards, Interceptors, Material components
    - Auth service, User service
 
 3. **✅ CREAR servicios nuevos:**
+
    - ClientService, GuideService, TripService
    - Componentes de UI para entidades de negocio
 
 4. **✅ CONFIGURAR CORS correctamente:**
+
    - Backend AdonisJS debe aceptar `http://localhost:4200`
 
 5. **✅ PROBAR exhaustivamente:**

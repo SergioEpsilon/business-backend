@@ -1,17 +1,14 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import axios from 'axios'
 import Env from '@ioc:Adonis/Core/Env'
+
 export default class Security {
   public async handle({ request, response }: HttpContextContract, next: () => Promise<void>) {
-    // 🚨 MODO TESTING: Deshabilitar seguridad temporalmente
-    console.log('⚠️ SECURITY MIDDLEWARE BYPASSED - TESTING MODE')
-    return await next()
-    
-    // Código original comentado para testing
-    /*
     let theRequest = request.toJSON()
-    console.log('--- [Security Middleware] ---')
-    console.log('Request:', theRequest)
+    console.log('🔒 === [Security Middleware] Validando solicitud ===')
+    console.log('📍 URL:', theRequest.url)
+    console.log('🔧 Método:', theRequest.method)
+
     if (theRequest.headers.authorization) {
       let token = theRequest.headers.authorization.replace('Bearer ', '')
       let thePermission: object = {
@@ -19,28 +16,30 @@ export default class Security {
         method: theRequest.method,
       }
       const url = `${Env.get('MS_SECURITY')}/api/public/security/permissions-validation`
-      console.log('Intentando validar permiso en:', url)
+      console.log('🔗 Validando permiso en:', url)
+
       try {
         const result = await axios.post(url, thePermission, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         })
-        console.log('Respuesta completa de ms-security:', result.data)
+        console.log('📥 Respuesta de ms-security:', result.data)
+
         if (result.data === true || result.data?.hasPermission === true) {
-          console.log('Permiso concedido por ms-security')
-          console.log('PASÓ EL MIDDLEWARE')
+          console.log('✅ PERMISO CONCEDIDO - Continuando con la solicitud')
           await next()
         } else {
-          console.log('Permiso denegado por ms-security')
-          return response
-            .status(401)
-            .send({ message: 'Permiso denegado por ms-security', detalle: result.data })
+          console.log('❌ PERMISO DENEGADO')
+          return response.status(403).send({
+            message: 'No tienes permiso para acceder a este recurso',
+            detalle: result.data,
+          })
         }
       } catch (error) {
-        console.error('Error al conectar con ms-security:', error?.message)
+        console.error('💥 Error al conectar con ms-security:', error?.message)
         if (error?.response) {
-          console.error('Respuesta de error:', error.response.data)
+          console.error('📄 Respuesta de error:', error.response.data)
         }
         return response.status(401).send({
           message: 'Error al validar permiso',
@@ -49,9 +48,10 @@ export default class Security {
         })
       }
     } else {
-      console.log('No se encontró header Authorization')
-      return response.status(401).send({ message: 'No autenticado: falta Authorization' })
+      console.log('⚠️ No se encontró header Authorization')
+      return response.status(401).send({
+        message: 'No autenticado: Se requiere token de autorización',
+      })
     }
-    */
   }
 }

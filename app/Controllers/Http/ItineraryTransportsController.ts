@@ -39,16 +39,16 @@ export default class ItineraryTransportsController {
   public async store({ request, response }: HttpContextContract) {
     try {
       console.log('⚠️ ItineraryTransportsController.store - TESTING MODE')
-      
+
       const payload = await request.validate(ItineraryTransportValidator)
-      
+
       // Si no se proporciona transportServiceId, verificar si existe alguno en la BD
       if (!payload.transportServiceId) {
         // Buscar si existe al menos un TransportService
         const TransportService = (await import('App/Models/TransportService')).default
         const { DateTime } = await import('luxon')
         const firstService = await TransportService.query().first()
-        
+
         if (firstService) {
           payload.transportServiceId = firstService.id
         } else {
@@ -67,9 +67,9 @@ export default class ItineraryTransportsController {
           payload.transportServiceId = newService.id
         }
       }
-      
+
       const itinerary = await ItineraryTransport.create(payload)
-      
+
       await itinerary.load('trip')
       await itinerary.load('route')
       await itinerary.load('transportService')

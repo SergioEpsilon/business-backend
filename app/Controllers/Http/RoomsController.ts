@@ -12,9 +12,7 @@ export default class RoomsController {
       const page = request.input('page', 1)
       const perPage = request.input('perPage', 10)
 
-      const rooms = await Room.query()
-        .preload('hotel')
-        .paginate(page, perPage)
+      const rooms = await Room.query().preload('hotel').paginate(page, perPage)
 
       return response.ok({
         meta: rooms.getMeta(),
@@ -56,19 +54,19 @@ export default class RoomsController {
 
       // Mapeo de roomType español → inglés
       const roomTypeMap = {
-        'individual': 'single',
-        'doble': 'double',
-        'triple': 'triple',
-        'suite': 'suite',
-        'familiar': 'family',
+        individual: 'single',
+        doble: 'double',
+        triple: 'triple',
+        suite: 'suite',
+        familiar: 'family',
       }
 
       // Mapeo de bedType español → inglés
       const bedTypeMap = {
-        'individual': 'single',
-        'doble': 'double',
-        'queen': 'queen',
-        'king': 'king',
+        individual: 'single',
+        doble: 'double',
+        queen: 'queen',
+        king: 'king',
       }
 
       const validRoomType = roomTypeMap[data.roomType] || data.roomType || 'double'
@@ -178,9 +176,7 @@ export default class RoomsController {
    */
   public async byHotel({ params, response }: HttpContextContract) {
     try {
-      const rooms = await Room.query()
-        .where('hotelId', params.hotelId)
-        .preload('hotel')
+      const rooms = await Room.query().where('hotelId', params.hotelId).preload('hotel')
 
       return response.ok({
         data: rooms,
