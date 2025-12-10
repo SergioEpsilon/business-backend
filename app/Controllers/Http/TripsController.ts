@@ -1,6 +1,8 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Trip from 'App/Models/Trip'
 import TripValidator from 'App/Validators/TripValidator'
+import NotificationService from 'App/Services/NotificationService'
+import UserService from 'App/Services/UserService'
 
 export default class TripsController {
   /**
@@ -52,6 +54,28 @@ export default class TripsController {
         paymentStatus: 'pending',
       })
 
+      // 📧 Enviar notificación por email al cliente (si tiene clientId)
+      const clientId = request.input('clientId')
+      if (clientId) {
+        try {
+          const token = request.header('Authorization')?.replace('Bearer ', '')
+          const userInfo = await UserService.getUserInfo(clientId, token)
+          
+          if (userInfo?.email) {
+            await NotificationService.notifyTripCreated(userInfo.email, {
+              destination: trip.destination,
+              startDate: trip.startDate.toString(),
+              endDate: trip.endDate.toString(),
+              totalAmount: trip.totalPrice || 0,
+            })
+            console.log('✅ Notificación de viaje enviada a:', userInfo.email)
+          }
+        } catch (notifError) {
+          console.error('⚠️ Error enviando notificación:', notifError.message)
+          // No fallar la creación del viaje si falla la notificación
+        }
+      }
+
       return response.created({
         message: 'Viaje creado exitosamente',
         data: trip,
@@ -90,14 +114,43 @@ export default class TripsController {
         return date.toISOString().split('T')[0] // Extrae solo YYYY-MM-DD
       }
 
+      const oldStatus = theTrip.status
+      
       if (body.destination) theTrip.destination = body.destination
       if (body.description) theTrip.description = body.description
       if (body.startDate) theTrip.startDate = formatDate(body.startDate) as any
       if (body.endDate) theTrip.endDate = formatDate(body.endDate) as any
       if (body.price !== undefined) theTrip.price = body.price
       if (body.capacity !== undefined) theTrip.capacity = body.capacity
+      if (body.status) theTrip.status = body.status
 
       await theTrip.save()
+
+      // 📧 Notificar cambio de estado a los clientes asociados
+      if (body.status && body.status !== oldStatus) {
+        try {
+          await theTrip.load('clients')
+          const token = request.header('Authorization')?.replace('Bearer ', '')
+          
+          for (const client of theTrip.clients) {
+            try {
+              const userInfo = await UserService.getUserInfo(client.id, token)
+              if (userInfo?.email) {
+                await NotificationService.notifyTripStatusChange(userInfo.email, {
+                  destination: theTrip.destination,
+                  newStatus: theTrip.status,
+                  message: body.statusMessage,
+                })
+                console.log('✅ Notificación de cambio de estado enviada a:', userInfo.email)
+              }
+            } catch (clientNotifError) {
+              console.error('⚠️ Error notificando cliente:', clientNotifError.message)
+            }
+          }
+        } catch (notifError) {
+          console.error('⚠️ Error enviando notificaciones:', notifError.message)
+        }
+      }
 
       return response.ok({
         message: 'Viaje actualizado exitosamente',

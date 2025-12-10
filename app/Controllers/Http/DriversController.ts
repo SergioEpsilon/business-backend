@@ -3,6 +3,7 @@ import Driver from 'App/Models/Driver'
 import axios from 'axios'
 import Env from '@ioc:Adonis/Core/Env'
 import UserService from 'App/Services/UserService'
+import NotificationService from 'App/Services/NotificationService'
 
 export default class DriversController {
   /**
@@ -275,70 +276,37 @@ export default class DriversController {
 
       // Obtener emails de los usuarios desde MS-Security
       const token = request.header('Authorization')?.replace('Bearer ', '')
-      const userIds = drivers.map((d) => d.id)
+      const emails: string[] = []
 
-      const emailPromises = drivers.map(async (driver) => {
+      for (const driver of drivers) {
         try {
-          // Consultar usuario en MS-Security para obtener email
-          const userResponse = await axios.get(`${Env.get('MS_SECURITY')}/api/users/${driver.id}`, {
-            headers: { Authorization: `Bearer ${token}` },
-          })
-
-          const userEmail = userResponse.data.email
-
-          if (!userEmail) {
-            console.warn(`Conductor ${driver.id} no tiene email`)
-            return null
-          }
-
-          // Enviar notificación por email usando MS-Notifications
-          await axios.post(
-            `${Env.get('MS_NOTIFICATIONS')}/send-email`,
-            {
-              to: userEmail,
-              subject: `⚠️ Alerta Climática - ${severity || 'IMPORTANTE'}`,
-              message: `Estimado/a Conductor,
-
-${message}
-
-Nivel de alerta: ${severity || 'MODERADO'}
-Fecha: ${new Date().toLocaleString('es-PE')}
-
-Por favor, tome las precauciones necesarias.
-
-Saludos,
-Sistema de Gestión de Viajes`,
-            },
-            {
-              headers: { Authorization: `Bearer ${token}` },
-            }
-          )
-
-          return {
-            driverId: driver.id,
-            email: userEmail,
-            sent: true,
+          const userInfo = await UserService.getUserInfo(driver.id, token)
+          if (userInfo?.email) {
+            emails.push(userInfo.email)
           }
         } catch (error) {
-          console.error(`Error enviando alerta a conductor ${driver.id}:`, error.message)
-          return {
-            driverId: driver.id,
-            sent: false,
-            error: error.message,
-          }
+          console.warn(`No se pudo obtener email del conductor ${driver.id}`)
         }
-      })
+      }
 
-      const results = await Promise.all(emailPromises)
-      const successCount = results.filter((r) => r?.sent).length
-      const failedCount = results.filter((r) => r && !r.sent).length
+      if (emails.length === 0) {
+        return response.badRequest({
+          message: 'No se encontraron emails de conductores',
+        })
+      }
+
+      // 📧 Usar NotificationService para enviar alertas
+      const result = await NotificationService.notifyWeatherAlert(emails, {
+        message,
+        severity: severity || 'MODERADO',
+      })
 
       return response.ok({
         message: 'Alerta climática enviada',
         totalDrivers: drivers.length,
-        sent: successCount,
-        failed: failedCount,
-        results: results.filter((r) => r !== null),
+        sent: result.sent,
+        failed: result.failed,
+        details: result.details,
       })
     } catch (error) {
       return response.badRequest({

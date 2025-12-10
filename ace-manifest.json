@@ -36,6 +36,18 @@
       "aliases": [],
       "flags": []
     },
+    "reminders:send": {
+      "settings": {
+        "loadApp": true,
+        "stayAlive": false
+      },
+      "commandPath": "./commands/SendPaymentReminders",
+      "commandName": "reminders:send",
+      "description": "Envía recordatorios de pago a clientes con cuotas por vencer",
+      "args": [],
+      "aliases": [],
+      "flags": []
+    },
     "dump:rcfile": {
       "settings": {},
       "commandPath": "@adonisjs/core/build/commands/DumpRc",

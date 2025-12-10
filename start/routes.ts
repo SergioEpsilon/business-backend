@@ -249,11 +249,13 @@ Route.group(() => {
     Route.get('/', 'InstallmentsController.index')
     Route.get('/overdue', 'InstallmentsController.overdue')
     Route.patch('/mark-overdue', 'InstallmentsController.markOverdue')
+    Route.post('/send-reminders', 'InstallmentsController.sendReminders') // 🆕 Enviar recordatorios masivos
     Route.post('/', 'InstallmentsController.store')
     Route.get('/:id', 'InstallmentsController.show')
     Route.put('/:id', 'InstallmentsController.update')
     Route.delete('/:id', 'InstallmentsController.destroy')
     Route.post('/:id/pay', 'InstallmentsController.pay')
+    Route.post('/:id/send-reminder', 'InstallmentsController.sendSingleReminder') // 🆕 Recordatorio individual
   })
     .prefix('/installments')
     .middleware('security')
@@ -301,5 +303,16 @@ Route.group(() => {
     Route.delete('/:id', 'ItineraryTransportsController.destroy')
   })
     .prefix('/itinerary-transports')
+    .middleware('security')
+
+  // ==================== NOTIFICATION ROUTES ====================
+  Route.group(() => {
+    Route.get('/test', 'NotificationsController.test') // Test de conectividad
+    Route.post('/send-email', 'NotificationsController.sendEmail') // Email individual
+    Route.post('/send-sms', 'NotificationsController.sendSMS') // SMS
+    Route.post('/send-bulk-email', 'NotificationsController.sendBulkEmail') // Emails masivos
+    Route.post('/weather-alert', 'NotificationsController.sendWeatherAlert') // Alerta climática
+  })
+    .prefix('/notifications')
     .middleware('security')
 }).prefix('/api/v1')

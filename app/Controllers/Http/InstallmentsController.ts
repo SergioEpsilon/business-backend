@@ -1,6 +1,8 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Installment from 'App/Models/Installment'
 import { DateTime } from 'luxon'
+import NotificationService from 'App/Services/NotificationService'
+import UserService from 'App/Services/UserService'
 
 export default class InstallmentsController {
   /**
@@ -279,4 +281,144 @@ export default class InstallmentsController {
       })
     }
   }
+
+  /**
+   * Envía recordatorio de pago a cuotas pendientes que vencen pronto
+   * POST /installments/send-reminders
+   */
+  public async sendReminders({ request, response }: HttpContextContract) {
+    try {
+      const daysAhead = request.input('days_ahead', 7) // Cuotas que vencen en los próximos X días
+      const token = request.header('Authorization')?.replace('Bearer ', '')
+
+      // Obtener cuotas pendientes que vencen pronto
+      const futureDate = DateTime.now().plus({ days: daysAhead }).toSQLDate()
+      const installments = await Installment.query()
+        .where('status', 'pending')
+        .where('due_date', '<=', futureDate)
+        .where('due_date', '>=', DateTime.now().toSQLDate())
+        .preload('trip', (tripQuery) => {
+          tripQuery.preload('clients')
+        })
+
+      console.log(`📧 Enviando recordatorios para ${installments.length} cuotas`)
+
+      let sentCount = 0
+      let errorCount = 0
+
+      for (const installment of installments) {
+        try {
+          // Obtener clientes del viaje
+          const clients = installment.trip.clients || []
+
+          for (const client of clients) {
+            try {
+              const userInfo = await UserService.getUserInfo(client.id, token)
+
+              if (userInfo?.email) {
+                const result = await NotificationService.notifyInstallmentReminder(userInfo.email, {
+                  amount: installment.amount,
+                  dueDate: installment.dueDate.toFormat('dd/MM/yyyy'),
+                  installmentNumber: installment.installmentNumber,
+                  totalInstallments: 1, // TODO: calcular total de cuotas del viaje
+                })
+
+                if (result.success) {
+                  sentCount++
+                  console.log(`✅ Recordatorio enviado a: ${userInfo.email}`)
+                } else {
+                  errorCount++
+                  console.error(`❌ Error enviando a ${userInfo.email}:`, result.message)
+                }
+              }
+            } catch (clientError) {
+              errorCount++
+              console.error(`❌ Error procesando cliente ${client.id}:`, clientError.message)
+            }
+          }
+        } catch (installmentError) {
+          errorCount++
+          console.error(
+            `❌ Error procesando cuota ${installment.id}:`,
+            installmentError.message
+          )
+        }
+      }
+
+      return response.ok({
+        message: 'Recordatorios procesados',
+        sent: sentCount,
+        errors: errorCount,
+        total: installments.length,
+      })
+    } catch (error) {
+      console.error('❌ Error enviando recordatorios:', error.message)
+      return response.badRequest({
+        message: 'Error al enviar recordatorios',
+        error: error.message,
+      })
+    }
+  }
+
+  /**
+   * Envía recordatorio de pago a una cuota específica
+   * POST /installments/:id/send-reminder
+   */
+  public async sendSingleReminder({ params, request, response }: HttpContextContract) {
+    try {
+      const installment = await Installment.query()
+        .where('id', params.id)
+        .preload('trip', (tripQuery) => {
+          tripQuery.preload('clients')
+        })
+        .firstOrFail()
+
+      const token = request.header('Authorization')?.replace('Bearer ', '')
+      const clients = installment.trip.clients || []
+
+      if (clients.length === 0) {
+        return response.badRequest({
+          message: 'No hay clientes asociados a este viaje',
+        })
+      }
+
+      let sentCount = 0
+      const errors: string[] = []
+
+      for (const client of clients) {
+        try {
+          const userInfo = await UserService.getUserInfo(client.id, token)
+
+          if (userInfo?.email) {
+            const result = await NotificationService.notifyInstallmentReminder(userInfo.email, {
+              amount: installment.amount,
+              dueDate: installment.dueDate.toFormat('dd/MM/yyyy'),
+              installmentNumber: installment.installmentNumber,
+              totalInstallments: 1,
+            })
+
+            if (result.success) {
+              sentCount++
+            } else {
+              errors.push(`${userInfo.email}: ${result.message}`)
+            }
+          }
+        } catch (clientError) {
+          errors.push(`Cliente ${client.id}: ${clientError.message}`)
+        }
+      }
+
+      return response.ok({
+        message: `Recordatorio enviado a ${sentCount} cliente(s)`,
+        sent: sentCount,
+        errors: errors.length > 0 ? errors : undefined,
+      })
+    } catch (error) {
+      return response.badRequest({
+        message: 'Error al enviar recordatorio',
+        error: error.message,
+      })
+    }
+  }
 }
+

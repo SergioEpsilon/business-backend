@@ -1,0 +1,300 @@
+{
+  "info": {
+    "name": "MS-Business - Notificaciones",
+    "description": "Colección para probar el módulo de notificaciones integrado",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://127.0.0.1:3333/api/v1",
+      "type": "string"
+    },
+    {
+      "key": "auth_url",
+      "value": "http://127.0.0.1:8080/api/auth",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Autenticación",
+      "item": [
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    pm.collectionVariables.set('token', response.token);",
+                  "    console.log('Token guardado:', response.token);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"tu_email@example.com\",\n  \"password\": \"tu_password\"\n}"
+            },
+            "url": {
+              "raw": "{{auth_url}}/login",
+              "host": ["{{auth_url}}"],
+              "path": ["login"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Tests de Conectividad",
+      "item": [
+        {
+          "name": "Test Notificaciones",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/notifications/test",
+              "host": ["{{base_url}}"],
+              "path": ["notifications", "test"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Notificaciones Manuales",
+      "item": [
+        {
+          "name": "Enviar Email Personalizado",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"to\": \"cliente@example.com\",\n  \"subject\": \"Prueba de Notificación\",\n  \"message\": \"<h1>Hola</h1><p>Este es un email de prueba desde Postman</p>\",\n  \"sender\": \"test@agenciaviajes.com\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/notifications/send-email",
+              "host": ["{{base_url}}"],
+              "path": ["notifications", "send-email"]
+            }
+          }
+        },
+        {
+          "name": "Enviar SMS",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phone\": \"+573001234567\",\n  \"message\": \"Este es un SMS de prueba desde el sistema de viajes\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/notifications/send-sms",
+              "host": ["{{base_url}}"],
+              "path": ["notifications", "send-sms"]
+            }
+          }
+        },
+        {
+          "name": "Enviar Emails Masivos",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"recipients\": [\n    \"cliente1@example.com\",\n    \"cliente2@example.com\",\n    \"cliente3@example.com\"\n  ],\n  \"subject\": \"Notificación Masiva\",\n  \"message\": \"<h1>Aviso Importante</h1><p>Este es un mensaje para todos los clientes</p>\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/notifications/send-bulk-email",
+              "host": ["{{base_url}}"],
+              "path": ["notifications", "send-bulk-email"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Viajes con Notificación",
+      "item": [
+        {
+          "name": "Crear Viaje (Notifica Automáticamente)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"destination\": \"Cartagena\",\n  \"startDate\": \"2025-12-25\",\n  \"endDate\": \"2025-12-30\",\n  \"numPassengers\": 4,\n  \"clientId\": \"675850a5c61e3c3ebe6b1234\",\n  \"status\": \"confirmed\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/trips",
+              "host": ["{{base_url}}"],
+              "path": ["trips"]
+            }
+          }
+        },
+        {
+          "name": "Actualizar Estado Viaje (Notifica Cambio)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"in_progress\",\n  \"statusMessage\": \"Tu viaje ha iniciado. ¡Disfruta!\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/trips/1",
+              "host": ["{{base_url}}"],
+              "path": ["trips", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. Recordatorios de Pago",
+      "item": [
+        {
+          "name": "Enviar Recordatorios Masivos",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"days_ahead\": 7\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/installments/send-reminders",
+              "host": ["{{base_url}}"],
+              "path": ["installments", "send-reminders"]
+            }
+          }
+        },
+        {
+          "name": "Recordatorio Individual",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/installments/1/send-reminder",
+              "host": ["{{base_url}}"],
+              "path": ["installments", "1", "send-reminder"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "6. Alertas a Conductores",
+      "item": [
+        {
+          "name": "Alerta Climática",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"Tormenta eléctrica en la ruta hacia Medellín. Evite conducir entre 14:00-18:00.\",\n  \"severity\": \"ALTO\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/drivers/weather-alert",
+              "host": ["{{base_url}}"],
+              "path": ["drivers", "weather-alert"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
