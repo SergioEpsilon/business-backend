@@ -532,6 +532,7 @@ Unificar todo en el backend AdonisJS:
    ```
 
 4. ⚠️ **Actualizar `environment.ts` con ambos backends:**
+
    ```typescript
    export const environment = {
      production: false,

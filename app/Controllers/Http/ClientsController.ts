@@ -1,5 +1,6 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Client from 'App/Models/Client'
+import UserService from 'App/Services/UserService'
 
 export default class ClientsController {
   /**
@@ -14,7 +15,23 @@ export default class ClientsController {
       const page = request.input('page', 1)
       const perPage = request.input('per_page', 20)
       const clients = await Client.query().orderBy('created_at', 'desc').paginate(page, perPage)
-      return response.ok(clients)
+
+      // Extraer token para consultar MS-SECURITY
+      const token = request.header('Authorization')?.replace('Bearer ', '')
+
+      // Serializar modelos a JSON plano y asegurar que tengan la propiedad id
+      const serializedClients = clients.all().map((client) => ({
+        id: client.id, // El id del cliente ES el userId de MS-SECURITY
+        ...client.serialize(),
+      }))
+
+      // Enriquecer con información del usuario
+      const enrichedData = await UserService.enrichWithUserInfo(serializedClients, token)
+
+      return response.ok({
+        meta: clients.getMeta(),
+        data: enrichedData,
+      })
 
       /* CÓDIGO ORIGINAL COMENTADO PARA TESTING:
       // Validar rol ADMINISTRADOR en MS-SECURITY
@@ -54,11 +71,18 @@ export default class ClientsController {
    * El id debe ser el _id del usuario de MS-SECURITY
    */
   public async store({ request, response }: HttpContextContract) {
+    console.log('🎯 === ENTRANDO A ClientsController.store() ===')
     try {
+      console.log('🔍 === POST /clients ===')
+      console.log('📥 Body completo recibido:', request.body())
+      console.log('📥 Headers:', request.headers())
+
       const data = request.only(['id', 'document', 'phone', 'address'])
+      console.log('📦 Datos extraídos:', data)
 
       // Validar que se envió el id (debe ser el _id del usuario de MS-SECURITY)
       if (!data.id) {
+        console.log('❌ Error: Falta el campo id')
         return response.badRequest({
           message: 'El campo id es requerido (debe ser el _id del usuario de MS-SECURITY)',
         })

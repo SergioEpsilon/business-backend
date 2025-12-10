@@ -3,6 +3,7 @@
 ## 📋 Descripción del Sistema
 
 El sistema utiliza **MS-SECURITY** para gestionar la autenticación y autorización mediante:
+
 - **Roles**: Agrupación de permisos (ej: Admin, Manager, Cliente)
 - **Permisos**: Control granular de acceso a endpoints específicos (método + URL)
 - **JWT**: Token de autenticación que incluye roles y permisos del usuario
@@ -31,6 +32,7 @@ El sistema utiliza **MS-SECURITY** para gestionar la autenticación y autorizaci
 **Endpoint**: `POST http://127.0.0.1:8080/api/public/security/login`
 
 **Body** (JSON):
+
 ```json
 {
   "email": "admin@example.com",
@@ -39,6 +41,7 @@ El sistema utiliza **MS-SECURITY** para gestionar la autenticación y autorizaci
 ```
 
 **Respuesta Esperada**:
+
 ```json
 {
   "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
@@ -63,11 +66,13 @@ El sistema utiliza **MS-SECURITY** para gestionar la autenticación y autorizaci
 ### Paso 2: Configurar Token en Postman
 
 **Opción A - Por petición individual**:
+
 1. En la pestaña "Authorization"
 2. Type: "Bearer Token"
 3. Token: `<pegar-token-aqui>`
 
 **Opción B - Variable de colección** (Recomendado):
+
 1. Crear una colección "Travel Agency API"
 2. Variables → Add variable:
    - Name: `auth_token`
@@ -84,11 +89,13 @@ El sistema utiliza **MS-SECURITY** para gestionar la autenticación y autorizaci
 **Endpoint**: `GET http://127.0.0.1:3333/api/v1/clients`
 
 **Headers**:
+
 ```
 Authorization: Bearer <tu-token>
 ```
 
 **Respuesta Esperada** (Si tiene permiso):
+
 ```json
 {
   "meta": {
@@ -101,6 +108,7 @@ Authorization: Bearer <tu-token>
 ```
 
 **Log del Middleware**:
+
 ```
 🔒 === [Security Middleware] Validando solicitud ===
 📍 URL: /api/v1/clients
@@ -115,6 +123,7 @@ Authorization: Bearer <tu-token>
 **Endpoint**: `DELETE http://127.0.0.1:3333/api/v1/clients/1`
 
 **Respuesta Esperada** (Si NO tiene permiso):
+
 ```json
 {
   "message": "No tienes permiso para acceder a este recurso",
@@ -133,6 +142,7 @@ Para otorgar permisos a un rol, usar:
 **Endpoint**: `POST http://127.0.0.1:8080/api/permissions`
 
 **Body**:
+
 ```json
 {
   "url": "/api/v1/clients",
@@ -149,44 +159,48 @@ Luego asignar el permiso al rol:
 
 ### Recursos del Sistema
 
-| Recurso | GET (List) | GET (Show) | POST | PUT | DELETE | Métodos Especiales |
-|---------|------------|------------|------|-----|--------|--------------------|
-| **Clients** | `/api/v1/clients` | `/api/v1/clients/:id` | `/api/v1/clients` | `/api/v1/clients/:id` | `/api/v1/clients/:id` | GET `/api/v1/clients/:id/trips`<br>POST `/api/v1/clients/:id/trips/:tripId` |
-| **Guides** | `/api/v1/guides` | `/api/v1/guides/:id` | `/api/v1/guides` | `/api/v1/guides/:id` | `/api/v1/guides/:id` | GET `/api/v1/guides/available`<br>PATCH `/api/v1/guides/:id/toggle-availability` |
-| **Administrators** | `/api/v1/administrators` | `/api/v1/administrators/:id` | `/api/v1/administrators` | `/api/v1/administrators/:id` | `/api/v1/administrators/:id` | PATCH `/api/v1/administrators/:id/permissions` |
-| **Drivers** | `/api/v1/drivers` | `/api/v1/drivers/:id` | `/api/v1/drivers` | `/api/v1/drivers/:id` | `/api/v1/drivers/:id` | GET `/api/v1/drivers/stats`<br>POST `/api/v1/drivers/weather-alert` |
-| **Vehicles** | `/api/v1/vehicles` | `/api/v1/vehicles/:id` | `/api/v1/vehicles` | `/api/v1/vehicles/:id` | `/api/v1/vehicles/:id` | GET `/api/v1/vehicles/:id/drivers`<br>GET `/api/v1/vehicles/:id/gps` |
-| **Cars** | `/api/v1/cars` | `/api/v1/cars/:id` | `/api/v1/cars` | `/api/v1/cars/:id` | `/api/v1/cars/:id` | - |
-| **Aircrafts** | `/api/v1/aircrafts` | `/api/v1/aircrafts/:id` | `/api/v1/aircrafts` | `/api/v1/aircrafts/:id` | `/api/v1/aircrafts/:id` | - |
-| **Shifts** | `/api/v1/shifts` | `/api/v1/shifts/:id` | `/api/v1/shifts` | `/api/v1/shifts/:id` | `/api/v1/shifts/:id` | PATCH `/api/v1/shifts/:id/start`<br>PATCH `/api/v1/shifts/:id/complete` |
-| **Municipalities** | `/api/v1/municipalities` | `/api/v1/municipalities/:id` | `/api/v1/municipalities` | `/api/v1/municipalities/:id` | `/api/v1/municipalities/:id` | GET `/api/v1/municipalities/search` |
-| **Tourist Activities** | `/api/v1/tourist-activities` | `/api/v1/tourist-activities/:id` | `/api/v1/tourist-activities` | `/api/v1/tourist-activities/:id` | `/api/v1/tourist-activities/:id` | GET `/api/v1/tourist-activities/by-type`<br>PATCH `/api/v1/tourist-activities/:id/toggle-active` |
-| **Plans** | `/api/v1/plans` | `/api/v1/plans/:id` | `/api/v1/plans` | `/api/v1/plans/:id` | `/api/v1/plans/:id` | POST `/api/v1/plans/:id/attach-activities`<br>PATCH `/api/v1/plans/:id/toggle-active` |
-| **Trips** | `/api/v1/trips` | `/api/v1/trips/:id` | `/api/v1/trips` | `/api/v1/trips/:id` | `/api/v1/trips/:id` | POST `/api/v1/trips/:id/clients/:clientId`<br>POST `/api/v1/trips/:id/routes/:routeId` |
-| **Routes** | `/api/v1/routes` | `/api/v1/routes/:id` | `/api/v1/routes` | `/api/v1/routes/:id` | `/api/v1/routes/:id` | POST `/api/v1/routes/:id/vehicles/:vehicleId` |
-| **Invoices** | `/api/v1/invoices` | `/api/v1/invoices/:id` | `/api/v1/invoices` | `/api/v1/invoices/:id` | `/api/v1/invoices/:id` | POST `/api/v1/invoices/:id/register-payment` |
-| **Installments** | `/api/v1/installments` | `/api/v1/installments/:id` | `/api/v1/installments` | `/api/v1/installments/:id` | `/api/v1/installments/:id` | GET `/api/v1/installments/overdue`<br>POST `/api/v1/installments/:id/pay` |
-| **Hotels** | `/api/v1/hotels` | `/api/v1/hotels/:id` | `/api/v1/hotels` | `/api/v1/hotels/:id` | `/api/v1/hotels/:id` | GET `/api/v1/hotels/:id/rooms` |
-| **Rooms** | `/api/v1/rooms` | `/api/v1/rooms/:id` | `/api/v1/rooms` | `/api/v1/rooms/:id` | `/api/v1/rooms/:id` | GET `/api/v1/rooms/hotel/:hotelId` |
-| **Itinerary Transports** | `/api/v1/itinerary-transports` | `/api/v1/itinerary-transports/:id` | `/api/v1/itinerary-transports` | `/api/v1/itinerary-transports/:id` | `/api/v1/itinerary-transports/:id` | - |
+| Recurso                  | GET (List)                     | GET (Show)                         | POST                           | PUT                                | DELETE                             | Métodos Especiales                                                                               |
+| ------------------------ | ------------------------------ | ---------------------------------- | ------------------------------ | ---------------------------------- | ---------------------------------- | ------------------------------------------------------------------------------------------------ |
+| **Clients**              | `/api/v1/clients`              | `/api/v1/clients/:id`              | `/api/v1/clients`              | `/api/v1/clients/:id`              | `/api/v1/clients/:id`              | GET `/api/v1/clients/:id/trips`<br>POST `/api/v1/clients/:id/trips/:tripId`                      |
+| **Guides**               | `/api/v1/guides`               | `/api/v1/guides/:id`               | `/api/v1/guides`               | `/api/v1/guides/:id`               | `/api/v1/guides/:id`               | GET `/api/v1/guides/available`<br>PATCH `/api/v1/guides/:id/toggle-availability`                 |
+| **Administrators**       | `/api/v1/administrators`       | `/api/v1/administrators/:id`       | `/api/v1/administrators`       | `/api/v1/administrators/:id`       | `/api/v1/administrators/:id`       | PATCH `/api/v1/administrators/:id/permissions`                                                   |
+| **Drivers**              | `/api/v1/drivers`              | `/api/v1/drivers/:id`              | `/api/v1/drivers`              | `/api/v1/drivers/:id`              | `/api/v1/drivers/:id`              | GET `/api/v1/drivers/stats`<br>POST `/api/v1/drivers/weather-alert`                              |
+| **Vehicles**             | `/api/v1/vehicles`             | `/api/v1/vehicles/:id`             | `/api/v1/vehicles`             | `/api/v1/vehicles/:id`             | `/api/v1/vehicles/:id`             | GET `/api/v1/vehicles/:id/drivers`<br>GET `/api/v1/vehicles/:id/gps`                             |
+| **Cars**                 | `/api/v1/cars`                 | `/api/v1/cars/:id`                 | `/api/v1/cars`                 | `/api/v1/cars/:id`                 | `/api/v1/cars/:id`                 | -                                                                                                |
+| **Aircrafts**            | `/api/v1/aircrafts`            | `/api/v1/aircrafts/:id`            | `/api/v1/aircrafts`            | `/api/v1/aircrafts/:id`            | `/api/v1/aircrafts/:id`            | -                                                                                                |
+| **Shifts**               | `/api/v1/shifts`               | `/api/v1/shifts/:id`               | `/api/v1/shifts`               | `/api/v1/shifts/:id`               | `/api/v1/shifts/:id`               | PATCH `/api/v1/shifts/:id/start`<br>PATCH `/api/v1/shifts/:id/complete`                          |
+| **Municipalities**       | `/api/v1/municipalities`       | `/api/v1/municipalities/:id`       | `/api/v1/municipalities`       | `/api/v1/municipalities/:id`       | `/api/v1/municipalities/:id`       | GET `/api/v1/municipalities/search`                                                              |
+| **Tourist Activities**   | `/api/v1/tourist-activities`   | `/api/v1/tourist-activities/:id`   | `/api/v1/tourist-activities`   | `/api/v1/tourist-activities/:id`   | `/api/v1/tourist-activities/:id`   | GET `/api/v1/tourist-activities/by-type`<br>PATCH `/api/v1/tourist-activities/:id/toggle-active` |
+| **Plans**                | `/api/v1/plans`                | `/api/v1/plans/:id`                | `/api/v1/plans`                | `/api/v1/plans/:id`                | `/api/v1/plans/:id`                | POST `/api/v1/plans/:id/attach-activities`<br>PATCH `/api/v1/plans/:id/toggle-active`            |
+| **Trips**                | `/api/v1/trips`                | `/api/v1/trips/:id`                | `/api/v1/trips`                | `/api/v1/trips/:id`                | `/api/v1/trips/:id`                | POST `/api/v1/trips/:id/clients/:clientId`<br>POST `/api/v1/trips/:id/routes/:routeId`           |
+| **Routes**               | `/api/v1/routes`               | `/api/v1/routes/:id`               | `/api/v1/routes`               | `/api/v1/routes/:id`               | `/api/v1/routes/:id`               | POST `/api/v1/routes/:id/vehicles/:vehicleId`                                                    |
+| **Invoices**             | `/api/v1/invoices`             | `/api/v1/invoices/:id`             | `/api/v1/invoices`             | `/api/v1/invoices/:id`             | `/api/v1/invoices/:id`             | POST `/api/v1/invoices/:id/register-payment`                                                     |
+| **Installments**         | `/api/v1/installments`         | `/api/v1/installments/:id`         | `/api/v1/installments`         | `/api/v1/installments/:id`         | `/api/v1/installments/:id`         | GET `/api/v1/installments/overdue`<br>POST `/api/v1/installments/:id/pay`                        |
+| **Hotels**               | `/api/v1/hotels`               | `/api/v1/hotels/:id`               | `/api/v1/hotels`               | `/api/v1/hotels/:id`               | `/api/v1/hotels/:id`               | GET `/api/v1/hotels/:id/rooms`                                                                   |
+| **Rooms**                | `/api/v1/rooms`                | `/api/v1/rooms/:id`                | `/api/v1/rooms`                | `/api/v1/rooms/:id`                | `/api/v1/rooms/:id`                | GET `/api/v1/rooms/hotel/:hotelId`                                                               |
+| **Itinerary Transports** | `/api/v1/itinerary-transports` | `/api/v1/itinerary-transports/:id` | `/api/v1/itinerary-transports` | `/api/v1/itinerary-transports/:id` | `/api/v1/itinerary-transports/:id` | -                                                                                                |
 
 ## 🎭 Roles Sugeridos
 
 ### 1. **Super Admin**
+
 - Acceso total a todos los recursos
 - CRUD completo en todos los endpoints
 
 ### 2. **Manager**
+
 - Lectura de todos los recursos
 - Escritura en: Clientes, Viajes, Planes, Actividades
 - Sin acceso a: Administradores, Permisos
 
 ### 3. **Operador**
+
 - Lectura de: Clientes, Viajes, Planes, Rutas
 - Escritura en: Turnos, Itinerarios de Transporte
 - Sin acceso a: Facturas, Cuotas
 
 ### 4. **Cliente**
+
 - Lectura de: Sus propios viajes, Planes disponibles, Actividades
 - Escritura en: Sus datos personales
 - Sin acceso a: Recursos administrativos
@@ -200,13 +214,13 @@ En la colección, ir a "Tests" y agregar:
 ```javascript
 // Script para guardar token automáticamente después del login
 if (pm.response.code === 200) {
-    const jsonData = pm.response.json();
-    if (jsonData.token) {
-        pm.collectionVariables.set("auth_token", jsonData.token);
-        console.log("✅ Token guardado:", jsonData.token);
-        console.log("🎭 Roles:", jsonData.roles);
-        console.log("🔑 Permisos:", jsonData.permissions);
-    }
+  const jsonData = pm.response.json()
+  if (jsonData.token) {
+    pm.collectionVariables.set('auth_token', jsonData.token)
+    console.log('✅ Token guardado:', jsonData.token)
+    console.log('🎭 Roles:', jsonData.roles)
+    console.log('🔑 Permisos:', jsonData.permissions)
+  }
 }
 ```
 
@@ -214,31 +228,36 @@ if (pm.response.code === 200) {
 
 ```javascript
 // Test para verificar acceso denegado
-pm.test("Permiso denegado correctamente", function () {
-    pm.expect(pm.response.code).to.be.oneOf([401, 403]);
-});
+pm.test('Permiso denegado correctamente', function () {
+  pm.expect(pm.response.code).to.be.oneOf([401, 403])
+})
 
 // Test para verificar acceso permitido
-pm.test("Permiso concedido", function () {
-    pm.expect(pm.response.code).to.equal(200);
-});
+pm.test('Permiso concedido', function () {
+  pm.expect(pm.response.code).to.equal(200)
+})
 ```
 
 ## 🐛 Troubleshooting
 
 ### Error: "No autenticado: Se requiere token de autorización"
+
 **Solución**: Verificar que el header `Authorization: Bearer <token>` esté presente.
 
 ### Error: "No tienes permiso para acceder a este recurso"
-**Solución**: 
+
+**Solución**:
+
 1. Verificar que el permiso (método + URL exacta) exista en la BD
 2. Verificar que el rol del usuario tenga ese permiso asignado
 3. Hacer login nuevamente para obtener token actualizado
 
 ### Error: "Error al validar permiso"
+
 **Solución**: Verificar que MS-SECURITY esté corriendo en `http://127.0.0.1:8080`
 
 ### El middleware no se ejecuta
+
 **Solución**: Verificar que la ruta tenga `.middleware('security')` aplicado
 
 ## 📝 Notas Importantes
@@ -252,6 +271,7 @@ pm.test("Permiso concedido", function () {
 ## 🚀 Siguiente Paso
 
 Una vez validado el sistema de permisos:
+
 1. Crear roles en MS-SECURITY
 2. Crear permisos para cada endpoint
 3. Asignar permisos a roles

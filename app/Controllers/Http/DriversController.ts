@@ -2,7 +2,7 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Driver from 'App/Models/Driver'
 import axios from 'axios'
 import Env from '@ioc:Adonis/Core/Env'
-import { v4 as uuidv4 } from 'uuid'
+import UserService from 'App/Services/UserService'
 
 export default class DriversController {
   /**
@@ -23,7 +23,18 @@ export default class DriversController {
 
       const drivers = await query.orderBy('created_at', 'desc').paginate(page, perPage)
 
-      return response.ok(drivers)
+      // Extraer token para consultar MS-SECURITY
+      const token = request.header('Authorization')?.replace('Bearer ', '')
+
+      // Serializar modelos a JSON plano
+      const serializedDrivers = drivers.all().map((driver) => driver.serialize())
+
+      // Enriquecer con información del usuario
+      const enrichedData = await UserService.enrichWithUserInfo(serializedDrivers, token)
+      return response.ok({
+        meta: drivers.getMeta(),
+        data: enrichedData,
+      })
     } catch (error) {
       return response.badRequest({
         message: 'Error al obtener conductores',
@@ -52,23 +63,25 @@ export default class DriversController {
   /**
    * Crea un nuevo conductor
    * POST /drivers
-   * Valida que el user_id existe en el microservicio de seguridad
+   * Body: {id, document, phone, licenseNumber, licenseType, licenseExpiryDate, yearsOfExperience}
+   * El 'id' es el _id del usuario en MS-SECURITY
    */
   public async store({ request, response }: HttpContextContract) {
     try {
+      console.log('🎯 === DriversController.store() ===')
+      console.log('📥 Body completo:', request.body())
+
       const data = request.only([
-        'userId',
-        'firstName',
-        'lastName',
-        'documentType',
-        'documentNumber',
+        'id', // Este es el _id de MS-SECURITY
+        'document',
         'phone',
         'licenseNumber',
         'licenseType',
         'licenseExpiryDate',
         'yearsOfExperience',
-        'vehicleId',
       ])
+
+      console.log('📦 Datos extraídos:', data)
 
       // Validar que el usuario existe en MS-Security
       const token = request.header('Authorization')?.replace('Bearer ', '')
@@ -79,16 +92,13 @@ export default class DriversController {
         })
       }
 
-      // Validar contra MS-Security que el usuario existe y es tipo 'driver'
+      // Validar contra MS-Security que el usuario existe
       try {
-        const userValidation = await axios.get(
-          `${Env.get('MS_SECURITY')}/api/users/${data.userId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        )
+        const userValidation = await axios.get(`${Env.get('MS_SECURITY')}/api/users/${data.id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
 
         console.log('Usuario validado en MS-Security:', userValidation.data)
 
@@ -98,17 +108,10 @@ export default class DriversController {
           })
         }
 
-        // Validar userType solo si existe y no es 'driver'
-        const userType = userValidation.data.userType
-        if (userType && userType !== 'driver') {
-          return response.badRequest({
-            message: `El usuario es de tipo '${userType}', debe ser 'driver'`,
-          })
-        }
-
-        // Nota: No validamos 'autenticado' para permitir crear drivers sin verificación completa
+        // Nota: No validamos roles aquí - eso se hace en MS-SECURITY
       } catch (error) {
-        console.error('Error al validar con MS-Security:', error.message)
+        console.error('❌ Error al validar con MS-Security:', error.message)
+        console.error('📄 Detalles:', error.response?.data)
         return response.badRequest({
           message: 'Error al validar usuario en MS-Security',
           error: error.response?.data || error.message,
@@ -116,17 +119,22 @@ export default class DriversController {
         })
       }
 
+      console.log('✅ Creando conductor con datos:', data)
+
       const driver = await Driver.create({
-        id: uuidv4(),
         ...data,
         isAvailable: true,
       })
+
+      console.log('✅ Conductor creado exitosamente:', driver.id)
 
       return response.created({
         message: 'Conductor registrado exitosamente',
         data: driver,
       })
     } catch (error) {
+      console.error('❌ ERROR en DriversController.store():', error.message)
+      console.error('📄 Stack:', error.stack)
       return response.badRequest({
         message: 'Error al registrar conductor',
         error: error.message,
@@ -143,16 +151,12 @@ export default class DriversController {
       const driver = await Driver.findOrFail(params.id)
 
       const data = request.only([
-        'firstName',
-        'lastName',
-        'documentType',
-        'documentNumber',
+        'document',
         'phone',
         'licenseNumber',
         'licenseType',
         'licenseExpiryDate',
         'yearsOfExperience',
-        'vehicleId',
         'isAvailable',
       ])
 
@@ -226,7 +230,7 @@ export default class DriversController {
       const token = request.header('Authorization')?.replace('Bearer ', '')
 
       // Consultar el usuario en el microservicio de seguridad
-      const userResponse = await axios.get(`${Env.get('MS_SECURITY')}/api/users/${driver.userId}`, {
+      const userResponse = await axios.get(`${Env.get('MS_SECURITY')}/api/users/${driver.id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -271,22 +275,19 @@ export default class DriversController {
 
       // Obtener emails de los usuarios desde MS-Security
       const token = request.header('Authorization')?.replace('Bearer ', '')
-      const userIds = drivers.map((d) => d.userId)
+      const userIds = drivers.map((d) => d.id)
 
       const emailPromises = drivers.map(async (driver) => {
         try {
           // Consultar usuario en MS-Security para obtener email
-          const userResponse = await axios.get(
-            `${Env.get('MS_SECURITY')}/api/users/${driver.userId}`,
-            {
-              headers: { Authorization: `Bearer ${token}` },
-            }
-          )
+          const userResponse = await axios.get(`${Env.get('MS_SECURITY')}/api/users/${driver.id}`, {
+            headers: { Authorization: `Bearer ${token}` },
+          })
 
           const userEmail = userResponse.data.email
 
           if (!userEmail) {
-            console.warn(`Conductor ${driver.firstName} ${driver.lastName} no tiene email`)
+            console.warn(`Conductor ${driver.id} no tiene email`)
             return null
           }
 
@@ -296,7 +297,7 @@ export default class DriversController {
             {
               to: userEmail,
               subject: `⚠️ Alerta Climática - ${severity || 'IMPORTANTE'}`,
-              message: `Estimado/a ${driver.firstName} ${driver.lastName},
+              message: `Estimado/a Conductor,
 
 ${message}
 
@@ -315,7 +316,6 @@ Sistema de Gestión de Viajes`,
 
           return {
             driverId: driver.id,
-            driverName: `${driver.firstName} ${driver.lastName}`,
             email: userEmail,
             sent: true,
           }
@@ -323,7 +323,6 @@ Sistema de Gestión de Viajes`,
           console.error(`Error enviando alerta a conductor ${driver.id}:`, error.message)
           return {
             driverId: driver.id,
-            driverName: `${driver.firstName} ${driver.lastName}`,
             sent: false,
             error: error.message,
           }

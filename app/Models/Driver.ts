@@ -6,20 +6,10 @@ export default class Driver extends BaseModel {
   @column({ isPrimary: true })
   public id: string
 
-  @column()
-  public userId: string
+  // NO hay userId separado - el id ES el userId de MS-SECURITY
 
   @column()
-  public firstName: string
-
-  @column()
-  public lastName: string
-
-  @column()
-  public documentType: string
-
-  @column()
-  public documentNumber: string
+  public document: string
 
   @column()
   public phone: string
@@ -30,14 +20,11 @@ export default class Driver extends BaseModel {
   @column()
   public licenseType: string
 
-  @column()
+  @column.date()
   public licenseExpiryDate: DateTime
 
   @column()
   public yearsOfExperience: number
-
-  @column()
-  public vehicleId: number | null
 
   @column()
   public isAvailable: boolean

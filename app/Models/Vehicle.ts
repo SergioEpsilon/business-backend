@@ -2,7 +2,7 @@ import { DateTime } from 'luxon'
 import { BaseModel, column, manyToMany, ManyToMany, hasOne, HasOne } from '@ioc:Adonis/Lucid/Orm'
 import Driver from 'App/Models/Driver'
 import Route from 'App/Models/Route'
-import Gp from 'App/Models/Gp'
+import VehicleGps from 'App/Models/VehicleGps'
 import Car from 'App/Models/Car'
 import Aircraft from 'App/Models/Aircraft'
 
@@ -59,11 +59,11 @@ export default class Vehicle extends BaseModel {
   })
   public routes: ManyToMany<typeof Route>
 
-  // Relación uno a uno con GPS
-  @hasOne(() => Gp, {
+  // Relación uno a uno con VehicleGps
+  @hasOne(() => VehicleGps, {
     foreignKey: 'vehicleId',
   })
-  public gps: HasOne<typeof Gp>
+  public gps: HasOne<typeof VehicleGps>
 
   // Relación uno a uno con Car (cuando vehicleType = 'car')
   @hasOne(() => Car, {

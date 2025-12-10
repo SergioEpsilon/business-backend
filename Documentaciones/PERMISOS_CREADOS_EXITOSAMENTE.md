@@ -10,28 +10,28 @@
 
 ## 📊 Distribución de Permisos por Módulo
 
-| #  | Módulo                 | Permisos | URLs Base                          |
-|----|------------------------|----------|-------------------------------------|
-| 1  | CLIENTS                | 8        | `/api/v1/clients`                   |
-| 2  | GUIDES                 | 8        | `/api/v1/guides`                    |
-| 3  | ADMINISTRATORS         | 6        | `/api/v1/administrators`            |
-| 4  | DRIVERS                | 8        | `/api/v1/drivers`                   |
-| 5  | VEHICLES               | 8        | `/api/v1/vehicles`                  |
-| 6  | CARS                   | 5        | `/api/v1/cars`                      |
-| 7  | AIRCRAFTS              | 5        | `/api/v1/aircrafts`                 |
-| 8  | SHIFTS                 | 8        | `/api/v1/shifts`                    |
-| 9  | MUNICIPALITIES         | 5        | `/api/v1/municipalities`            |
-| 10 | TOURIST ACTIVITIES     | 8        | `/api/v1/tourist-activities`        |
-| 11 | PLANS                  | 8        | `/api/v1/plans`                     |
-| 12 | TRIPS                  | 8        | `/api/v1/trips`                     |
-| 13 | ROUTES                 | 8        | `/api/v1/routes`                    |
-| 14 | INVOICES               | 8        | `/api/v1/invoices`                  |
-| 15 | INSTALLMENTS           | 7        | `/api/v1/installments`              |
-| 16 | BANK CARDS             | 6        | `/api/v1/bank-cards`                |
-| 17 | HOTELS                 | 6        | `/api/v1/hotels`                    |
-| 18 | ROOMS                  | 5        | `/api/v1/rooms`                     |
-| 19 | ITINERARY TRANSPORTS   | 5        | `/api/v1/itinerary-transports`      |
-|    | **TOTAL**              | **130**  | **19 módulos**                      |
+| #   | Módulo               | Permisos | URLs Base                      |
+| --- | -------------------- | -------- | ------------------------------ |
+| 1   | CLIENTS              | 8        | `/api/v1/clients`              |
+| 2   | GUIDES               | 8        | `/api/v1/guides`               |
+| 3   | ADMINISTRATORS       | 6        | `/api/v1/administrators`       |
+| 4   | DRIVERS              | 8        | `/api/v1/drivers`              |
+| 5   | VEHICLES             | 8        | `/api/v1/vehicles`             |
+| 6   | CARS                 | 5        | `/api/v1/cars`                 |
+| 7   | AIRCRAFTS            | 5        | `/api/v1/aircrafts`            |
+| 8   | SHIFTS               | 8        | `/api/v1/shifts`               |
+| 9   | MUNICIPALITIES       | 5        | `/api/v1/municipalities`       |
+| 10  | TOURIST ACTIVITIES   | 8        | `/api/v1/tourist-activities`   |
+| 11  | PLANS                | 8        | `/api/v1/plans`                |
+| 12  | TRIPS                | 8        | `/api/v1/trips`                |
+| 13  | ROUTES               | 8        | `/api/v1/routes`               |
+| 14  | INVOICES             | 8        | `/api/v1/invoices`             |
+| 15  | INSTALLMENTS         | 7        | `/api/v1/installments`         |
+| 16  | BANK CARDS           | 6        | `/api/v1/bank-cards`           |
+| 17  | HOTELS               | 6        | `/api/v1/hotels`               |
+| 18  | ROOMS                | 5        | `/api/v1/rooms`                |
+| 19  | ITINERARY TRANSPORTS | 5        | `/api/v1/itinerary-transports` |
+|     | **TOTAL**            | **130**  | **19 módulos**                 |
 
 ---
 
@@ -40,11 +40,13 @@
 Se crearon 3 scripts PowerShell para evitar timeouts:
 
 1. **`crear-permisos-completo.ps1`**
+
    - Limpia permisos incorrectos
    - Crea permisos: CLIENTS, GUIDES, ADMINISTRATORS, DRIVERS, VEHICLES, CARS, AIRCRAFTS
    - Total parcial: 48 permisos
 
 2. **`crear-permisos-parte2.ps1`**
+
    - Crea permisos: SHIFTS, MUNICIPALITIES, TOURIST ACTIVITIES, PLANS, TRIPS, ROUTES
    - Total acumulado: 93 permisos
 
@@ -57,25 +59,41 @@ Se crearon 3 scripts PowerShell para evitar timeouts:
 ## ✅ Verificación
 
 ### Comando para verificar cantidad:
+
 ```powershell
 mongosh "mongodb://localhost:27017/ms-security" --quiet --eval "db.permission.countDocuments()"
 ```
+
 **Resultado**: `130`
 
 ### Comando para ver algunos permisos:
+
 ```powershell
 mongosh "mongodb://localhost:27017/ms-security" --quiet --eval "db.permission.find({}, {url: 1, method: 1, description: 1, _id: 0}).sort({url: 1}).limit(10)"
 ```
 
 ### Ejemplo de permisos creados:
+
 ```json
 [
   { "url": "/api/v1/administrators", "method": "GET", "description": "Listar administradores" },
   { "url": "/api/v1/administrators", "method": "POST", "description": "Crear administrador" },
   { "url": "/api/v1/administrators/:id", "method": "GET", "description": "Ver administrador" },
-  { "url": "/api/v1/administrators/:id", "method": "PUT", "description": "Actualizar administrador" },
-  { "url": "/api/v1/administrators/:id", "method": "DELETE", "description": "Eliminar administrador" },
-  { "url": "/api/v1/administrators/:id/permissions", "method": "PATCH", "description": "Actualizar permisos" }
+  {
+    "url": "/api/v1/administrators/:id",
+    "method": "PUT",
+    "description": "Actualizar administrador"
+  },
+  {
+    "url": "/api/v1/administrators/:id",
+    "method": "DELETE",
+    "description": "Eliminar administrador"
+  },
+  {
+    "url": "/api/v1/administrators/:id/permissions",
+    "method": "PATCH",
+    "description": "Actualizar permisos"
+  }
 ]
 ```
 
@@ -84,6 +102,7 @@ mongosh "mongodb://localhost:27017/ms-security" --quiet --eval "db.permission.fi
 ## 🔄 Estado del Sistema
 
 ### ✅ Completado
+
 - [x] Middleware de seguridad habilitado en `app/middleware/Security.ts`
 - [x] Todos los endpoints protegidos en `start/routes.ts` (19 módulos)
 - [x] Limpieza de permisos incorrectos ejecutada
@@ -91,6 +110,7 @@ mongosh "mongodb://localhost:27017/ms-security" --quiet --eval "db.permission.fi
 - [x] Estructura de permisos validada (`url`, `method`, `description`, `_class`)
 
 ### 📋 Pendiente
+
 - [ ] **Crear roles en MS-SECURITY** (ej: ADMIN, USER, GUEST, DRIVER, GUIDE)
 - [ ] **Asignar permisos a roles** (cada rol debe tener un array de permission IDs)
 - [ ] **Crear usuarios de prueba** con diferentes roles
@@ -102,6 +122,7 @@ mongosh "mongodb://localhost:27017/ms-security" --quiet --eval "db.permission.fi
 ## 🧪 Próximos Pasos: Testing con Postman
 
 ### 1. Login en MS-SECURITY
+
 ```http
 POST http://127.0.0.1:8080/api/public/security/login
 Content-Type: application/json
@@ -113,6 +134,7 @@ Content-Type: application/json
 ```
 
 **Respuesta esperada:**
+
 ```json
 {
   "token": "eyJhbGciOiJIUzI1NiJ9...",
@@ -127,12 +149,14 @@ Content-Type: application/json
 ```
 
 ### 2. Probar Endpoint Protegido
+
 ```http
 GET http://localhost:3333/api/v1/clients
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9...
 ```
 
 **Flujo de validación:**
+
 1. Request llega a AdonisJS (ms-bussiness-backend)
 2. Middleware `Security` intercepta el request
 3. Extrae token del header `Authorization`
@@ -198,25 +222,29 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9...
 ## 🎯 Comandos Útiles
 
 ### Ver todos los permisos:
+
 ```bash
 mongosh mongodb://localhost:27017/ms-security
 db.permission.find().pretty()
 ```
 
 ### Contar permisos por método:
+
 ```javascript
 db.permission.aggregate([
-  { $group: { _id: "$method", count: { $sum: 1 } } },
-  { $sort: { count: -1 } }
+  { $group: { _id: '$method', count: { $sum: 1 } } },
+  { $sort: { count: -1 } },
 ])
 ```
 
 ### Buscar permisos de un módulo específico:
+
 ```javascript
-db.permission.find({ url: { $regex: "^/api/v1/clients" } })
+db.permission.find({ url: { $regex: '^/api/v1/clients' } })
 ```
 
 ### Eliminar todos los permisos (si necesitas reiniciar):
+
 ```javascript
 db.permission.deleteMany({})
 ```
@@ -229,4 +257,3 @@ db.permission.deleteMany({})
 Todos los 130 endpoints del backend están mapeados como permisos en MongoDB.
 
 **Siguiente fase**: Crear roles y asignar permisos, luego probar con Postman.
-

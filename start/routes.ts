@@ -31,7 +31,13 @@ Route.get('/', async () => {
 // API v1 Routes
 Route.group(() => {
   // ==================== USER ROUTES ====================
-  // Las rutas de usuarios se manejan en MS-SECURITY
+  // Obtener usuarios disponibles para asignar a entidades de negocio
+  Route.group(() => {
+    Route.get('/available-for/:roleType', 'UsersController.availableForRole')
+    Route.get('/:id', 'UsersController.show')
+  })
+    .prefix('/users')
+    .middleware('security')
 
   // ==================== CLIENT ROUTES ====================
   Route.group(() => {
@@ -121,6 +127,17 @@ Route.group(() => {
     Route.delete('/:id', 'AircraftsController.destroy')
   })
     .prefix('/aircrafts')
+    .middleware('security')
+
+  // ==================== VEHICLE GPS ROUTES ====================
+  Route.group(() => {
+    Route.get('/', 'VehicleGpsController.index')
+    Route.get('/:vehicleId', 'VehicleGpsController.show')
+    Route.post('/:vehicleId', 'VehicleGpsController.update')
+    Route.post('/:vehicleId/simulate', 'VehicleGpsController.simulate')
+    Route.delete('/:vehicleId', 'VehicleGpsController.destroy')
+  })
+    .prefix('/vehicle-gps')
     .middleware('security')
 
   // ==================== SHIFT ROUTES ====================

@@ -90,7 +90,7 @@ Itinerary Transports: 5
 1. Conectarse a `mongodb://localhost:27017`
 2. Seleccionar base de datos `ms-security`
 
-### Paso 2: Abrir Shell (_MONGOSH)
+### Paso 2: Abrir Shell (\_MONGOSH)
 
 1. En la parte inferior de Compass, clic en `_MONGOSH` tab
 2. Pegar el contenido del archivo `crear-todos-permisos.js`
@@ -127,10 +127,10 @@ db.permission.find().limit(5).pretty()
 
 ```javascript
 // Ver todos los permisos de clientes
-db.permission.find({ url: { $regex: "^/api/v1/clients" } }).pretty()
+db.permission.find({ url: { $regex: '^/api/v1/clients' } }).pretty()
 
 // Ver todos los permisos de viajes
-db.permission.find({ url: { $regex: "^/api/v1/trips" } }).pretty()
+db.permission.find({ url: { $regex: '^/api/v1/trips' } }).pretty()
 ```
 
 ## 🔧 Troubleshooting
@@ -140,6 +140,7 @@ db.permission.find({ url: { $regex: "^/api/v1/trips" } }).pretty()
 **Problema**: MongoDB no está corriendo
 
 **Solución**:
+
 ```powershell
 # Iniciar MongoDB
 net start MongoDB
@@ -153,6 +154,7 @@ mongod
 **Problema**: Necesitas autenticación
 
 **Solución**:
+
 ```powershell
 mongosh "mongodb://usuario:password@localhost:27017/ms-security"
 ```
@@ -162,6 +164,7 @@ mongosh "mongodb://usuario:password@localhost:27017/ms-security"
 **Problema**: La base de datos no existe
 
 **Solución**:
+
 ```javascript
 use ms-security
 // La base de datos se creará automáticamente al insertar datos
@@ -170,6 +173,7 @@ use ms-security
 ### Los permisos no aparecen
 
 **Verificar conexión**:
+
 ```javascript
 // En mongosh
 show dbs
@@ -216,6 +220,7 @@ print("✅ Rol Admin creado con " + allPermissions.length + " permisos")
 ## 🧪 Probar en Postman
 
 1. **Login**:
+
    ```
    POST http://127.0.0.1:8080/api/public/security/login
    Body: { "email": "tu@email.com", "password": "password" }
@@ -224,6 +229,7 @@ print("✅ Rol Admin creado con " + allPermissions.length + " permisos")
 2. **Copiar token** de la respuesta
 
 3. **Probar endpoint protegido**:
+
    ```
    GET http://127.0.0.1:3333/api/v1/clients
    Authorization: Bearer <tu-token>

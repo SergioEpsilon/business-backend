@@ -78,16 +78,38 @@ export default class TripsController {
    * Actualiza la información de un viaje basado
    * en el identificador y nuevos parámetros
    */
-  public async update({ params, request }: HttpContextContract) {
-    const theTrip: Trip = await Trip.findOrFail(params.id)
-    const body = request.body()
-    if (body.destination) theTrip.destination = body.destination
-    if (body.description) theTrip.description = body.description
-    if (body.startDate) theTrip.startDate = body.startDate
-    if (body.endDate) theTrip.endDate = body.endDate
-    if (body.price !== undefined) theTrip.price = body.price
-    if (body.capacity !== undefined) theTrip.capacity = body.capacity
-    return await theTrip.save()
+  public async update({ params, request, response }: HttpContextContract) {
+    try {
+      const theTrip: Trip = await Trip.findOrFail(params.id)
+      const body = request.body()
+
+      // Función helper para convertir fecha ISO a formato MySQL (YYYY-MM-DD)
+      const formatDate = (dateString: string) => {
+        if (!dateString) return undefined
+        const date = new Date(dateString)
+        return date.toISOString().split('T')[0] // Extrae solo YYYY-MM-DD
+      }
+
+      if (body.destination) theTrip.destination = body.destination
+      if (body.description) theTrip.description = body.description
+      if (body.startDate) theTrip.startDate = formatDate(body.startDate) as any
+      if (body.endDate) theTrip.endDate = formatDate(body.endDate) as any
+      if (body.price !== undefined) theTrip.price = body.price
+      if (body.capacity !== undefined) theTrip.capacity = body.capacity
+
+      await theTrip.save()
+
+      return response.ok({
+        message: 'Viaje actualizado exitosamente',
+        data: theTrip,
+      })
+    } catch (error) {
+      console.error('Error al actualizar viaje:', error.message)
+      return response.badRequest({
+        message: 'Error al actualizar viaje',
+        error: error.message,
+      })
+    }
   }
 
   /**

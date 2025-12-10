@@ -1,6 +1,7 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Administrator from 'App/Models/Administrator'
 import Database from '@ioc:Adonis/Lucid/Database'
+import UserService from 'App/Services/UserService'
 
 export default class AdministratorsController {
   /**
@@ -21,7 +22,18 @@ export default class AdministratorsController {
 
       const administrators = await query.orderBy('created_at', 'desc').paginate(page, perPage)
 
-      return response.ok(administrators)
+      // Extraer token para consultar MS-SECURITY
+      const token = request.header('Authorization')?.replace('Bearer ', '')
+
+      // Serializar modelos a JSON plano
+      const serializedAdmins = administrators.all().map((admin) => admin.serialize())
+
+      // Enriquecer con información del usuario
+      const enrichedData = await UserService.enrichWithUserInfo(serializedAdmins, token)
+      return response.ok({
+        meta: administrators.getMeta(),
+        data: enrichedData,
+      })
     } catch (error) {
       return response.badRequest({
         message: 'Error al obtener administradores',
@@ -37,16 +49,21 @@ export default class AdministratorsController {
    */
   public async store({ request, response }: HttpContextContract) {
     try {
+      console.log('🎯 === AdministratorsController.store() ===')
+      console.log('📥 Body completo:', request.body())
+
       const data = request.only([
         'id',
         'document',
         'phone',
         'department',
-        'access_level',
-        'can_manage_users',
-        'can_manage_trips',
-        'can_manage_invoices',
+        'accessLevel',
+        'canManageUsers',
+        'canManageTrips',
+        'canManageInvoices',
       ])
+
+      console.log('📦 Datos extraídos:', data)
 
       // Validar que se envió el id (debe ser el _id del usuario de MS-SECURITY)
       if (!data.id) {
@@ -64,24 +81,29 @@ export default class AdministratorsController {
         })
       }
 
+      console.log('✅ Creando administrador con datos:', data)
+
       // Crear administrador usando el MISMO ID del usuario de MS-SECURITY
       const administrator = await Administrator.create({
         id: data.id,
         document: data.document,
         phone: data.phone,
         department: data.department,
-        accessLevel: data.access_level || 1,
-        canManageUsers: data.can_manage_users !== undefined ? data.can_manage_users : false,
-        canManageTrips: data.can_manage_trips !== undefined ? data.can_manage_trips : false,
-        canManageInvoices:
-          data.can_manage_invoices !== undefined ? data.can_manage_invoices : false,
+        accessLevel: data.accessLevel || 1,
+        canManageUsers: data.canManageUsers !== undefined ? data.canManageUsers : false,
+        canManageTrips: data.canManageTrips !== undefined ? data.canManageTrips : false,
+        canManageInvoices: data.canManageInvoices !== undefined ? data.canManageInvoices : false,
       })
+
+      console.log('✅ Administrador creado exitosamente:', administrator.id)
 
       return response.created({
         message: 'Administrador registrado exitosamente',
         data: administrator,
       })
     } catch (error) {
+      console.error('❌ ERROR en AdministratorsController.store():', error.message)
+      console.error('📄 Stack:', error.stack)
       return response.badRequest({
         message: 'Error al crear administrador',
         error: error.message,

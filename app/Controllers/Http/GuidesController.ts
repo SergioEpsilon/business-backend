@@ -1,6 +1,7 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Guide from 'App/Models/Guide'
 import Database from '@ioc:Adonis/Lucid/Database'
+import UserService from 'App/Services/UserService'
 
 export default class GuidesController {
   /**
@@ -26,7 +27,18 @@ export default class GuidesController {
 
       const guides = await query.orderBy('created_at', 'desc').paginate(page, perPage)
 
-      return response.ok(guides)
+      // Extraer token para consultar MS-SECURITY
+      const token = request.header('Authorization')?.replace('Bearer ', '')
+
+      // Serializar modelos a JSON plano
+      const serializedGuides = guides.all().map((guide) => guide.serialize())
+
+      // Enriquecer con información del usuario
+      const enrichedData = await UserService.enrichWithUserInfo(serializedGuides, token)
+      return response.ok({
+        meta: guides.getMeta(),
+        data: enrichedData,
+      })
     } catch (error) {
       return response.badRequest({ message: 'Error al obtener guías', error: error.message })
     }
@@ -39,15 +51,20 @@ export default class GuidesController {
    */
   public async store({ request, response }: HttpContextContract) {
     try {
+      console.log('🎯 === GuidesController.store() ===')
+      console.log('📥 Body completo:', request.body())
+
       const data = request.only([
         'id',
         'document',
         'phone',
-        'license_number',
+        'licenseNumber',
         'specialization',
         'languages',
-        'years_of_experience',
+        'yearsOfExperience',
       ])
+
+      console.log('📦 Datos extraídos:', data)
 
       // Validar que se envió el id (debe ser el _id del usuario de MS-SECURITY)
       if (!data.id) {
@@ -65,23 +82,29 @@ export default class GuidesController {
         })
       }
 
+      console.log('✅ Creando guía con datos:', data)
+
       // Crear guía usando el MISMO ID del usuario de MS-SECURITY
       const guide = await Guide.create({
         id: data.id,
         document: data.document,
         phone: data.phone,
-        licenseNumber: data.license_number,
+        licenseNumber: data.licenseNumber,
         specialization: data.specialization,
         languages: JSON.stringify(data.languages), // Convertir array a JSON string
-        yearsOfExperience: data.years_of_experience || 0,
+        yearsOfExperience: data.yearsOfExperience || 0,
         isAvailable: true,
       })
+
+      console.log('✅ Guía creado exitosamente:', guide.id)
 
       return response.created({
         message: 'Guía registrado exitosamente',
         data: guide,
       })
     } catch (error) {
+      console.error('❌ ERROR en GuidesController.store():', error.message)
+      console.error('📄 Stack:', error.stack)
       return response.badRequest({
         message: 'Error al crear guía',
         error: error.message,

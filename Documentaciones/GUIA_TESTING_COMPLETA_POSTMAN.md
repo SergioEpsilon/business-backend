@@ -5,7 +5,7 @@
 ✅ **130 permisos** creados en MongoDB Atlas  
 ✅ **6 roles** con permisos asignados  
 ✅ **205 relaciones** rolePermission configuradas  
-✅ **Middleware Security** activado en todos los endpoints  
+✅ **Middleware Security** activado en todos los endpoints
 
 ---
 
@@ -24,6 +24,7 @@ Content-Type: application/json
 ```
 
 **Respuesta esperada:**
+
 ```json
 {
   "_id": "675abc123def456789...",
@@ -58,6 +59,7 @@ print("✓ Rol ADMINISTRADOR asignado al usuario");
 ```
 
 **Comando PowerShell directo:**
+
 ```powershell
 $userId = "675abc123def456789..."  # ← Tu user_id del PASO 1
 
@@ -79,6 +81,7 @@ Content-Type: application/json
 ```
 
 **Respuesta esperada:**
+
 ```json
 {
   "token": "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiNjc1YWJjMTIzZGVmNDU2Nzg5Li4uIiwicm9sZXMiOlsiQURNSU5JU1RSQURPUiJdLCJwZXJtaXNzaW9ucyI6W3sidXJsIjoiL2FwaS92MS9jbGllbnRzIiwibWV0aG9kIjoiR0VUIn0sLi4uXSwiaWF0IjoxNzMzNjY3MjAwLCJleHAiOjE3MzM2NzA4MDB9.xyz...",
@@ -113,6 +116,7 @@ Content-Type: application/json
 ```
 
 **✅ Respuesta exitosa (200 OK):**
+
 ```json
 {
   "id": "675abc123def456789...",
@@ -126,6 +130,7 @@ Content-Type: application/json
 ```
 
 **❌ Si NO tienes permisos (403 Forbidden):**
+
 ```json
 {
   "errors": [
@@ -146,6 +151,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9...
 ```
 
 **Respuesta esperada:**
+
 ```json
 [
   {
@@ -200,6 +206,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9...
 ### Usuario CLIENTE (Permisos Limitados)
 
 **1. Crear usuario:**
+
 ```http
 POST http://127.0.0.1:8080/api/public/security/register
 Content-Type: application/json
@@ -211,17 +218,19 @@ Content-Type: application/json
 ```
 
 **2. Asignar rol CLIENTE:**
+
 ```javascript
 // MongoDB
-var clienteRole = db.role.findOne({ name: "CLIENTE" });
+var clienteRole = db.role.findOne({ name: 'CLIENTE' })
 db.userRole.insertOne({
-  user: ObjectId("USER_ID_DEL_CLIENTE"),
+  user: ObjectId('USER_ID_DEL_CLIENTE'),
   role: clienteRole._id,
-  _class: "sb.proyecto.Models.UserRole"
-});
+  _class: 'sb.proyecto.Models.UserRole',
+})
 ```
 
 **3. Crear entidad en MS-BUSSINESS:**
+
 ```http
 POST http://localhost:3333/api/v1/clients
 Authorization: Bearer TOKEN_DE_ADMIN
@@ -237,6 +246,7 @@ Content-Type: application/json
 ```
 
 **4. Login como cliente:**
+
 ```http
 POST http://127.0.0.1:8080/api/public/security/login
 Content-Type: application/json
@@ -250,16 +260,19 @@ Content-Type: application/json
 **5. Probar permisos limitados:**
 
 ✅ **PUEDE hacer esto:**
+
 ```http
 GET http://localhost:3333/api/v1/clients/USER_ID_DEL_CLIENTE
 Authorization: Bearer TOKEN_DEL_CLIENTE
 ```
 
 ❌ **NO PUEDE hacer esto:**
+
 ```http
 GET http://localhost:3333/api/v1/clients
 Authorization: Bearer TOKEN_DEL_CLIENTE
 ```
+
 **Respuesta:** `403 Forbidden` (no tiene permiso para listar todos los clientes)
 
 ---
@@ -267,16 +280,18 @@ Authorization: Bearer TOKEN_DEL_CLIENTE
 ### Usuario GUIA
 
 **1. Crear y asignar rol:**
+
 ```javascript
-var guiaRole = db.role.findOne({ name: "GUIA" });
+var guiaRole = db.role.findOne({ name: 'GUIA' })
 db.userRole.insertOne({
-  user: ObjectId("USER_ID_DEL_GUIA"),
+  user: ObjectId('USER_ID_DEL_GUIA'),
   role: guiaRole._id,
-  _class: "sb.proyecto.Models.UserRole"
-});
+  _class: 'sb.proyecto.Models.UserRole',
+})
 ```
 
 **2. Crear entidad guía:**
+
 ```http
 POST http://localhost:3333/api/v1/guides
 Authorization: Bearer TOKEN_DE_ADMIN
@@ -294,6 +309,7 @@ Content-Type: application/json
 ```
 
 **3. Permisos del GUIA:**
+
 - ✅ Ver/editar su propio perfil
 - ✅ Ver actividades turísticas
 - ✅ Cambiar su disponibilidad
@@ -305,35 +321,44 @@ Content-Type: application/json
 ## 🧪 Tests de Validación
 
 ### Test 1: Token Inválido
+
 ```http
 GET http://localhost:3333/api/v1/clients
 Authorization: Bearer token_falso_123
 ```
+
 **Esperado:** `401 Unauthorized`
 
 ### Test 2: Sin Token
+
 ```http
 GET http://localhost:3333/api/v1/clients
 ```
+
 **Esperado:** `401 Unauthorized`
 
 ### Test 3: Token Expirado
+
 Espera 1 hora (o modifica `jwt.expiration=3600` a `60` en application.properties) y reintenta.
 **Esperado:** `401 Unauthorized - Token expired`
 
 ### Test 4: Permiso Inexistente
+
 ```http
 POST http://localhost:3333/api/v1/clientes
 Authorization: Bearer TOKEN_VALIDO
 ```
+
 (Nota: URL incorrecta `/clientes` vs `/clients`)
 **Esperado:** `404 Not Found` (antes de validar permisos)
 
 ### Test 5: Método No Permitido
+
 ```http
 DELETE http://localhost:3333/api/v1/clients
 Authorization: Bearer TOKEN_DE_CLIENTE
 ```
+
 **Esperado:** `403 Forbidden` (CLIENTE no tiene permiso DELETE)
 
 ---
@@ -341,6 +366,7 @@ Authorization: Bearer TOKEN_DE_CLIENTE
 ## 📊 Verificar Logs
 
 ### En MS-SECURITY (Terminal Java):
+
 ```
 2025-12-08 20:30:15 DEBUG SecurityController - Validating permission: /api/v1/clients POST
 2025-12-08 20:30:15 DEBUG SecurityController - User ID from token: 675abc123def456789
@@ -350,6 +376,7 @@ Authorization: Bearer TOKEN_DE_CLIENTE
 ```
 
 ### En MS-BUSSINESS (Terminal Node):
+
 ```
 [2025-12-08 20:30:15] INFO: POST /api/v1/clients - Middleware Security intercepted
 [2025-12-08 20:30:15] DEBUG: Validating with MS-SECURITY: {"url":"/api/v1/clients","method":"POST"}
@@ -405,7 +432,7 @@ Importa esta colección en Postman:
       "name": "1. Register Admin User",
       "request": {
         "method": "POST",
-        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
         "url": "{{ms_security_url}}/api/public/security/register",
         "body": {
           "mode": "raw",
@@ -417,7 +444,7 @@ Importa esta colección en Postman:
       "name": "2. Login Admin",
       "request": {
         "method": "POST",
-        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
         "url": "{{ms_security_url}}/api/public/security/login",
         "body": {
           "mode": "raw",
@@ -430,8 +457,8 @@ Importa esta colección en Postman:
       "request": {
         "method": "POST",
         "header": [
-          {"key": "Content-Type", "value": "application/json"},
-          {"key": "Authorization", "value": "Bearer {{admin_token}}"}
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{admin_token}}" }
         ],
         "url": "{{ms_business_url}}/api/v1/clients",
         "body": {
@@ -444,7 +471,7 @@ Importa esta colección en Postman:
       "name": "4. List Clients (Protected)",
       "request": {
         "method": "GET",
-        "header": [{"key": "Authorization", "value": "Bearer {{admin_token}}"}],
+        "header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }],
         "url": "{{ms_business_url}}/api/v1/clients"
       }
     }

@@ -1,5 +1,6 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Vehicle from 'App/Models/Vehicle'
+import VehicleValidator from 'App/Validators/VehicleValidator'
 
 export default class VehiclesController {
   /**
@@ -40,21 +41,28 @@ export default class VehiclesController {
    */
   public async store({ request, response }: HttpContextContract) {
     try {
-      const data = request.only([
-        'brand',
-        'model',
-        'year',
-        'licensePlate',
-        'vehicleType',
-        'capacity',
-        'hasAirConditioning',
-        'hasWifi',
-      ])
+      // Validar datos de entrada
+      const payload = await request.validate(VehicleValidator)
 
       const vehicle = await Vehicle.create({
-        ...data,
-        isActive: true,
+        ...payload,
+        isActive: payload.isActive !== undefined ? payload.isActive : true,
       })
+
+      // Inicializar GPS automáticamente para el nuevo vehículo
+      try {
+        const { default: GpsSimulatorService } = await import('App/Services/GpsSimulatorService')
+        await GpsSimulatorService.initializeVehicleGps(vehicle.id)
+
+        // Si el simulador no está corriendo, iniciarlo
+        const status = GpsSimulatorService.getStatus()
+        if (!status.isRunning) {
+          GpsSimulatorService.start()
+        }
+      } catch (gpsError) {
+        console.error('⚠️ Error inicializando GPS para vehículo:', gpsError.message)
+        // No fallar la creación del vehículo si el GPS falla
+      }
 
       return response.created({
         message: 'Vehículo registrado exitosamente',
@@ -80,8 +88,6 @@ export default class VehiclesController {
           driversQuery.pivotColumns(['shift_start', 'shift_end', 'status'])
         })
         .preload('gps')
-        .preload('car')
-        .preload('aircraft')
         .firstOrFail()
 
       return response.ok(vehicle)
